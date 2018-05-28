@@ -3,7 +3,7 @@
 //				this is a windows platform implementation
 //				builds and runs on x86 & x64 architectures
 //
-// Copyright (c) 2015 Jack Heeley, Fox-IT
+// Copyright (c) 2015 Jack Heeley
 // 
 #pragma once
 
