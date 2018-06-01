@@ -100,6 +100,12 @@ public:
 ///<remarks> uses system pause and stdout to interact with user.</remarks>
 int main(int argc, char* argv[])
 {
+
+   ////HINT for non-ascii programmers...
+   //SetConsoleOutputCP(CP_UTF8);  // TODO: platform specific code (function is windows)
+   //setvbuf(stdout, nullptr, _IOFBF, 1000);
+   //std::cout << "\xce\xba\xce\xb1\xce\xbb\xce\xae\x20\xcf\x84\xcf\x8d\xcf\x87\xce\xb7\x21" << std::endl;
+
    try
    {
       LOG_INFO("Sample test program starting.");
@@ -111,7 +117,7 @@ int main(int argc, char* argv[])
          std::system("pause");
       }
 
-      DeviceDiscoverer cdromDevices(GUID_DEVINTERFACE_CDROM);
+      DeviceDiscoverer cdromDevices(GUID_DEVINTERFACE_CDROM);  // TODO: platform specific code (GUID is windows)
 
       if (cdromDevices.device_path_map.get().empty())
       {
