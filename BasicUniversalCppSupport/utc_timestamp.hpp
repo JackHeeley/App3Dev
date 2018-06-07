@@ -35,7 +35,7 @@ std::basic_string<C, T, A> trim(const std::basic_string<C, T, A>& str,
 ///<returns> a date time string, the format is system dependent</returns>
 const auto utc_timestamp = []()
 {
-   char timebuf[26];
+	char timebuf[26] = { 0 };
    time_t now = time(0);
    tm gmtm;
    if (gmtime_s(&gmtm, &now) !=0)

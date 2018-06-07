@@ -88,7 +88,7 @@ namespace CustomAllocator
 
       ///<summary> destructor.</summary>
       ///<remarks> nothing to do because the allocator has no state.</remarks>
-      ~mmf_allocator() throw() 
+      ~mmf_allocator() noexcept
       {
       }
 

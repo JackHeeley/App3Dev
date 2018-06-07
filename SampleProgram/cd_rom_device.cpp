@@ -166,8 +166,8 @@ public:
                if (GetLastError() == ERROR_NO_SYSTEM_RESOURCES)
                {
                   uint64_t cTracksReadAsCylinders = (((uint64_t)lpabyBufferMemoryAddress - (uint64_t)lpabyBufferMemoryBase) / cbyCylinderSize)* diskGeometry.TracksPerCylinder;
-                  uint64_t cbyTrackSize = diskGeometry.SectorsPerTrack * diskGeometry.BytesPerSector;
-                  uint64_t cTracksStillToRead = (diskGeometry.Cylinders.LowPart * diskGeometry.TracksPerCylinder) - cTracksReadAsCylinders;
+                  uint64_t cbyTrackSize = (uint64_t)(diskGeometry.SectorsPerTrack) * (uint64_t)(diskGeometry.BytesPerSector);
+                  uint64_t cTracksStillToRead = ((uint64_t)(diskGeometry.Cylinders.LowPart) * (uint64_t)(diskGeometry.TracksPerCylinder)) - cTracksReadAsCylinders;
                   try
                   {
                      // read remainder of the image in track sized sized chunks 
@@ -177,7 +177,7 @@ public:
                   catch (std::exception&)
                   {
                      uint64_t cSectorsReadAsTracks = (((uint64_t)lpabyBufferMemoryAddress - (uint64_t)lpabyBufferMemoryBase) / cbyTrackSize)* diskGeometry.SectorsPerTrack;
-                     uint64_t cSectorsStillToRead = (diskGeometry.Cylinders.LowPart * diskGeometry.TracksPerCylinder * diskGeometry.SectorsPerTrack) - cSectorsReadAsTracks;
+                     uint64_t cSectorsStillToRead = ((uint64_t)(diskGeometry.Cylinders.LowPart) * (uint64_t)(diskGeometry.TracksPerCylinder) * (uint64_t)(diskGeometry.SectorsPerTrack)) - cSectorsReadAsTracks;
                      if (GetLastError() == ERROR_NO_SYSTEM_RESOURCES)
                      {
                         // read remainder of the image in sector sized sized chunks 
