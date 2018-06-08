@@ -121,8 +121,8 @@ int main(int argc, char* argv[])
 
       if (cdromDevices.device_path_map.get().empty())
       {
-         LOG_ERROR("CDROM device is not detected/attached (program terminating).");
-         std::cout << "CDROM device is not detected/attached (program terminating)" << std::endl;
+         LOG_ERROR("CDROM media not present or device not attached (program terminating).");
+         std::cout << "CDROM media not present or device not attached (program terminating)" << std::endl;
          exit(1);
       }
 
@@ -131,9 +131,7 @@ int main(int argc, char* argv[])
 
       auto deviceName = cdromDevices.device_path_map.get()[0];
 
-      Ripper rip(deviceName, fileName);
-
-      rip();
+      Ripper(deviceName, fileName)();
 
       std::cout << "Ripping completed successfully. It is now safe to remove the CDROM device" << std::endl;
       LOG_INFO("Ripping completed successfully.");
