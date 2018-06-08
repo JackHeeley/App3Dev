@@ -22,7 +22,7 @@ private:
    std::ofstream stream;
 
 public:
-   impl() :
+   impl() noexcept :
       fileName("LogFile.log"),
       filter(LogFilter::None),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
@@ -36,11 +36,19 @@ public:
    {
    };
 
+   ///<summary> destructor.</summary>
    ~impl()
    {
-      clear();
+      try
+      {
+         clear();
+      }
+      catch (std::exception&)
+      {
+         // catch and dismiss is least bad option
+      }
    }
-   
+
    ///<summary> copy constructor.</summary>
    impl(const impl& other) :
       fileName(other.fileName),
@@ -50,7 +58,7 @@ public:
    }
 
    ///<summary> move constructor.</summary>
-   impl(impl&& other) :
+   impl(impl&& other) noexcept :
       fileName(other.fileName),
       filter(other.filter),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
@@ -70,7 +78,7 @@ public:
    }
 
    ///<summary> move assignment operator.</summary>
-   impl& impl::operator=(impl&& other)
+   impl& impl::operator=(impl&& other) noexcept
    {
       if (this != &other)
       {
@@ -83,29 +91,29 @@ public:
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean identical fileName member content.</remarks>
-   bool operator==(const impl& other) const
+   bool operator==(const impl& other) const noexcept
    {
       return fileName == other.fileName;
    }
 
    ///<summary> not equals comparison operator.</summary>
    ///<remarks> defines not equals to mean differing fileName member content.</remarks>
-   bool operator!=(const impl& other) const
+   bool operator!=(const impl& other) const noexcept
    {
       return !(*this == other);
    }
 
-   void set_log_filter(LogFilter filter)
+   void set_log_filter(LogFilter filter) noexcept override
    {
       this->filter = filter;
    }
 
-   LogFilter get_log_filter()
+   LogFilter get_log_filter() const noexcept override
    {
       return this->filter;
    }
 
-   void write(LogLevel level, std::string line)
+   void write(LogLevel level, std::string line) override
    {
       if (!(static_cast<int>(filter) /*bitwise*/& static_cast<int>(level)))
          return;
@@ -113,7 +121,7 @@ public:
       stream << log_level(level) << ": " << utc_timestamp() << " " << line;
    }
 
-   void writeln(LogLevel level, std::string line)
+   void writeln(LogLevel level, std::string line) override
    {
       if (!(static_cast<int>(filter) /*bitwise*/& static_cast<int>(level)))
          return;
@@ -121,20 +129,20 @@ public:
       stream << log_level(level) << ": " << utc_timestamp() << " " << line << std::endl;
    }
 
-   void write(LogLevel level, std::exception e)
+   void write(LogLevel level, std::exception e) override
    {
       //TODO: stack trace 
       writeln(level, e.what());
    }
 
-   std::string read_all()
+   std::string read_all() override
    {
       std::ifstream t = std::ifstream(fileName);
       std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
       return str;
    }
 
-   void clear()
+   void clear() noexcept override
    {
       stream.clear();
    }
@@ -147,7 +155,7 @@ public:
 */
 
 ///<summary> constructs a default file_logger.</summary>
-file_logger::file_logger() :
+file_logger::file_logger() noexcept :
    impl_(spimpl::make_impl<impl>())
 {
 }
@@ -159,24 +167,24 @@ file_logger::file_logger(std::string fileName, LogFilter filter) :
 
 ///<summary> equals comparison operator.</summary>
 ///<remarks> defines equals to mean identical fileName members.</remarks>
-bool file_logger::operator==(const file_logger& other) const
+bool file_logger::operator==(const file_logger& other) const noexcept
 {
    return *impl_.get() == *other.impl_.get();
 }
 
 ///<summary> not equals comparison operator.</summary>
 ///<remarks> defines not equals to mean differing fileName members.</remarks>
-bool file_logger::operator!=(const file_logger& other) const
+bool file_logger::operator!=(const file_logger& other) const noexcept
 {
    return !(*this == other);
 }
 
-void file_logger::set_log_filter(LogFilter filter)
+void file_logger::set_log_filter(LogFilter filter) noexcept
 {
    impl_->set_log_filter(filter);
 }
 
-LogFilter file_logger::get_log_filter()
+LogFilter file_logger::get_log_filter() const noexcept
 {
    return impl_->get_log_filter();
 }
@@ -201,7 +209,7 @@ std::string file_logger::read_all()
    return impl_->read_all();
 }
 
-void file_logger::clear()
+void file_logger::clear() noexcept
 {
    impl_->clear();
 }

@@ -131,7 +131,7 @@ namespace spimpl {
          >::type = dummy_t_()) SPIMPL_NOEXCEPT
          : impl_ptr(u, &details::default_delete<T>, &details::default_copy<T>) {}
 
-      impl_ptr(const impl_ptr& r)
+      impl_ptr(const impl_ptr& r) SPIMPL_NOEXCEPT
          : impl_ptr(r.clone()) {}
 
 #ifndef SPIMPL_NO_CPP11_DEFAULT_MOVE_SPEC_FUNC
@@ -181,7 +181,7 @@ namespace spimpl {
          >::type = dummy_t_()) SPIMPL_NOEXCEPT
          : ptr_(std::move(u.ptr_)), copier_(std::move(u.copier_)) {}
 
-      impl_ptr& operator= (const impl_ptr& r)
+      impl_ptr& operator= (const impl_ptr& r) SPIMPL_NOEXCEPT
       {
          if (this == &r)
             return *this;
@@ -247,7 +247,7 @@ namespace spimpl {
          return operator=(impl_ptr(std::move(u)));
       }
 
-      impl_ptr clone() const
+      impl_ptr clone() const SPIMPL_NOEXCEPT
       {
          return impl_ptr(
             ptr_ ? copier_(ptr_.get()) : nullptr,

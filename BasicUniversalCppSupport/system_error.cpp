@@ -24,7 +24,7 @@ private:
    LPVOID lpBuffer;
 
    ///<summary> wrap the system message retrieval.</summary>
-   void format_message(int error_code, LPVOID& lpBuffer)
+   void format_message(int error_code, LPVOID& lpBuffer) noexcept
    {
       FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
          FORMAT_MESSAGE_FROM_SYSTEM |
@@ -41,7 +41,7 @@ private:
 public:
 
    ///<summary> default constructor.</summary>
-   impl() :
+   impl() noexcept:
       error_code(GetLastError()),
       lpBuffer(nullptr)
    {      
@@ -50,7 +50,7 @@ public:
 
    ///<summary> constructor for specified error.</summary>
    ///<param name='an_error_code'> the error code to use.</param>
-   impl(int an_error_code) :
+   impl(int an_error_code) noexcept:
       error_code(an_error_code),
       lpBuffer(nullptr)
    {
@@ -58,7 +58,7 @@ public:
    }
 
    ///<summary> copy constructor.</summary>
-   impl(const impl& other) :
+   impl(const impl& other) noexcept:
       error_code(other.error_code),
       lpBuffer(nullptr)
    {
@@ -66,7 +66,7 @@ public:
    }
 
    ///<summary> move constructor.</summary>
-   impl(impl&& other) :
+   impl(impl&& other) noexcept :
       error_code(other.error_code),
       lpBuffer(other.lpBuffer)
    {
@@ -74,7 +74,7 @@ public:
    }
 
    ///<summary> copy assignment operator.</summary>
-   impl& impl::operator=(impl& other)
+   impl& impl::operator=(impl& other) noexcept
    {
       if (this != &other)
       {
@@ -85,7 +85,7 @@ public:
    }
 
    ///<summary> move assignment operator.</summary>
-   impl& impl::operator=(impl&& other)
+   impl& impl::operator=(impl&& other) noexcept
    {
       if (this != &other)
       {
@@ -127,7 +127,7 @@ public:
       return utf8::convert::from_utf16((LPCTSTR)lpBuffer);
    }
 
-   const int get_error_code() const
+   const int get_error_code() const noexcept
    {
       return (int)error_code;
    }
@@ -145,7 +145,7 @@ public:
 */
 
 ///<summary> constructs a system error for the last system error.</summary>
-SystemError::SystemError() :
+SystemError::SystemError() noexcept :
    impl_(spimpl::make_impl<impl>())
 {
 }
@@ -177,7 +177,7 @@ std::string SystemError::get_error_text() const
 }
 
 ///<summary> gets the system error code.</summary>
-int SystemError::get_error_code() const
+int SystemError::get_error_code() const noexcept
 {
    return impl_->get_error_code();
 }

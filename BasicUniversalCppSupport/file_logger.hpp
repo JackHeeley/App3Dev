@@ -24,7 +24,7 @@ class BASICUNIVERSALCPPSUPPORT_API file_logger : public logger
 {
 public:
    ///<summary> construct a default file_logger.</summary>
-   file_logger();
+   file_logger() noexcept;
 
    ///<summary>construct logger</summary>
    ///<param name='fileName'>path and name of the log file.</param>
@@ -34,45 +34,45 @@ public:
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean identical member content.</remarks>
-   bool operator==(const file_logger& other) const;
+   bool operator==(const file_logger& other) const noexcept;
 
    ///<summary> not equals comparison operator.</summary>
    ///<remarks> defines not equals to mean differing member content.</remarks>
-   bool operator!=(const file_logger& other) const;
+   bool operator!=(const file_logger& other) const noexcept;
 
    ///<summary> used to determine which messages get logged. loggers compare the filter bitmask supplied
    /// here (or at construction time) with the single bit level supplied as parameter to write operations.</summary>
    ///<param name='filter'>bitmask used to filter log write events.</param>
-   virtual void set_log_filter(LogFilter filter);
+   void set_log_filter(LogFilter filter) noexcept override;
 
    ///<summary> get log filter.</summary>
    ///<returns>the current filter.</returns>
-   virtual LogFilter get_log_filter();
+   LogFilter get_log_filter() const noexcept override;
 
    ///<summary> Write message to log without newline.</summary>
    ///<remarks> writeln does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask.</remarks>
    ///<param name="level"> the LogLevel used to filter log messages.</param>
    ///<param name="text"> The message to log.</param>
-   virtual void write(LogLevel level, std::string line);
+   void write(LogLevel level, std::string line) override;
 
    ///<summary> Write message to log with newline.</summary>
    ///<remarks> writeln does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask.</remarks>
    ///<param name="level"> the LogLevel used to filter log messages.</param>
    ///<param name="line"> The message to log.</param>
-   virtual void writeln(LogLevel level, std::string line);
+   void writeln(LogLevel level, std::string line) override;
 
    ///<summary> Write exception to log (multi-line).</summary>
    ///<remarks> writeln does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask.</remarks>
    ///<param name="level"> the LogLevel used to filter log messages.</param>
    ///<param name="line">The message to log</param>
-   virtual void write(LogLevel level, std::exception e);
+   void write(LogLevel level, std::exception e) override;
 
    ///<summary>Read the complete log file. </summary>
    ///<returns>The log file contents in raw bytes</returns>
-   virtual std::string read_all();
+   std::string read_all() override;
 
    ///<summary>Clear log file.</summary>
-   virtual void clear();
+   void clear() noexcept override;
 
 private:
    ///<summary> forward reference to private implementation.</summary>

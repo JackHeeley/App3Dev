@@ -142,7 +142,7 @@ public:
 
    ///<summary> Get log flags.</summary>
    ///<returns> The current LogFilter bitmask.</returns>
-   virtual LogFilter get_log_filter() = 0;
+   virtual LogFilter get_log_filter() const = 0;
 
    ///<summary> test a log level. compares the parameter with the log flags of this logger.</summary>
    ///<param name='aLevel'> the LogLevel to test.</param>

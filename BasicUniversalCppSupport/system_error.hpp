@@ -23,7 +23,7 @@ class BASICUNIVERSALCPPSUPPORT_API SystemError {
 
 public:
    ///<summary> constructs a system error for the last system error.</summary>
-   SystemError();
+   SystemError() noexcept;
 
    ///<summary> constructs a system error from an error code.</summary>
    SystemError(int errorCode);
@@ -40,7 +40,7 @@ public:
    std::string get_error_text() const;
 
    ///<summary> get the error code.</summary>
-   int get_error_code() const;
+   int get_error_code() const noexcept;
 
 private:
    ///<summary> forward reference to private implementation.</summary>
