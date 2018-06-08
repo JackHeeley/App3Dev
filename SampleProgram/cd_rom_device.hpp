@@ -66,7 +66,7 @@ public:
 
    ///<summary>query the locked state of the cdrom.</summary>
    ///<returns>true if the cdrom is locked.</returns>
-   bool get_locked(void);
+   bool get_locked(void) noexcept;
 
    ///<summary> load the media (closes the door of the CD drive)</summary>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>

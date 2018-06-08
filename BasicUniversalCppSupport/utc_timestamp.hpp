@@ -14,36 +14,62 @@
 #include <string>
 #include <time.h>
 #include <locale>
+#include <algorithm>
 
 #pragma warning (disable:4251 4290)
 
-template< typename C, typename T, typename A >
-std::basic_string<C, T, A> trim(const std::basic_string<C, T, A>& str,
-   const std::locale& loc = std::locale::classic())
+// trim from start (in place)
+static inline void ltrim(std::string &s) 
 {
-   auto begin = str.begin(); // first non ws from left
-   while (begin != str.end() && std::isspace(*begin, loc)) ++begin;
-   if (begin == str.end()) return{}; // EDIT
-
-   auto rbegin = str.rbegin(); // first non ws from right
-   while (rbegin != str.rend() && std::isspace(*rbegin, loc)) ++rbegin;
-
-   return{ begin, rbegin.base() };
+   s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+      return !std::isspace(ch, std::locale::classic());
+   }));
 }
 
-///<summary> lambda to get current date and time in UTC</summary>
+// trim from end (in place)
+static inline void rtrim(std::string &s) {
+   s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+      return !std::isspace(ch, std::locale::classic());
+   }).base(), s.end());
+}
+
+// trim from both ends (in place)
+static inline void trim(std::string &s) {
+   ltrim(s);
+   rtrim(s);
+}
+
+// trim from start (copying)
+static inline std::string ltrim_copy(std::string s) {
+   ltrim(s);
+   return s;
+}
+
+// trim from end (copying)
+static inline std::string rtrim_copy(std::string s) {
+   rtrim(s);
+   return s;
+}
+
+// trim from both ends (copying)
+static inline std::string trim_copy(std::string s) {
+   trim(s);
+   return s;
+}
+
+///<summary> get current date and time in UTC</summary>
 ///<returns> a date time string, the format is system dependent</returns>
 const auto utc_timestamp = []()
 {
-	char timebuf[26] = { 0 };
-   time_t now = time(0);
+   const time_t now = time(0);
    tm gmtm;
    if (gmtime_s(&gmtm, &now) !=0)
       throw std::domain_error("utc timestamp failed");
+   
+   char timebuf[26] = { 0 };
    asctime_s(timebuf, &gmtm);
-      
-   std::string s(timebuf);
-   return trim(s);
+     
+   return trim_copy({ timebuf });
 };
 
 #pragma warning (default:4251 4290)

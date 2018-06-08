@@ -93,7 +93,7 @@ namespace CustomAllocator
       }
 
       ///<summary> return maximum number of elements that can be allocated.</summary>
-      size_type max_size() const throw() 
+      size_type max_size() const noexcept
       {
          return std::numeric_limits<std::size_t>::max() / sizeof(T);
       }
@@ -104,7 +104,7 @@ namespace CustomAllocator
          if (is_stl_vector<T>::value) 
          {
             // allocate the vector *container* as per default allocator
-            return (pointer)(::operator new(num * sizeof(T)));
+            return static_cast<pointer>(::operator new(num * sizeof(T)));
          }
          else 
          {
@@ -114,26 +114,27 @@ namespace CustomAllocator
       }
 
       ///<summary> initialize elements of allocated storage p with value value.</summary>
-      void construct(pointer p, const T& value) 
+      void construct(pointer p, const T& value) noexcept
       {
          // initialize memory with placement new
-         new((void*)p)T(value);
+         //new(static_cast<void*>(p))T(value);
+         new(p)T(value);
       }
 
       ///<summary> destroy elements of initialized storage p.</summary>
-      void destroy(pointer p) 
+      void destroy(pointer p) noexcept
       {
          // destroy objects by calling their destructor
          p->~T();
       }
 
       ///<summary> deallocate storage p of deleted elements.</summary>
-      void deallocate(pointer p, size_type num) 
+      void deallocate(pointer p, size_type num) noexcept
       {
          if (is_stl_vector<T>::value) 
          {
             // deallocate the vector *container* as per default allocator
-            ::operator delete((void*)p);
+            ::operator delete(p);
          }
          else 
          {

@@ -37,7 +37,7 @@ namespace utf8
       ///<returns>utf8 encoded string representation of aGuid</returns>
       static inline std::string from_guid(const GUID aGuid)
       {
-         return (utf8::convert::from_utf16((const wchar_t*)(&aGuid)));
+         return (utf8::convert::from_utf16(reinterpret_cast<const wchar_t*>(&aGuid)));
       }
    };
 }

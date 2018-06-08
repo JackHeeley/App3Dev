@@ -76,7 +76,7 @@ namespace fox
       ///<remarks> overrides std::exception what().</remarks>
       ///<returns> a full description of what went wrong (including details of where in the code and any system error that is implicated).
       /// Note: return value is raw pointer to short lived memory that will be invalidated when the exception destructor is called.</returns>
-      const char* what()
+      const char* what() noexcept
       {
          return _full_what.c_str();
       }

@@ -186,8 +186,6 @@ public:
    /// <summary> Clear log file.</summary>
    virtual void clear() = 0;
 
-   /// <summary> empty base virtual destructor.</summary>
-   virtual ~logger() {};
 };
 
 #pragma warning (default:4251 4275 4290)

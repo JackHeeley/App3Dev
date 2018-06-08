@@ -35,7 +35,7 @@ extern "C"
 
    ///<summary> simple (thread unsafe) mmf_malloc.</summary>
    ///<returns> pointer to allocated memory (within memory mapped file buffer).</returns>
-   inline void* __cdecl mmf_malloc(size_t _Size)
+   inline void* __cdecl mmf_malloc(size_t _Size) noexcept
    {
       size_t s_buffer_initial = reinterpret_cast<size_t>(s_buffer_ptr);
       s_buffer_ptr = reinterpret_cast<unsigned char*>(s_buffer_initial + _Size);
@@ -44,7 +44,7 @@ extern "C"
 
    ///<summary> simple (thread unsafe) mmf_free.</summary>
    ///<remarks> actual delete is deferred (and done by memory mapped file).</remarks>
-   inline void __cdecl mmf_free(void* _Block) { };
+   inline void __cdecl mmf_free(void* _Block) noexcept { };
 }
 
 ///<summary> wraps the system memory mapped file facility.</summary>
@@ -53,10 +53,10 @@ class EXTENDEDUNIVERSALCPPSUPPORT_API MemoryMappedFile
 
 public:
    ///<summary> helper for working in kilobytes</summary>
-   static inline uint32_t kilobytes(int n) { return n*1024; };
+   static constexpr inline uint32_t kilobytes(int n) noexcept { return n*1024; };
    
    ///<summary> helper for working in megabytes.</summary>
-   static inline uint32_t megabytes(int n) { return n*kilobytes(1024); };
+   static constexpr inline uint32_t megabytes(int n) noexcept { return n*kilobytes(1024); };
 
    ///<summary> construct a memory mapped file object</summary>
    ///<param name='file_path'> path name of file to be used.</param>

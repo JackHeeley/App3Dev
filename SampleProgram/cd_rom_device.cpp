@@ -36,6 +36,14 @@ public:
       locked = false;
    };
 
+   impl(const impl &other) = default;
+
+   impl(impl&& other) = default;
+
+   impl& impl::operator=(impl& other) = default;
+
+   impl& impl::operator=(impl&& other) = default;
+
    ///<summary> destructor maintains accessible device state at end of use.</summary> 
    ~impl(void)
    {
@@ -58,7 +66,7 @@ public:
    uint64_t impl::get_image_size()
    {
       // query current media for data needed for buffer size calculation
-      DISK_GEOMETRY diskGeometry = get_disk_geometry();
+      const DISK_GEOMETRY diskGeometry = get_disk_geometry();
 
       if (diskGeometry.Cylinders.HighPart != 0)
       {
@@ -67,11 +75,11 @@ public:
       }
 
       // calculate size of buffer needed to read entire media content
-      uint64_t bufferSize =
-         static_cast<uint64_t>(diskGeometry.Cylinders.LowPart) *
-         static_cast<uint64_t>(diskGeometry.TracksPerCylinder) *
-         static_cast<uint64_t>(diskGeometry.SectorsPerTrack) *
-         static_cast<uint64_t>(diskGeometry.BytesPerSector);
+      const uint64_t bufferSize =
+         uint64_t{ diskGeometry.Cylinders.LowPart } *
+         uint64_t{ diskGeometry.TracksPerCylinder } *
+         uint64_t{ diskGeometry.SectorsPerTrack } *
+         uint64_t{ diskGeometry.BytesPerSector };
 
       return bufferSize;
    }
@@ -82,7 +90,7 @@ public:
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
    void impl::get_image(std::vector<unsigned char>& buffer)
    {
-      uint64_t buffer_size = get_image_size();
+      const uint64_t buffer_size = get_image_size();
 
       // check vector size limitation (on win32)
       if (buffer_size > reinterpret_cast<uint64_t>(std::numeric_limits<std::size_t>::max))
@@ -92,7 +100,7 @@ public:
       }
 
       // adjust buffer vector to accommodate the image data
-      buffer.resize(static_cast<size_t>(buffer_size));
+      buffer.resize(gsl::narrow_cast<size_t>(buffer_size));
 
       get_image(buffer.data(), buffer.size());
    }
@@ -103,7 +111,7 @@ public:
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
    void impl::get_image(mmf_vector& buffer)
    {
-      uint64_t buffer_size = get_image_size();
+      const uint64_t buffer_size = get_image_size();
 
       // check vector size limitation (on win32)
       if (buffer_size > reinterpret_cast<uint64_t>(std::numeric_limits<std::size_t>::max))
@@ -113,7 +121,7 @@ public:
       }
 
       // adjust buffer vector to accommodate the image data
-      buffer.resize(static_cast<size_t>(buffer_size));
+      buffer.resize(gsl::narrow_cast<size_t>(buffer_size));
 
       get_image(buffer.data(), buffer.size());
    }
@@ -128,7 +136,7 @@ public:
    {
 
       // initialize the low and high water marks (used in read, and resource limited exception handling)
-      LPBYTE lpabyBufferMemoryBase = (LPBYTE)ptr;
+      LPBYTE lpabyBufferMemoryBase = static_cast<LPBYTE>(ptr);
       LPBYTE lpabyBufferMemoryAddress = lpabyBufferMemoryBase;
 
       try
@@ -142,19 +150,19 @@ public:
          if (GetLastError() == ERROR_NO_SYSTEM_RESOURCES)
          {
             // query current media for details used in exception handling strategy (physical block alignment constraint)
-            DISK_GEOMETRY diskGeometry = get_disk_geometry();
+            const DISK_GEOMETRY diskGeometry = get_disk_geometry();
 
             if (diskGeometry.Cylinders.HighPart != 0)
             {
                SetLastError(ERROR_NOT_SUPPORTED);
                throw fox_exception("Unsupported media size"); // future proofing
             }
-             
-            uint64_t cbyCylinderSize =
-              static_cast<uint64_t>(diskGeometry.TracksPerCylinder) *
-              static_cast<uint64_t>(diskGeometry.SectorsPerTrack) *
-              static_cast<uint64_t>(diskGeometry.BytesPerSector);
-            
+
+            const uint64_t cbyCylinderSize =
+               uint64_t{ diskGeometry.TracksPerCylinder } *
+               uint64_t{ diskGeometry.SectorsPerTrack } *
+               uint64_t{ diskGeometry.BytesPerSector };
+
             try
             {
                // read remainder of the image in cylinder sized chunks 
@@ -165,9 +173,9 @@ public:
             {
                if (GetLastError() == ERROR_NO_SYSTEM_RESOURCES)
                {
-                  uint64_t cTracksReadAsCylinders = (((uint64_t)lpabyBufferMemoryAddress - (uint64_t)lpabyBufferMemoryBase) / cbyCylinderSize)* diskGeometry.TracksPerCylinder;
-                  uint64_t cbyTrackSize = (uint64_t)(diskGeometry.SectorsPerTrack) * (uint64_t)(diskGeometry.BytesPerSector);
-                  uint64_t cTracksStillToRead = ((uint64_t)(diskGeometry.Cylinders.LowPart) * (uint64_t)(diskGeometry.TracksPerCylinder)) - cTracksReadAsCylinders;
+                  const uint64_t cTracksReadAsCylinders = (((uint64_t)lpabyBufferMemoryAddress - (uint64_t)lpabyBufferMemoryBase) / cbyCylinderSize)* diskGeometry.TracksPerCylinder;
+                  const uint64_t cbyTrackSize = (uint64_t)(diskGeometry.SectorsPerTrack) * (uint64_t)(diskGeometry.BytesPerSector);
+                  const uint64_t cTracksStillToRead = ((uint64_t)(diskGeometry.Cylinders.LowPart) * (uint64_t)(diskGeometry.TracksPerCylinder)) - cTracksReadAsCylinders;
                   try
                   {
                      // read remainder of the image in track sized sized chunks 
@@ -176,8 +184,8 @@ public:
                   }
                   catch (std::exception&)
                   {
-                     uint64_t cSectorsReadAsTracks = (((uint64_t)lpabyBufferMemoryAddress - (uint64_t)lpabyBufferMemoryBase) / cbyTrackSize)* diskGeometry.SectorsPerTrack;
-                     uint64_t cSectorsStillToRead = ((uint64_t)(diskGeometry.Cylinders.LowPart) * (uint64_t)(diskGeometry.TracksPerCylinder) * (uint64_t)(diskGeometry.SectorsPerTrack)) - cSectorsReadAsTracks;
+                     const uint64_t cSectorsReadAsTracks = (((uint64_t)lpabyBufferMemoryAddress - (uint64_t)lpabyBufferMemoryBase) / cbyTrackSize)* diskGeometry.SectorsPerTrack;
+                     const uint64_t cSectorsStillToRead = ((uint64_t)(diskGeometry.Cylinders.LowPart) * (uint64_t)(diskGeometry.TracksPerCylinder) * (uint64_t)(diskGeometry.SectorsPerTrack)) - cSectorsReadAsTracks;
                      if (GetLastError() == ERROR_NO_SYSTEM_RESOURCES)
                      {
                         // read remainder of the image in sector sized sized chunks 
@@ -210,7 +218,7 @@ public:
 
    ///<summary>query the locked state of the cdrom.</summary>
    ///<returns>true if the cdrom is locked.</returns>
-   bool impl::get_locked(void)
+   bool impl::get_locked(void) noexcept
    {
       return locked;
    }
@@ -219,7 +227,7 @@ public:
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
    void impl::load(void)
    {
-      DWORD nBytesReturned =
+      const DWORD nBytesReturned =
          ioctl(IOCTL_STORAGE_LOAD_MEDIA, NULL, 0, NULL, 0);
 
       if (nBytesReturned != 0)
@@ -232,7 +240,7 @@ public:
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
    void impl::eject(void)
    {
-      DWORD nBytesReturned =
+      const DWORD nBytesReturned =
          ioctl(IOCTL_STORAGE_EJECT_MEDIA, NULL, 0, NULL, 0);
 
       if (nBytesReturned != 0)
@@ -251,7 +259,7 @@ private:
 
       lpInBuffer.PreventMediaRemoval = aLockedValue;
 
-      DWORD nBytesReturned =
+      const DWORD nBytesReturned =
          ioctl(IOCTL_STORAGE_MEDIA_REMOVAL, &lpInBuffer, sizeof(PREVENT_MEDIA_REMOVAL), NULL, 0);
 
       if (nBytesReturned != 0)
@@ -267,7 +275,7 @@ private:
    {
       DISK_GEOMETRY disk_geometry;
 
-      DWORD nBytesReturned =
+      const DWORD nBytesReturned =
          ioctl(IOCTL_CDROM_GET_DRIVE_GEOMETRY, NULL, 0, &disk_geometry, sizeof(DISK_GEOMETRY));    // (re-)fetch from device
 
       if (nBytesReturned != sizeof(DISK_GEOMETRY))
@@ -288,7 +296,7 @@ private:
    {
       for (uint64_t nBlock = 0; nBlock < cBlocks; nBlock++)
       {
-         read(lpabyBufferMemoryAddress, static_cast<uint32_t>(cbyBlockSize)); // see remarks above
+         read(lpabyBufferMemoryAddress, gsl::narrow_cast<uint32_t>(cbyBlockSize)); // see remarks above
          lpabyBufferMemoryAddress += cbyBlockSize;
       }
    }
@@ -361,7 +369,7 @@ void CdromDevice::unlock(void)
 
 ///<summary>query the locked state of the cdrom.</summary>
 ///<returns>true if the cdrom is locked.</returns>
-bool CdromDevice::get_locked(void)
+bool CdromDevice::get_locked(void) noexcept
 {
    return impl_->get_locked();
 }

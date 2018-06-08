@@ -42,7 +42,7 @@ public:
 
    ///<summary>unlock tray door in all return paths</summary>
    ~TrayDoorLock() noexcept
-   { 
+   {
       try
       {
          m_cdr.unlock();
