@@ -78,7 +78,7 @@ public:
 
    ///<summary> get base address of buffer (a user space virtual address).</summary>
    ///<returns> address of memory buffer</returns>
-   void* get_buffer_address();
+   void* get_buffer_address() noexcept;
 
    ///<summary> get buffer as a vector of bytes.</summary>
    ///<returns> a vector of bytes (with content in address space of the memory mapped file)</returns>

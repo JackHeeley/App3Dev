@@ -44,7 +44,7 @@ public:
    impl(const GUID& anInterfaceClassGuid) :
       device_path_data()
    {
-      INTERFACE_CLASS_GUID = (LPGUID)&anInterfaceClassGuid;
+      INTERFACE_CLASS_GUID = (LPGUID)(&anInterfaceClassGuid);
       m_hDevInfo = getDevInfoHandle(INTERFACE_CLASS_GUID);
 
       SP_DEVICE_INTERFACE_DATA deviceInterfaceData;
@@ -76,11 +76,23 @@ public:
    {
       return (!((*this) == other));
    }
+      
+   ///<summary> copy constructor.</summary>
+   impl(const impl& other) = default;
+      
+   ///<summary> move constructor.</summary>
+   impl(impl&& other) = default;
 
+   ///<summary> copy assignment operator</summary>
+   impl& impl::operator=(impl& other) = default;
+
+   ///<summary> move assignment operator </summary>
+   impl& impl::operator=(impl&& other) = default;
+   
    ///<summary> dtor release resources used by the class.</summary>
    ~impl()
    {
-      SetupDiDestroyDeviceInfoList(m_hDevInfo);
+      SetupDiDestroyDeviceInfoList(m_hDevInfo); //TODO : after moves, there is a redundant extra call (which is harmless in this case)
    }
 
 private:
@@ -88,7 +100,7 @@ private:
    ///<param name ="anInterfaceClassGuid"> pointer to setup interface class guid or device class guid to interrogate.</param>
    HDEVINFO getDevInfoHandle(LPGUID anInterfaceClassGuid)
    {
-      DWORD Flags = DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
+      const DWORD Flags = DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
 
       HDEVINFO hDI = SetupDiGetClassDevs(anInterfaceClassGuid,
          NULL,
@@ -108,7 +120,7 @@ private:
    ///<returns> true if device interface data is found for this device.</returns>
    bool getDeviceInterfaceData(int memberIndex, SP_DEVICE_INTERFACE_DATA& deviceInterfaceData)
    {
-      BOOLEAN result =
+      const BOOLEAN result =
          SetupDiEnumDeviceInterfaces(m_hDevInfo,
             0,
             INTERFACE_CLASS_GUID,
@@ -118,7 +130,7 @@ private:
 
       if (!result)
       {
-         int errorCode = GetLastError();
+         const int errorCode = GetLastError();
          if (errorCode != ERROR_NO_MORE_ITEMS)
          {
             throw fox_exception("SetupDiEnumDeviceInterfaces failed");
@@ -138,7 +150,7 @@ private:
       //
       // First find out required length of the buffer
       //
-      BOOLEAN result =
+      const BOOLEAN result =
          SetupDiGetInterfaceDeviceDetail(m_hDevInfo,
             &deviceInterfaceData,
             NULL,    // probing so no output buffer yet
@@ -149,7 +161,7 @@ private:
 
       if (!result) 
       {
-         int errorCode = GetLastError();
+         const int errorCode = GetLastError();
          if (errorCode != ERROR_INSUFFICIENT_BUFFER) 
          {
             throw fox_exception("Probing SetupDiGetInterfaceDeviceDetail failed");
@@ -163,7 +175,7 @@ private:
       //
       auto buffer = std::vector<unsigned char>(predictedLength);
 
-      PSP_DEVICE_INTERFACE_DETAIL_DATA pDeviceInterfaceDetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)buffer.data();
+      PSP_DEVICE_INTERFACE_DETAIL_DATA pDeviceInterfaceDetailData = reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA>(buffer.data());
       pDeviceInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
       if(!SetupDiGetInterfaceDeviceDetail(m_hDevInfo,

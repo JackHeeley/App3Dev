@@ -69,20 +69,20 @@ namespace CustomAllocator
 
       ///<summary> default constructor.</summary>
       ///<remarks> nothing to do because the allocator has no state.</remarks>
-      mmf_allocator() throw() 
+      mmf_allocator() noexcept
       {
       }
       
       ///<summary> copy constructor.</summary>
       ///<remarks> nothing to do because the allocator has no state.</remarks>
-      mmf_allocator(const mmf_allocator&) throw()
+      mmf_allocator(const mmf_allocator&) noexcept
       {
       }
       
       ///<summary> generalized copy constructor.</summary>
       ///<remarks> nothing to do because the allocator has no state.</remarks>
       template <class U>
-      mmf_allocator(const mmf_allocator<U>&) throw() 
+      mmf_allocator(const mmf_allocator<U>&) noexcept 
       {
       }
 

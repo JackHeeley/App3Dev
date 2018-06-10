@@ -83,7 +83,7 @@ public:
    }
 
    ///<summary> move constructor.</summary>
-   impl(impl&& other) :
+   impl(impl&& other) noexcept :
       filePathW(other.filePathW),
       bufferNameW(other.bufferNameW),
 
@@ -91,6 +91,7 @@ public:
       hFile(other.hFile),
       hFileMap(other.hFileMap)
    {
+      bufferSize.QuadPart = other.bufferSize.QuadPart;
       other.hFile = INVALID_HANDLE_VALUE;
       other.hFileMap = 0;
    }
@@ -117,7 +118,7 @@ public:
    }
 
    ///<summary> move assignment operator.</summary>
-   impl& impl::operator=(impl&& other)
+   impl& impl::operator=(impl&& other) noexcept
    {
       if (this != &other)
       {
@@ -155,7 +156,7 @@ public:
       return utf8::convert::from_utf16(bufferNameW);
    };
 
-   void* get_buffer_address()
+   void* get_buffer_address() noexcept
    {
       return buffer_ptr;
    };
@@ -165,12 +166,12 @@ public:
    mmf_vector get_buffer()
    {
       s_buffer_ptr = static_cast<unsigned char*>(buffer_ptr);  // TODO: weak point & not threadsafe
-      return mmf_vector((size_t)(get_buffer_size()));
+      return mmf_vector(gsl::narrow_cast<size_t>(get_buffer_size()));
    };
    
    ///<summary> get size of memory buffer.</summary>
    ///<returns> size of memory buffer in bytes</returns>
-   uint64_t get_buffer_size()
+   uint64_t get_buffer_size() noexcept
    {
        return bufferSize.QuadPart;
    };
@@ -304,7 +305,7 @@ const std::string MemoryMappedFile::get_buffer_name()
 
 ///<summary> get base address of buffer (a user space virtual address).</summary>
 ///<returns> address of memory buffer</returns>
-void* MemoryMappedFile::get_buffer_address()
+void* MemoryMappedFile::get_buffer_address() noexcept
 {
    return impl_->get_buffer_address();
 };

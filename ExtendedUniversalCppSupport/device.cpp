@@ -23,7 +23,7 @@ class Device::impl
 private:
    ///<summary>the wstring form of the device path and the memory</summary>
    const std::wstring device_path_w;
- 
+
    ///<summary> handle to the (open) device.</summary>
    HANDLE hDevice;
 
@@ -38,6 +38,30 @@ public:
       open();
    }
 
+   ///<summary> copy constructor.</summary>
+   ///<remarks>copies device name, and opens another handle on device</remarks>
+   impl(const impl& other) :
+      device_path_w(other.device_path_w),
+      hDevice(INVALID_HANDLE_VALUE)
+   {
+      open();
+   }
+
+   ///<summary> move constructor.</summary>
+   ///<remarks>copies device name, and takes ownership of other.hDevice</remarks>
+   impl(impl&& other) noexcept :
+      device_path_w(other.device_path_w),
+      hDevice(other.hDevice)
+   {
+      other.hDevice = INVALID_HANDLE_VALUE; // avoid double or premature CloseHandle
+   }
+
+   ///<summary> no copy assignment operator (class has const member)</summary>
+   impl& impl::operator=(impl& other) = delete;
+ 
+   ///<summary> no move assignment operator (class has const member)</summary>
+   impl& impl::operator=(impl&& other) = delete;
+   
    ///<summary> destructor</summary> 
    ///<remarks>If the handle to the device is open, it will be closed here.</remarks>
    ~impl() 
@@ -49,17 +73,17 @@ public:
    ///<exception cref='std::exception'>if the operation cannot be completed.</exception>
    void open()
    {
-      DWORD dwDesiredAccess = GENERIC_READ | GENERIC_WRITE;
-      DWORD dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
-      LPSECURITY_ATTRIBUTES lpSecurityAttributes = NULL;
-      DWORD dwCreateDisposition = OPEN_EXISTING;
-      DWORD dwFlagsAndAttributes = FILE_ATTRIBUTE_NORMAL;
+      const DWORD dwDesiredAccess = GENERIC_READ | GENERIC_WRITE;
+      const DWORD dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
+      //LPSECURITY_ATTRIBUTES lpSecurityAttributes = NULL;
+      const DWORD dwCreateDisposition = OPEN_EXISTING;
+      const DWORD dwFlagsAndAttributes = FILE_ATTRIBUTE_NORMAL;
       HANDLE hTemplateFile = NULL;
 
       hDevice = CreateFile(device_path_w.c_str(),
          dwDesiredAccess,
          dwShareMode,
-         lpSecurityAttributes,
+         NULL, //lpSecurityAttributes,
          dwCreateDisposition,
          dwFlagsAndAttributes,
          hTemplateFile
@@ -173,7 +197,7 @@ public:
    }
 
    ///<summary> close the device for device control and file i/o operations.</summary>
-   void close() 
+   void close() noexcept
    {
       if (hDevice != INVALID_HANDLE_VALUE) 
       {
