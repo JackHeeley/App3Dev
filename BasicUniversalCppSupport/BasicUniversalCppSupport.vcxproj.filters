@@ -39,10 +39,10 @@
     <ClInclude Include="logger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="exception.hpp">
+    <ClInclude Include="spimpl.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="spimpl.hpp">
+    <ClInclude Include="error_context.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

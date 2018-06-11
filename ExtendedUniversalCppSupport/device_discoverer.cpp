@@ -110,7 +110,7 @@ private:
 
       if (hDI == INVALID_HANDLE_VALUE)
       {
-         throw fox_exception("SetUpDiGetClassDevs failed");
+         throw error_context("SetUpDiGetClassDevs failed");
       }
       return hDI;
    }
@@ -133,7 +133,7 @@ private:
          const int errorCode = GetLastError();
          if (errorCode != ERROR_NO_MORE_ITEMS)
          {
-            throw fox_exception("SetupDiEnumDeviceInterfaces failed");
+            throw error_context("SetupDiEnumDeviceInterfaces failed");
          }
       }
 
@@ -164,7 +164,7 @@ private:
          const int errorCode = GetLastError();
          if (errorCode != ERROR_INSUFFICIENT_BUFFER) 
          {
-            throw fox_exception("Probing SetupDiGetInterfaceDeviceDetail failed");
+            throw error_context("Probing SetupDiGetInterfaceDeviceDetail failed");
          }
       }
 
@@ -186,7 +186,7 @@ private:
          NULL )
          )
       {
-         throw fox_exception("SetupDiGetInterfaceDeviceDetail failed");
+         throw error_context("SetupDiGetInterfaceDeviceDetail failed");
       }
 
       return std::wstring(pDeviceInterfaceDetailData->DevicePath); // copies buffer content before its destroyed

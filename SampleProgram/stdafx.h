@@ -16,7 +16,7 @@
 #include <gsl.h>
 #include <windows.h> // TODO: almost ready to remove this and set project for pure ANSI C++ 14
 
-#include <exception.hpp>
+#include <error_context.hpp>
 #include <file_logger.hpp>
 #include <logger.hpp>
 #include <spimpl.hpp>

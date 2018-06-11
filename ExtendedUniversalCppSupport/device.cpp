@@ -92,7 +92,7 @@ public:
       if (hDevice == INVALID_HANDLE_VALUE) 
       {
          std::stringstream create_file_failed; create_file_failed << "CreateFile(\"" << utf8::convert::from_utf16(device_path_w) << "\", ...) failed";
-         throw fox_exception(create_file_failed.str().c_str());
+         throw error_context(create_file_failed.str().c_str());
       }
    }
 
@@ -110,7 +110,7 @@ public:
 
       if (hDevice == INVALID_HANDLE_VALUE) 
       {
-         throw fox_exception("Invalid handle");
+         throw error_context("Invalid handle");
       }
 
       DWORD nBytesReturned = 0;
@@ -125,7 +125,7 @@ public:
          NULL
       ))
       {
-         throw fox_exception("DeviceIoControl failed");
+         throw error_context("DeviceIoControl failed");
       }
 
       return nBytesReturned;
@@ -141,7 +141,7 @@ public:
 
       if (hDevice == INVALID_HANDLE_VALUE) 
       {
-         throw fox_exception("Invalid handle");
+         throw error_context("Invalid handle");
       }
 
       DWORD numberOfBytesRead = 0;
@@ -153,7 +153,7 @@ public:
          NULL
       ))
       {
-         throw fox_exception("ReadFile failed");
+         throw error_context("ReadFile failed");
       }
       return numberOfBytesRead;
    }
@@ -168,7 +168,7 @@ public:
  
       if (hDevice == INVALID_HANDLE_VALUE) 
       {
-         throw fox_exception("Invalid handle");
+         throw error_context("Invalid handle");
       }
 
       DWORD numberOfBytesWritten = 0;
@@ -180,7 +180,7 @@ public:
          NULL
       ))
       {
-         throw fox_exception("WriteFile failed");
+         throw error_context("WriteFile failed");
       }
       return numberOfBytesWritten;
    }

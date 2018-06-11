@@ -43,10 +43,13 @@ Programmers notes:
 StdAfx.h, targtver.h modified to target windows 7 and higher
 
 Logger.hpp
-    Abstract logging support and a fox::exception type (featuring context tagging on 'what').
+    Abstract logging support
+
+error_context.hpp
+    An error::context type (featuring context tagging on std::exception 'what').
 
 FileLogger.hpp, FileLogger.cpp
-    A logger implementation using a filesystem file.
+    A simple logger implementation using a filesystem file.
 
 spimpl.h
     Templates support for smart pointer to implementation paradigm using rule of zero. 

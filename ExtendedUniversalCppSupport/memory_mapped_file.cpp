@@ -192,7 +192,7 @@ public:
       if (hFile == INVALID_HANDLE_VALUE) 
       {
          std::stringstream create_file_failed; create_file_failed << "CreateFile(\"" << utf8::convert::from_utf16(filePathW) << "\", ...) failed";
-         throw fox_exception(create_file_failed.str().c_str());
+         throw error_context(create_file_failed.str().c_str());
       }
    }
 
@@ -202,7 +202,7 @@ public:
    {
       if (hFile == INVALID_HANDLE_VALUE) 
       {
-         throw fox_exception("No file handle available");
+         throw error_context("No file handle available");
       }
 
       bufferSize.LowPart = GetFileSize(hFile, (LPDWORD)(&bufferSize.HighPart));
@@ -226,7 +226,7 @@ public:
          {
             CloseHandle(hFileMap);
             hFileMap = 0;
-            throw fox_exception("CreateFileMapping failed");
+            throw error_context("CreateFileMapping failed");
          }
       }
    }
@@ -244,7 +244,7 @@ public:
 
       if (buffer_ptr == NULL) 
       {
-         throw fox_exception("MapViewOfFile failed");
+         throw error_context("MapViewOfFile failed");
       }
    }
 

@@ -16,7 +16,7 @@
 #include <sstream>
 
 // Additional headers this dll requires are here...
-#include <exception.hpp>
+#include <error_context.hpp>
 #include <file_logger.hpp>
 #include <logger.hpp>
 #include <spimpl.hpp>

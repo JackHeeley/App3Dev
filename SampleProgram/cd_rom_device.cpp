@@ -71,7 +71,7 @@ public:
       if (diskGeometry.Cylinders.HighPart != 0)
       {
          SetLastError(ERROR_NOT_SUPPORTED);
-         throw fox_exception("Unsupported media size");   // future proofing
+         throw error_context("Unsupported media size");   // future proofing
       }
 
       // calculate size of buffer needed to read entire media content
@@ -96,7 +96,7 @@ public:
       if (buffer_size > reinterpret_cast<uint64_t>(std::numeric_limits<std::size_t>::max))
       {
          SetLastError(ERROR_NOT_SUPPORTED);
-         throw fox_exception("Vector cannot accommodate this media size with x86 architecture");
+         throw error_context("Vector cannot accommodate this media size with x86 architecture");
       }
 
       // adjust buffer vector to accommodate the image data
@@ -117,7 +117,7 @@ public:
       if (buffer_size > reinterpret_cast<uint64_t>(std::numeric_limits<std::size_t>::max))
       {
          SetLastError(ERROR_NOT_SUPPORTED);
-         throw fox_exception("Vector cannot accommodate this media size with x86 architecture");
+         throw error_context("Vector cannot accommodate this media size with x86 architecture");
       }
 
       // adjust buffer vector to accommodate the image data
@@ -155,7 +155,7 @@ public:
             if (diskGeometry.Cylinders.HighPart != 0)
             {
                SetLastError(ERROR_NOT_SUPPORTED);
-               throw fox_exception("Unsupported media size"); // future proofing
+               throw error_context("Unsupported media size"); // future proofing
             }
 
             const uint64_t cbyCylinderSize =
@@ -232,7 +232,7 @@ public:
 
       if (nBytesReturned != 0)
       {
-         throw fox_exception("ioctl returned non-zero length");
+         throw error_context("ioctl returned non-zero length");
       }
    }
 
@@ -245,7 +245,7 @@ public:
 
       if (nBytesReturned != 0)
       {
-         throw fox_exception("ioctl returned non-zero length");
+         throw error_context("ioctl returned non-zero length");
       }
    }
 
@@ -264,7 +264,7 @@ private:
 
       if (nBytesReturned != 0)
       {
-         throw fox_exception("ioctl returned non-zero length");
+         throw error_context("ioctl returned non-zero length");
       }
       return aLockedValue;
    }
@@ -280,7 +280,7 @@ private:
 
       if (nBytesReturned != sizeof(DISK_GEOMETRY))
       {
-         throw fox_exception("ioctl returned unexpected length");
+         throw error_context("ioctl returned unexpected length");
       }
 
       return disk_geometry;

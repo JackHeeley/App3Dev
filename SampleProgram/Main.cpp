@@ -40,6 +40,11 @@ public:
       m_cdr.lock(); 
    }
 
+   TrayDoorLock(TrayDoorLock& other) = default; 
+   TrayDoorLock(TrayDoorLock&& other) = delete;
+   TrayDoorLock& operator=(TrayDoorLock& other) = default;
+   TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
+
    ///<summary>unlock tray door in all return paths</summary>
    ~TrayDoorLock() noexcept
    {
@@ -137,16 +142,17 @@ int main(int argc, char* argv[])
       LOG_INFO("Ripping completed successfully.");
       exit(0);
    }
-   catch (fox::exception& f)
+   catch (error::context& f)
    {
-      std::string error_text = "Unhandled Fox Exception: "; error_text.append(f.what());   // fancy what
+      std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.full_what()); // fancy what
+      //std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.what());    // or simple what if you prefer
       std::cout << error_text << std::endl;
       LOG_ERROR(error_text);
       exit(-1);
    }
    catch (std::exception& e)
    {
-      LOG_WARNING("A std::exception was thrown. (design intent is to always use fox::exception).");
+      LOG_WARNING("A std::exception was thrown. (design intent is to always use error::context).");
       std::string error_text = "Unhandled Std Exception: "; error_text.append(e.what());   // simple what
       std::cout << error_text << std::endl;
       LOG_ERROR(error_text);
@@ -154,7 +160,7 @@ int main(int argc, char* argv[])
    }
    catch (...)
    {
-      LOG_WARNING("Something odd was thrown. (design intent is to always use fox::exception).");
+      LOG_WARNING("Something odd was thrown. (design intent is to always use error::context).");
       std::string error_text = "Unhandled exception, "; error_text.append(SystemError().get_error_text()); // best effort
       std::cout << error_text << std::endl;
       LOG_ERROR(error_text);
