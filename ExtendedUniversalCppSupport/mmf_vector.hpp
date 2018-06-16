@@ -116,7 +116,9 @@ namespace CustomAllocator
          if (is_stl_vector<T>::value) 
          {
             // allocate the vector *container* as per default allocator
+#pragma warning(disable:26409)
             return static_cast<pointer>(::operator new(num * sizeof(T)));
+#pragma warning(default:26409)
          }
          else 
          {
@@ -129,8 +131,9 @@ namespace CustomAllocator
       void construct(pointer p, const T& value) noexcept
       {
          // initialize memory with placement new
-         //new(static_cast<void*>(p))T(value);
-         new(p)T(value);
+#pragma warning(disable:26409)
+        new(p)T(value);
+#pragma warning(default:26409)
       }
 
       ///<summary> destroy elements of initialized storage p.</summary>
@@ -146,7 +149,9 @@ namespace CustomAllocator
          if (is_stl_vector<T>::value) 
          {
             // deallocate the vector *container* as per default allocator
+#pragma warning(disable:26409)
             ::operator delete(p);
+#pragma warning(default:26409)
          }
          else 
          {

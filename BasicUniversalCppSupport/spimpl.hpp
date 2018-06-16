@@ -1,5 +1,5 @@
 #pragma once
-
+#pragma warning(disable:  26402 26409 26432)
 /*
 ====================================================================
 A Smart Pointer to IMPLementation (i.e. Smart PIMPL or just SPIMPL).
@@ -434,3 +434,4 @@ namespace std {
       }
    };
 }
+#pragma warning(default:  26402 26409 26432)

@@ -16,14 +16,18 @@
 #include <iostream>
 #include <fstream>
 
+#pragma warning(disable:26426)
+
 ///<summary> the file logger in use.</summary>
 static file_logger Logger("ripper.log", LogFilter::Full);
 
-///<summary> number of times to test for an absent device.</summary>
-const static int  MAX_RETRIES = 3;
-
 ///<summary> filename for ripped image</summary>
 const static std::string fileName("cdrom_image.iso");
+
+#pragma warning(default:26426)
+
+///<summary> number of times to test for an absent device.</summary>
+const static int  MAX_RETRIES = 3;
 
 ///<summary> RAII object used to lock the physical media tray door on CDROM.</summary>
 ///<remarks> Be aware that signalled process termination (Eg CRTL+C or CTRL+BREAK) won't invoke destructors!</remarks>
@@ -41,15 +45,22 @@ public:
       m_cdr.lock(); 
    }
 
-   TrayDoorLock(TrayDoorLock& other) = default; 
+   ///<summary> default copy constructor.</summary>
+   TrayDoorLock(TrayDoorLock& other) = default;
+
+   ///<summary> deleted move constructor.</summary>
    TrayDoorLock(TrayDoorLock&& other) = delete;
+
+   ///<summary> default copy assignment.</summary>
    TrayDoorLock& operator=(TrayDoorLock& other) = default;
+
+   ///<summary> deleted move assignment.</summary>
    TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
 
    ///<summary>unlock tray door in all return paths</summary>
+#pragma warning (disable:26447)
    ~TrayDoorLock() noexcept
    {
-#pragma warning (disable:26447)
       try
       {
          LOG_INFO("~TrayDoorLock invoked");
@@ -66,8 +77,9 @@ public:
             // dismiss is still least bad option here
          }
       }
-#pragma warning (disable:26447)
    }
+#pragma warning (default:26447)
+
 };
 
 ///<summary> functor class to rip image.</summary>
