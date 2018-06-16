@@ -22,32 +22,21 @@ private:
    std::ofstream stream;
 
 public:
-   impl() noexcept :
+#pragma warning (disable:26439)
+   impl() /*noexcept*/ :
+#pragma warning (default:26439)
       fileName("LogFile.log"),
       filter(LogFilter::None),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
    {
    };
 
-   impl(std::string fileName, LogFilter filter) :
+   impl(const std::string fileName, LogFilter filter) /*noexcept*/ :
       fileName(fileName),
       filter(filter),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
    {
    };
-
-   ///<summary> destructor.</summary>
-   ~impl()
-   {
-      try
-      {
-         clear();
-      }
-      catch (std::exception&)
-      {
-         // catch and dismiss is least bad option
-      }
-   }
 
    ///<summary> copy constructor.</summary>
    impl(const impl& other) :
@@ -58,13 +47,30 @@ public:
    }
 
    ///<summary> move constructor.</summary>
-   impl(impl&& other) noexcept :
+#pragma warning (disable:26439)
+   impl(impl&& other) /*noexcept*/ :
+#pragma warning (default:26439)
       fileName(other.fileName),
       filter(other.filter),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
    {
    }
 
+   ///<summary> destructor.</summary>
+   ~impl() noexcept
+   {
+      try
+      {
+#pragma warning (disable:26447)
+         clear();
+#pragma warning (default:26447)
+      }
+      catch (std::exception&)
+      {
+         // catch and dismiss is least bad option
+      }
+   }
+   
    ///<summary> copy assignment operator.</summary>
    impl& impl::operator=(impl& other)
    {
@@ -78,7 +84,10 @@ public:
    }
 
    ///<summary> move assignment operator.</summary>
-   impl& impl::operator=(impl&& other) noexcept
+#pragma warning (disable:26439)
+   impl& impl::operator=(impl&& other) /*noexcept*/
+#pragma warning (default:26439)
+
    {
       if (this != &other)
       {
@@ -142,9 +151,9 @@ public:
       return str;
    }
 
-   void clear() noexcept override
+   void clear() override
    {
-      stream.clear();
+       stream.clear();
    }
 };
 
@@ -209,7 +218,7 @@ std::string file_logger::read_all()
    return impl_->read_all();
 }
 
-void file_logger::clear() noexcept
+void file_logger::clear()
 {
    impl_->clear();
 }

@@ -78,14 +78,26 @@ namespace CustomAllocator
       mmf_allocator(const mmf_allocator&) noexcept
       {
       }
+
+      ///<summary> move constructor.</summary>
+      ///<remarks> nothing to do because the allocator has no state.</remarks>
+      mmf_allocator(const mmf_allocator&&) noexcept
+      {
+      }
       
+      ///<summary> copy assignment operator.</summary>
+      mmf_allocator& operator=(mmf_allocator& other) = default;
+
+      ///<summary> move assignment operator.</summary>
+      mmf_allocator& operator=(mmf_allocator&& other) = default;
+
       ///<summary> generalized copy constructor.</summary>
       ///<remarks> nothing to do because the allocator has no state.</remarks>
       template <class U>
-      mmf_allocator(const mmf_allocator<U>&) noexcept 
+      mmf_allocator(const mmf_allocator<U>&) noexcept
       {
       }
-
+      
       ///<summary> destructor.</summary>
       ///<remarks> nothing to do because the allocator has no state.</remarks>
       ~mmf_allocator() noexcept

@@ -49,12 +49,14 @@ public:
 
    ///<summary> move constructor.</summary>
    ///<remarks>copies device name, and takes ownership of other.hDevice</remarks>
-   impl(impl&& other) noexcept :
+#pragma warning (disable:26439)
+   impl(impl&& other) /*noexcept*/  :
       device_path_w(other.device_path_w),
       hDevice(other.hDevice)
    {
       other.hDevice = INVALID_HANDLE_VALUE; // avoid double or premature CloseHandle
    }
+#pragma warning (default:26439)
 
    ///<summary> no copy assignment operator (class has const member)</summary>
    impl& impl::operator=(impl& other) = delete;

@@ -30,7 +30,7 @@ public:
    ///<param name='fileName'>path and name of the log file.</param>
    ///<param name='filter'>bitmask used to filter log write events.</param>
    ///<exception cref='std::exception'>if underlying ofstream could not be opened</exception>
-   file_logger(std::string fileName, LogFilter filter);
+   file_logger(const std::string fileName, LogFilter filter);
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean identical member content.</remarks>
@@ -72,7 +72,7 @@ public:
    std::string read_all() override;
 
    ///<summary>Clear log file.</summary>
-   void clear() noexcept override;
+   void clear() override;
 
 private:
    ///<summary> forward reference to private implementation.</summary>

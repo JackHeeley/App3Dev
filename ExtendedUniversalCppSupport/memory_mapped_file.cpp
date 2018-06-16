@@ -83,7 +83,9 @@ public:
    }
 
    ///<summary> move constructor.</summary>
-   impl(impl&& other) noexcept :
+#pragma warning (disable:26439)
+   impl(impl&& other) /*noexcept*/ :
+#pragma warning (default:26439)
       filePathW(other.filePathW),
       bufferNameW(other.bufferNameW),
 
@@ -118,7 +120,9 @@ public:
    }
 
    ///<summary> move assignment operator.</summary>
-   impl& impl::operator=(impl&& other) noexcept
+#pragma warning (disable:26439)
+   impl& impl::operator=(impl&& other) /*noexcept*/
+#pragma warning (default:26439)
    {
       if (this != &other)
       {
@@ -139,7 +143,16 @@ public:
    ///<summary> destructor.</summary>
    impl::~impl()
    {
-      release();
+      try
+      {
+#pragma warning (disable:26447)
+         release();
+#pragma warning (default:26447)
+      }
+      catch (std::exception&)
+      {
+         // catch and dismiss is least bad strategy
+      }
    }
 
    ///<summary> get path name of disk file used as swap space for buffer</summary>
@@ -319,7 +332,7 @@ mmf_vector MemoryMappedFile::get_buffer()
 
 ///<summary> get base address of buffer (a user space virtual address).</summary>
 ///<returns> address of memory buffer</returns>
-uint64_t MemoryMappedFile::get_buffer_size()
+uint64_t MemoryMappedFile::get_buffer_size() noexcept
 {
    return impl_->get_buffer_size();
 };

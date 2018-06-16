@@ -134,6 +134,24 @@ public:
       return result;
    }
 
+   ///<summary> default constructor.</summary>
+   logger() = default;
+      
+   ///<summary> copy constructor.</summary>
+   logger(const logger& other) = default;
+
+   ///<summary> move constructor.</summary>
+   logger(logger&& other) = default;
+
+   ///<summary> virtualize copy assignment operator.</summary>
+   virtual logger& operator=(logger& other) = default;
+ 
+   ///<summary> virtualize move assignment operator.</summary>
+   virtual logger& operator=(logger&& other) = default;
+
+   ///<summary> virtual destructor.</summary>
+   virtual ~logger() = default;
+
    ///<summary> used to determine which messages get logged
    /// logger implementors compare the bitmask parameter constructed or supplied here 
    /// to the filter parameter supplied with write operations.</summary>

@@ -86,7 +86,7 @@ public:
 
    ///<summary> get buffer size.</summary>
    ///<returns> length memory buffer in bytes.</returns>
-   uint64_t get_buffer_size();
+   uint64_t get_buffer_size() noexcept;
 
    ///<summary> commit buffer to disk and release memory.</summary>
    void release();

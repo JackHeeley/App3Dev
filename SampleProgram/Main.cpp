@@ -26,6 +26,7 @@ const static int  MAX_RETRIES = 3;
 const static std::string fileName("cdrom_image.iso");
 
 ///<summary> RAII object used to lock the physical media tray door on CDROM.</summary>
+///<remarks> Be aware that signalled process termination (Eg CRTL+C or CTRL+BREAK) won't invoke destructors!</remarks>
 class TrayDoorLock
 {
 private:
@@ -48,14 +49,24 @@ public:
    ///<summary>unlock tray door in all return paths</summary>
    ~TrayDoorLock() noexcept
    {
+#pragma warning (disable:26447)
       try
       {
+         LOG_INFO("~TrayDoorLock invoked");
          m_cdr.unlock();
       }
       catch (...)
       {
-         LOG_ERROR("Exception in ~TrayDoorLock.");
+         try
+         {
+            LOG_ERROR("Exception in ~TrayDoorLock.");
+         }
+         catch (...)
+         {
+            // dismiss is still least bad option here
+         }
       }
+#pragma warning (disable:26447)
    }
 };
 
@@ -142,7 +153,7 @@ int main(int argc, char* argv[])
       LOG_INFO("Ripping completed successfully.");
       exit(0);
    }
-   catch (error::context& f)
+   catch (const error::context& f)
    {
       std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.full_what()); // fancy what
       //std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.what());    // or simple what if you prefer

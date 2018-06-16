@@ -98,7 +98,7 @@ public:
 private:
    ///<summary> get handle to device information set corresponding to the interface class guid supplied.</summary>
    ///<param name ="anInterfaceClassGuid"> pointer to setup interface class guid or device class guid to interrogate.</param>
-   HDEVINFO getDevInfoHandle(LPGUID anInterfaceClassGuid)
+   HDEVINFO getDevInfoHandle(LPCGUID anInterfaceClassGuid)
    {
       const DWORD Flags = DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
 
