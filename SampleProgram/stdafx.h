@@ -13,8 +13,10 @@
 
 
 // Additional headers program requires are here...
-#include <gsl.h>
+#define NOMINMAX
 #include <windows.h> // TODO: almost ready to remove this and set project for pure ANSI C++ 14
+
+#include <gsl.h>
 
 #include <error_context.hpp>
 #include <file_logger.hpp>

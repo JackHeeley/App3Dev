@@ -134,7 +134,7 @@ namespace UnitTestBasicUniversalCppSupport
             SystemError lastError(error_code);
 
             // perform the operation under test (get error_code from SystemError)...
-            auto actual_value = lastError.get_error_code();
+            const auto actual_value = lastError.get_error_code();
 
             // test succeeds if error_code matches
             utf8::Assert::IsTrue((actual_value == expected_value), "SystemError returned unexpected error code");
@@ -177,7 +177,7 @@ namespace UnitTestBasicUniversalCppSupport
             std::vector<int> test_case { 0x23, 0x2000 };
 
             // perform the operation under test (construct some SystemErrors with the parameterized constructor)...
-            for (int i : test_case )
+            for (const int i : test_case )
             {
                SystemError lastError(i);
 

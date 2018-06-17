@@ -9,8 +9,10 @@
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files:
-#include <gsl.h>
+#define NOMINMAX
 #include <windows.h>
+
+#include <gsl.h>
 
 #include <vector>
 #include <sstream>

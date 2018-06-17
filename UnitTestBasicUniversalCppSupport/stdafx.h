@@ -11,7 +11,10 @@
 #include "CppUnitTest.h"
 
 // TODO: reference additional headers your program requires here
+#define NOMINMAX
 #include <windows.h>
+
+#include <gsl.h>
 
 #include "error_context.hpp"
 #include "file_logger.hpp"

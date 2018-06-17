@@ -18,7 +18,9 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (error::context& e)
          {
+#pragma warning(disable:26489)   // known false positive
             std::string what_string(e.full_what());
+#pragma warning(default:26489)
             utf8::Assert::IsTrue(what_string.find("unittestfilelogger.cpp") != std::string::npos, "Didn't find __FILE__ in exception what().");
             //utf8::Assert::IsTrue(what_string.find("L26") != std::string::npos, "Didn't find __LINE__ in exception what().");
             utf8::Assert::IsTrue(what_string.find("TestErrorContext") != std::string::npos, "Didn't find __func__ in exception what().");

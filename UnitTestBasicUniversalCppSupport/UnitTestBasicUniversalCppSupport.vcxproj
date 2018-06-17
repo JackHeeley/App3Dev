@@ -175,6 +175,7 @@
     </ClCompile>
     <ClCompile Include="UnitTestFileLogger.cpp" />
     <ClCompile Include="UnitTestSystemError.cpp" />
+    <ClCompile Include="UnitTestUtf8Convert.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BasicUniversalCppSupport\BasicUniversalCppSupport.vcxproj">
