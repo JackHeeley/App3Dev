@@ -65,8 +65,8 @@ namespace UnitTestExtendedUniversalCppSupport
             // prepare for test (fetch cdrom data)
             DeviceDiscoverer cdrom(GUID_DEVINTERFACE_CDROM);
 
-            auto n_cdrom_devices_before = cdrom.device_path_map.get().size();
-            auto cdrom_device0_path = cdrom.device_path_map.get()[0];
+            const auto n_cdrom_devices_before = cdrom.device_path_map.get().size();
+            const auto cdrom_device0_path = cdrom.device_path_map.get()[0];
 
             // perform the operation under test...
             DeviceDiscoverer cdrom1(std::move(cdrom));
@@ -93,8 +93,8 @@ namespace UnitTestExtendedUniversalCppSupport
             DeviceDiscoverer disk(GUID_DEVINTERFACE_DISK);   // initialize disk with some "irrelevent" data
             DeviceDiscoverer cdrom(GUID_DEVINTERFACE_CDROM); // fetch the cd_rom data (but to a short-lived local scope object)
 
-            auto n_disk_devices_before = disk.device_path_map.get().size();
-            auto n_cdrom_devices_before = cdrom.device_path_map.get().size();
+            const auto n_disk_devices_before = disk.device_path_map.get().size();
+            const auto n_cdrom_devices_before = cdrom.device_path_map.get().size();
 
             utf8::Assert::IsTrue((n_disk_devices_before != n_cdrom_devices_before), "number of cdrom and disks (being equal) may not be ideal to support this test");
 

@@ -18,7 +18,8 @@ namespace UnitTestExtendedUniversalCppSupport
             // prepare for test...
             const std::string file_path("test.iso");
             const std::string buffer_name("test_buffer");
-            uint64_t buffer_size(1024);
+            const uint64_t buffer_size = 1024;
+
             // perform the operation under test (construct a memory mapped file with a constructor)...
             MemoryMappedFile mmf(file_path, buffer_name, buffer_size);
 
@@ -32,10 +33,13 @@ namespace UnitTestExtendedUniversalCppSupport
             }
             catch (...)
             {
-               std::stringstream ss;
-               SystemError lastError;
-               ss << "get_buffer_address()  failed (" << lastError.get_error_code() << ") " << lastError.get_error_text();
-               utf8::Assert::Fail(ss.str().c_str());
+               const SystemError lastError;
+               const int errorCode = lastError.get_error_code();
+               const std::string errorText = lastError.get_error_text();
+               std::stringstream ss;  
+               ss << "get_buffer_address()  failed (" << errorCode << ") " << errorText;
+               const std::string failString = ss.str();
+               utf8::Assert::Fail(failString.c_str());
             }
          }
          catch (std::exception e)
@@ -51,7 +55,7 @@ namespace UnitTestExtendedUniversalCppSupport
             // prepare for test...
             const std::string file_path("test.iso");
             const std::string buffer_name("test_buffer");
-            uint64_t buffer_size(1024);
+            const uint64_t buffer_size = 1024;
             // perform the operation under test (construct a memory mapped file with a constructor)...
             MemoryMappedFile mmf(file_path, buffer_name, buffer_size);
 
@@ -65,10 +69,13 @@ namespace UnitTestExtendedUniversalCppSupport
             }
             catch (...)
             {
+               const SystemError lastError;
+               const int errorCode = lastError.get_error_code();
+               const std::string errorText = lastError.get_error_text();
                std::stringstream ss;
-               SystemError lastError;
-               ss << "get_buffer()  failed (" << lastError.get_error_code() << ") " << lastError.get_error_text();
-               utf8::Assert::Fail(ss.str().c_str());
+               ss << "get_buffer()  failed (" << errorCode << ") " << errorText;
+               const std::string failString = ss.str();
+               utf8::Assert::Fail(failString.c_str());
             }
          }
          catch (std::exception e)

@@ -171,13 +171,13 @@ bool SystemError::operator!=(const SystemError& other) const
 }
 
 ///<summary> gets the system error text from an error code.</summary>
-std::string SystemError::get_error_text() const
+const std::string SystemError::get_error_text() const
 {
    return impl_->get_error_text();
 }
 
 ///<summary> gets the system error code.</summary>
-int SystemError::get_error_code() const noexcept
+const int SystemError::get_error_code() const noexcept
 {
    return impl_->get_error_code();
 }

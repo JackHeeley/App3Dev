@@ -33,20 +33,40 @@ namespace UnitTestAbstractDevice
       TEST_METHOD(TestCdromTrayLocking)
       {
          // RAII door lock helper
-         class LockTrayDoor
+         class TrayDoorLock
          {
-            CdromDevice& m_cdrom;
+            CdromDevice& m_cdr;
 
          public:
-            LockTrayDoor(CdromDevice& cdrom) : m_cdrom(cdrom)
+            TrayDoorLock(CdromDevice& cdrom) : m_cdr(cdrom)
             {
-               m_cdrom.lock();
+               m_cdr.lock();
             }
+            ///<summary> default copy constructor.</summary>
+            TrayDoorLock(TrayDoorLock& other) = default;
 
-            ~LockTrayDoor()
+            ///<summary> deleted move constructor.</summary>
+            TrayDoorLock(TrayDoorLock&& other) = delete;
+
+            ///<summary> default copy assignment.</summary>
+            TrayDoorLock& operator=(TrayDoorLock& other) = default;
+
+            ///<summary> deleted move assignment.</summary>
+            TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
+
+#pragma warning (disable:26447)
+            ~TrayDoorLock()
             {
-               m_cdrom.unlock();
+               try
+               {
+                  m_cdr.unlock();
+               }
+               catch (...)
+               {
+                 // dismiss is still least bad option here
+               }
             }
+#pragma warning (default:26447)
          };
 
          // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
@@ -62,7 +82,7 @@ namespace UnitTestAbstractDevice
                try
                {
                   // perpare for test (lock the tray door)...
-                  LockTrayDoor scoped_lock(cdrom0);
+                  TrayDoorLock scoped_lock(cdrom0);
 
                   utf8::Assert::IsTrue(cdrom0.get_locked(), "cdrom0 reports unlocked when expected state is locked");
 
@@ -133,7 +153,7 @@ namespace UnitTestAbstractDevice
                try
                {
                   // perform the operation under test (query device geometry and calculate media size)...
-                  auto size = cdrom.get_image_size();
+                  const auto size = cdrom.get_image_size();
                   break;
                }
                catch (std::exception& e)

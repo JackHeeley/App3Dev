@@ -37,10 +37,10 @@ public:
    bool operator!=(const SystemError& other) const;
 
    ///<summary> get the system error text corresponding to the error code.</summary>
-   std::string get_error_text() const;
+   const std::string get_error_text() const;
 
    ///<summary> get the error code.</summary>
-   int get_error_code() const noexcept;
+   const int get_error_code() const noexcept;
 
 private:
    ///<summary> forward reference to private implementation.</summary>
