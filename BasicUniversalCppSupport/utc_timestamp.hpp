@@ -16,7 +16,7 @@
 #include <locale>
 #include <algorithm>
 
-#pragma warning (disable:4251 4290)
+#pragma warning (disable:4251 4290 26444)
 
 // trim from start (in place)
 static inline void ltrim(std::string &s) 
@@ -72,4 +72,4 @@ const auto utc_timestamp = []()
    return trim_copy({ timebuf });
 };
 
-#pragma warning (default:4251 4290)
+#pragma warning (default:4251 4290 26444)

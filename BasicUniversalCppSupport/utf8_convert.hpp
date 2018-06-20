@@ -9,7 +9,6 @@
 #include <string>
 #include <codecvt>
 #include <iomanip>
-#include <gsl.h>
 
 namespace utf8
 {
