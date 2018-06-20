@@ -51,7 +51,7 @@ error_context.hpp
 FileLogger.hpp, FileLogger.cpp
     A simple logger implementation using a filesystem file.
 
-spimpl.h
+spimpl.hpp
     Templates support for smart pointer to implementation paradigm using rule of zero. 
 
 SystemError.hpp, SystemError.cpp

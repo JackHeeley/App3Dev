@@ -87,15 +87,14 @@ DONE:
 32. Spimpled the file_logger.
 33. Fixed debug build custom allocator problem.
 33. Cleaned up mmf_vector implementation.
+34. Obsoleted mmf_vector in favour of gsl:span.
+35. Replced c++98 style parameter frames (using raw pointers and buffer sizes) with gsl::span.
 
 IN PROGRESS:
 
 TODO:
 
-1. consider C++98 style parameter frames (using raw pointers and buffer sizes) modernize.
-    - Device (method parameter frames)
+1. consider how to more conveniently share a single file_logger in a multi-dll program.
 
-2. consider how to more conveniently share a single file_logger in a multi-dll program.
-
-3. File logger entry layout could be improved.
+2. File logger entry layout could be improved.
 

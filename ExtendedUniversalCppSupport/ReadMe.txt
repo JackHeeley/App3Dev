@@ -57,7 +57,3 @@ MemoryMappedFile.hpp, MemoryMappedFile.cpp
     These files wrap the windows memory mapping functions with enough 
     functionality to supply a shared memory buffer backed by a file system
     (eg disk) file.
-
-MyAlloc.hpp
-    Templates for a custom allocator, designed for type alias "mmf_vector"
-    (a byte vector backed by the memory mapped file).
