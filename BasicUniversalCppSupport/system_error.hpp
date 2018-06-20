@@ -26,7 +26,7 @@ public:
    SystemError() noexcept;
 
    ///<summary> constructs a system error from an error code.</summary>
-   SystemError(int errorCode);
+   SystemError(int errorCode) noexcept;
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean identical error_code content.</remarks>

@@ -32,31 +32,13 @@ public:
    ///<summary> get size of media image.</summary>
    ///<returns> size in bytes of image data.</returns>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   uint64_t get_image_size(void);
+   const uint64_t get_image_size(void) const;
 
-   ///<summary>get image of media into normal byte vector.</summary>
-   ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).
-   /// For this reason caller may wish to consider using lock/unlock.</remarks>
-   ///<param name ='buffer'> a vector to receive the image.
-   /// The vector will be adjusted in size to accommodate the data.</param>
-   ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void get_image(std::vector<unsigned char>& buffer);
-
-   ///<summary>get image of media into mmf byte vector.</summary>
-   ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).
-   /// For this reason caller may wish to consider using lock/unlock.</remarks>
-   ///<param name ='buffer'> a mmf_vector to receive the image. 
-   /// The vector will be adjusted in size to accommodate the data.</param>
-   ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void get_image(mmf_vector& buffer);
-
-   ///<summary>get image of media to memory buffer.</summary>
+   ///<summary>get image of media into span.</summary>
    ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
-   ///<param name ='ptr'> a raw pointer to a memory location to receive the image.</param>
-   ///<param name ='buffer_size'> length in bytes of the memory location to receive the image.
-   /// The supplied contiguous virtual memory block should be large enough to accomodate the data to be returned.</param>
+   ///<param name ='span'> a gsl::span representing a memory location to receive the image.</param>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void CdromDevice::get_image(void* ptr, uint64_t buffer_size);
+   void CdromDevice::get_image(gsl::span<unsigned char> span) const;
 
    ///<summary> prevents media removal.</summary>
    void lock(void);
@@ -66,15 +48,15 @@ public:
 
    ///<summary>query the locked state of the cdrom.</summary>
    ///<returns>true if the cdrom is locked.</returns>
-   bool get_locked(void) noexcept;
+   const bool get_locked(void) const noexcept;
 
    ///<summary> load the media (closes the door of the CD drive)</summary>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void load(void);
+   void load(void) const;
 
    ///<summary> eject the media (opens the door of the CD drive)</summary>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void eject(void);
+   void eject(void) const;
 
 protected:
 

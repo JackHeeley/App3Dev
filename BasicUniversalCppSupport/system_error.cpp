@@ -41,7 +41,7 @@ private:
 public:
 
    ///<summary> default constructor.</summary>
-   impl() noexcept:
+   impl() noexcept :
       error_code(GetLastError()),
       lpBuffer(nullptr)
    {      
@@ -50,7 +50,7 @@ public:
 
    ///<summary> constructor for specified error.</summary>
    ///<param name='an_error_code'> the error code to use.</param>
-   impl(int an_error_code) noexcept:
+   impl(int an_error_code) noexcept :
       error_code(an_error_code),
       lpBuffer(nullptr)
    {
@@ -58,7 +58,7 @@ public:
    }
 
    ///<summary> copy constructor.</summary>
-   impl(const impl& other) noexcept:
+   impl(const impl& other) noexcept :
       error_code(other.error_code),
       lpBuffer(nullptr)
    {
@@ -151,8 +151,10 @@ SystemError::SystemError() noexcept :
 }
 
 ///<summary> constructs a system error from an error code.</summary>
-SystemError::SystemError(int errorCode) :
+SystemError::SystemError(int errorCode) noexcept :
+#pragma warning (disable : 26447)
    impl_(spimpl::make_impl<impl>(errorCode))
+#pragma warning (default : 26447)
 {
 }
 

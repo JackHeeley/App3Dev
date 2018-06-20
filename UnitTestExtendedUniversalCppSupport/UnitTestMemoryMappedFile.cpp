@@ -29,7 +29,7 @@ namespace UnitTestExtendedUniversalCppSupport
             utf8::Assert::AreEqual(mmf.get_buffer_size(), buffer_size, "buffer_size retrieved doesn't match buffer_size supplied");
             try
             {
-               auto buffer = mmf.get_buffer_address();
+               const auto buffer = mmf.get_span();
             }
             catch (...)
             {
@@ -65,7 +65,7 @@ namespace UnitTestExtendedUniversalCppSupport
             utf8::Assert::AreEqual(mmf.get_buffer_size(), buffer_size, "buffer_size retrieved doesn't match buffer_size supplied");
             try
             {
-               auto buffer = mmf.get_buffer();
+               const auto span = mmf.get_span();
             }
             catch (...)
             {

@@ -65,7 +65,7 @@ public:
    ///<summary> get size of media image.</summary>
    ///<returns> size in bytes of image data.</returns>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   uint64_t impl::get_image_size()
+   const uint64_t impl::get_image_size() const
    {
       // query current media for data needed for buffer size calculation
       const DISK_GEOMETRY diskGeometry = get_disk_geometry();
@@ -85,66 +85,22 @@ public:
 
       return bufferSize;
    }
-
-   ///<summary>get image of media into normal byte vector.</summary>
+ 
+   ///<summary>get image of media into span.</summary>
    ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
-   ///<param name ='buffer'> a vector to receive the image. The vector will be adjusted in size to accommodate the data.</param>
+   ///<param name ='span'> a gsl::span repesenting a memory location to receive the image.</param>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void impl::get_image(std::vector<unsigned char>& buffer)
-   {
-      const uint64_t buffer_size = get_image_size();
-
-      // check vector size limitation (on win32)
-      if (buffer_size > reinterpret_cast<uint64_t>(std::numeric_limits<std::size_t>::max))
-      {
-         SetLastError(ERROR_NOT_SUPPORTED);
-         throw error_context("Vector cannot accommodate this media size with x86 architecture");
-      }
-
-      // adjust buffer vector to accommodate the image data
-      buffer.resize(gsl::narrow_cast<size_t>(buffer_size));
-
-      get_image(buffer.data(), buffer.size());
-   }
-
-   ///<summary>get image of media into mmf byte vector.</summary>
-   ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
-   ///<param name ='buffer'> a mmf_vector to receive the image. The vector will be adjusted in size to accommodate the data.</param>
-   ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void impl::get_image(mmf_vector& buffer)
-   {
-      const uint64_t buffer_size = get_image_size();
-
-      // check vector size limitation (on win32)
-      if (buffer_size > reinterpret_cast<uint64_t>(std::numeric_limits<std::size_t>::max))
-      {
-         SetLastError(ERROR_NOT_SUPPORTED);
-         throw error_context("Vector cannot accommodate this media size with x86 architecture");
-      }
-
-      // adjust buffer vector to accommodate the image data
-      buffer.resize(gsl::narrow_cast<size_t>(buffer_size));
-
-      get_image(buffer.data(), buffer.size());
-   }
-
-   ///<summary>get image of media to memory buffer.</summary>
-   ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
-   ///<param name ='ptr'> a raw pointer to a memory location to receive the image.</param>
-   ///<param name ='buffer_size'> length in bytes of the memory location to receive the image.
-   /// The supplied contiguous virtual memory block should be large enough to accomodate the data to be returned.</param>
-   ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void impl::get_image(void* ptr, uint64_t buffer_size)
+   void impl::get_image(gsl::span<unsigned char> span) const
    {
 
       // initialize the low and high water marks (used in read, and resource limited exception handling)
-      LPBYTE lpabyBufferMemoryBase = static_cast<LPBYTE>(ptr);
+      LPBYTE lpabyBufferMemoryBase = span.data();
       LPBYTE lpabyBufferMemoryAddress = lpabyBufferMemoryBase;
 
       try
       {
          // reading full image in one go is most probable scenario (at least for CD's)
-         read_blocks(lpabyBufferMemoryAddress, 1, buffer_size); 
+         read_blocks(lpabyBufferMemoryAddress, 1, span.size_bytes()); 
       }
       catch (std::exception&)
       {
@@ -220,14 +176,14 @@ public:
 
    ///<summary>query the locked state of the cdrom.</summary>
    ///<returns>true if the cdrom is locked.</returns>
-   bool impl::get_locked(void) noexcept
+   bool impl::get_locked(void) const noexcept
    {
       return locked;
    }
 
    ///<summary> load the media (closes the door of the CD drive)</summary>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void impl::load(void)
+   void impl::load(void) const
    {
       const DWORD nBytesReturned =
          ioctl(IOCTL_STORAGE_LOAD_MEDIA, NULL, 0, NULL, 0);
@@ -240,7 +196,7 @@ public:
 
    ///<summary> eject the media (opens the door of the CD drive)</summary>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void impl::eject(void)
+   void impl::eject(void) const
    {
       const DWORD nBytesReturned =
          ioctl(IOCTL_STORAGE_EJECT_MEDIA, NULL, 0, NULL, 0);
@@ -255,7 +211,7 @@ private:
    ///<summary>apply the IOCTL to allow/disallow media removal</summary>
    ///<remarks>this physically locks the cdrom tray door</remarks>
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   bool impl::lock_control(bool aLockedValue)
+   bool impl::lock_control(bool aLockedValue) const
    {
       PREVENT_MEDIA_REMOVAL lpInBuffer;
 
@@ -273,7 +229,7 @@ private:
 
    ///<summary>get shape and size of medium currently in cdrom drive</summary>
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   DISK_GEOMETRY impl::get_disk_geometry(void)
+   const DISK_GEOMETRY impl::get_disk_geometry(void) const
    {
       DISK_GEOMETRY disk_geometry;
 
@@ -294,7 +250,7 @@ private:
    ///<param name='cBlocks'>the number of blocks to read</param>
    ///<param name='cbyBlockSize'>the size in bytes of the blocks to read</param>
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   void impl::read_blocks(LPBYTE &lpabyBufferMemoryAddress, uint64_t cBlocks, uint64_t cbyBlockSize)
+   void impl::read_blocks(LPBYTE &lpabyBufferMemoryAddress, uint64_t cBlocks, uint64_t cbyBlockSize) const
    {
       for (uint64_t nBlock = 0; nBlock < cBlocks; nBlock++)
       {
@@ -322,39 +278,18 @@ CdromDevice::CdromDevice(std::string device_path) :
 ///<summary> get size of media image.</summary>
 ///<returns> size in bytes of image data.</returns>
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-uint64_t CdromDevice::get_image_size(void)
+const uint64_t CdromDevice::get_image_size(void) const 
 {
    return impl_->get_image_size();
 }
 
-///<summary>get image of media into normal byte vector.</summary>
+///<summary>get image of media into span.</summary>
 ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
-///<param name ='buffer'> a vector to receive the image.
-/// The vector will be adjusted in size to accommodate the data.</param>
+///<param name ='span'> a gsl::span representing a memory location to receive the image.</param>
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-void CdromDevice::get_image(std::vector<unsigned char>& buffer)
+void CdromDevice::get_image(gsl::span<unsigned char>span) const
 {
-   impl_->get_image(buffer);
-}
-
-///<summary>get image of media into mmf byte vector.</summary>
-///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
-///<param name ='buffer'> a mmf_vector to receive the image. The vector will be adjusted in size to accommodate the data.</param>
-///<exception cref='std::exception'>if the operation could not be completed.</exception>
-void CdromDevice::get_image(mmf_vector& buffer)
-{
-   impl_->get_image(buffer);
-}
-
-///<summary>get image of media to memory buffer.</summary>
-///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
-///<param name ='ptr'> a raw pointer to a memory location to receive the image.</param>
-///<param name ='buffer_size'> length in bytes of the memory location to receive the image.
-/// The supplied contiguous virtual memory block should be large enough to accomodate the data to be returned.</param>
-///<exception cref='std::exception'>if the operation could not be completed.</exception>
-void CdromDevice::get_image(void* ptr, uint64_t buffer_size)
-{
-   impl_->get_image(ptr, buffer_size);
+   impl_->get_image(span);
 }
 
 ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>
@@ -371,21 +306,21 @@ void CdromDevice::unlock(void)
 
 ///<summary>query the locked state of the cdrom.</summary>
 ///<returns>true if the cdrom is locked.</returns>
-bool CdromDevice::get_locked(void) noexcept
+const bool CdromDevice::get_locked(void) const noexcept
 {
    return impl_->get_locked();
 }
 
 ///<summary> load the media (closes the door of the CD drive)</summary>
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-void CdromDevice::load(void)
+void CdromDevice::load(void) const
 {
    impl_->load();
 }
 
 ///<summary> eject the media (opens the door of the CD drive)</summary>
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-void CdromDevice::eject(void)
+void CdromDevice::eject(void) const
 {
    impl_->eject();
 }

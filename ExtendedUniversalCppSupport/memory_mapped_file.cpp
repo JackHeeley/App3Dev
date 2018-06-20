@@ -157,34 +157,41 @@ public:
 
    ///<summary> get path name of disk file used as swap space for buffer</summary>
    ///<returns> text string representing file name</returns>
-   const std::string get_file_path()
+   const std::string get_file_path() const
    {
       return utf8::convert::from_utf16(filePathW);
    };
 
    ///<summary> get name of memory buffer.</summary>
    ///<returns> text string representing memory buffer name</returns>
-   const std::string get_buffer_name()
+   const std::string get_buffer_name() const
    {
       return utf8::convert::from_utf16(bufferNameW);
    };
 
-   void* get_buffer_address() noexcept
-   {
-      return buffer_ptr;
-   };
+ //  const void* get_buffer_address() const noexcept
+ //  {
+ //     return buffer_ptr;
+ //  };
 
-   ///<summary> get buffer as a vector of bytes.</summary>
-   ///<returns> vector of bytes (in mmf).</returns>
-   mmf_vector get_buffer()
+   /////<summary> get buffer as a vector of bytes.</summary>
+   /////<returns> vector of bytes (in mmf).</returns>
+   //mmf_vector get_buffer() const
+   //{
+   //   s_buffer_ptr = static_cast<unsigned char*>(buffer_ptr);  // TODO: weak point & not threadsafe
+   //   return mmf_vector(gsl::narrow_cast<size_t>(get_buffer_size()));
+   //};
+   
+   ///<summary> get buffer as a gsl::span.</summary>
+   ///<returns> gsl::span (in mmf).</returns>
+   gsl::span<unsigned char> get_span() const
    {
-      s_buffer_ptr = static_cast<unsigned char*>(buffer_ptr);  // TODO: weak point & not threadsafe
-      return mmf_vector(gsl::narrow_cast<size_t>(get_buffer_size()));
+      return gsl::as_span<unsigned char>(static_cast<unsigned char*>(buffer_ptr), gsl::narrow<ptrdiff_t>(bufferSize.QuadPart));
    };
    
    ///<summary> get size of memory buffer.</summary>
    ///<returns> size of memory buffer in bytes</returns>
-   uint64_t get_buffer_size() noexcept
+   const uint64_t get_buffer_size() const noexcept
    {
        return bufferSize.QuadPart;
    };
@@ -304,35 +311,28 @@ MemoryMappedFile::MemoryMappedFile(const std::string& file_path, const std::stri
 
 ///<summary> get name of disk file used as swap space for buffer</summary>
 ///<returns> text string representing file name</returns>
-const std::string MemoryMappedFile::get_file_path() 
+const std::string MemoryMappedFile::get_file_path() const
 { 
    return impl_->get_file_path();
 };
 
 ///<summary> get name of memory buffer.</summary>
 ///<returns> text string representing memory buffer name</returns>
-const std::string MemoryMappedFile::get_buffer_name() 
+const std::string MemoryMappedFile::get_buffer_name() const
 { 
    return impl_->get_buffer_name();
 };
 
-///<summary> get base address of buffer (a user space virtual address).</summary>
-///<returns> address of memory buffer</returns>
-void* MemoryMappedFile::get_buffer_address() noexcept
+///<summary> get buffer as a gsl::span.</summary>
+///<returns> gsl::span (in mmf)</returns>
+gsl::span<unsigned char> MemoryMappedFile::get_span() const
 {
-   return impl_->get_buffer_address();
-};
-
-///<summary> get buffer as a vector of bytes.</summary>
-///<returns> vector of bytes (in mmf)</returns>
-mmf_vector MemoryMappedFile::get_buffer()
-{
-   return impl_->get_buffer();
+   return impl_->get_span();
 };
 
 ///<summary> get base address of buffer (a user space virtual address).</summary>
 ///<returns> address of memory buffer</returns>
-uint64_t MemoryMappedFile::get_buffer_size() noexcept
+const uint64_t MemoryMappedFile::get_buffer_size() const noexcept
 {
    return impl_->get_buffer_size();
 };

@@ -98,7 +98,7 @@ public:
    ///<returns> text identifying the LogLevel (extended with whitespace to help log alignment).</returns>
    ///<exception cref='std::invalid_argument'> if LogLevel::none is supplied. Puropse is to comment log entries, and in this context LogLevel::None is never valid.</exception>
    ///<exception cref='std::logic_error'> if (after implementation change) an unexpected LogLevel value is supplied that is not (yet) supported here.</exception>
-   const std::string log_level(LogLevel level)
+   const std::string log_level(LogLevel level) const
    {
       std::string result;
 
@@ -165,7 +165,7 @@ public:
    ///<summary> test a log level. compares the parameter with the log flags of this logger.</summary>
    ///<param name='aLevel'> the LogLevel to test.</param>
    ///<returns> true if the flag is set in the LogFilter of this logger.</returns> 
-   bool inline test_log_level(LogLevel aLevel) 
+   bool inline test_log_level(LogLevel aLevel) const
    { 
       return (static_cast<int>(get_log_filter()) & static_cast<int>(aLevel)) ? true : false; 
    }
@@ -199,7 +199,7 @@ public:
 
    /// <summary> Read the complete log file.</summary>
    /// <returns>The log file contents as a std::string</returns>
-   virtual std::string read_all() = 0;
+   virtual std::string read_all() const = 0;
 
    /// <summary> Clear log file.</summary>
    virtual void clear() = 0;

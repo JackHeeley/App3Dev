@@ -108,15 +108,8 @@ public:
    void operator()()
    {
       TrayDoorLock lock(m_cdr);
-
-#ifdef _WIN64
-      LOG_INFO("64-bit. mmf_vector can accommodate all supported media (using mmf_vector).");
-      m_cdr.get_image(m_mmf.get_buffer());
-#else
-      LOG_INFO("32-bit. mmf_vector size can't accommodate all media sizes (using raw pointer instead).");
-      m_cdr.get_image(m_mmf.get_buffer_address(), m_cdr.get_image_size());
-#endif
-
+      const auto span = m_mmf.get_span();
+      m_cdr.get_image(span);
    }
 
 };

@@ -40,21 +40,21 @@ public:
    ///<param name='nOutBufferSize'> Specifies the length in bytes of the output buffer. If OutputBuffer is NULL, this value must be zero.</param>
    ///<returns> actual number of bytes transferred in the operation.</returns>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
-   std::uint32_t ioctl(std::uint32_t dwIoControlCode, void* lpInBuffer, std::uint32_t nInBufferSize, void* lpOutBuffer, std::uint32_t nOutBufferSize) throw (std::exception);
+   const std::uint32_t ioctl(std::uint32_t dwIoControlCode, void* lpInBuffer, std::uint32_t nInBufferSize, void* lpOutBuffer, std::uint32_t nOutBufferSize) const throw (std::exception);
 
    ///<summary> issue a synchronous read. The thread is suspended pending completion of the read.</summary>
    ///<param name='lpBuffer'> pointer to buffer which will receive read data.</param>
    ///<param name='nBytesToRead'> number of bytes to read. this must be less than or equal to the available memory at lpBuffer.</param>
    ///<returns> actual number of bytes transferred/read.</returns>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
-   std::uint32_t read(void* lpBuffer, std::uint32_t nBytesToRead) throw (std::exception);
+   const std::uint32_t read(void* lpBuffer, std::uint32_t nBytesToRead) const throw (std::exception);
 
    ///<summary> issue a synchronous write. The thread is suspended pending completion of the write.</summary>
    ///<param name='lpBuffer'> pointer to buffer containing data to write.</param>
    ///<param name='nBytesToWrite'> number of bytes to write from the buffer.</param>
    ///<returns> actual number of bytes transferred/written.</returns>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   std::uint32_t write(void* lpBuffer, std::uint32_t nBytesToWrite) throw (std::exception);
+   const std::uint32_t write(void* lpBuffer, std::uint32_t nBytesToWrite) const throw (std::exception);
 
    ///<summary> reset the device.</summary>
    ///<remarks> this is equivalent to close/open sequence and is predicated on the system 

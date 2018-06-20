@@ -175,7 +175,6 @@
     <ClInclude Include="device.hpp" />
     <ClInclude Include="device_discoverer.hpp" />
     <ClInclude Include="memory_mapped_file.hpp" />
-    <ClInclude Include="mmf_vector.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

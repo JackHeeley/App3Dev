@@ -107,7 +107,7 @@ public:
    ///<param name='nOutBufferSize'> Specifies the length in bytes of the output buffer. If OutputBuffer is NULL, this value must be zero.</param>
    ///<returns> actual number of bytes transferred in the operation.</returns>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
-   DWORD ioctl(DWORD dwIoControlCode, LPVOID lpInBuffer, DWORD nInBufferSize, LPVOID lpOutBuffer, DWORD nOutBufferSize) 
+   const DWORD ioctl(DWORD dwIoControlCode, LPVOID lpInBuffer, DWORD nInBufferSize, LPVOID lpOutBuffer, DWORD nOutBufferSize) const
    {
 
       if (hDevice == INVALID_HANDLE_VALUE) 
@@ -138,7 +138,7 @@ public:
    ///<param name='nBytesToRead'> number of bytes to read. this must be less than or equal to the available memory at lpBuffer.</param>
    ///<returns> actual number of bytes transferred/read.</returns>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   DWORD read(LPVOID lpBuffer, DWORD numberOfBytesToRead) 
+   const DWORD read(LPVOID lpBuffer, DWORD numberOfBytesToRead) const
    {
 
       if (hDevice == INVALID_HANDLE_VALUE) 
@@ -165,7 +165,7 @@ public:
    ///<param name='nBytesToWrite'> number of bytes to write from the buffer.</param>
    ///<returns> actual number of bytes transferred/written.</returns>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
-   DWORD write(LPVOID lpBuffer, DWORD numberOfBytesToWrite) 
+   const DWORD write(LPVOID lpBuffer, DWORD numberOfBytesToWrite) const
    {
  
       if (hDevice == INVALID_HANDLE_VALUE) 
@@ -224,17 +224,17 @@ Device::Device(std::string a_device_path) :
 {
 }
 
-std::uint32_t Device::ioctl(std::uint32_t dwIoControlCode, void* lpInBuffer, std::uint32_t nInBufferSize, void* lpOutBuffer, std::uint32_t nOutBufferSize)
+const std::uint32_t Device::ioctl(std::uint32_t dwIoControlCode, void* lpInBuffer, std::uint32_t nInBufferSize, void* lpOutBuffer, std::uint32_t nOutBufferSize) const throw()
 {
    return impl_->ioctl(dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize);
 }
 
-std::uint32_t Device::read(void* lpBuffer, std::uint32_t nBytesToRead)
+const std::uint32_t Device::read(void* lpBuffer, std::uint32_t nBytesToRead) const throw()
 {
    return impl_->read(lpBuffer, nBytesToRead);
 }
 
-std::uint32_t Device::write(void* lpBuffer, std::uint32_t nBytesToWrite)
+const std::uint32_t Device::write(void* lpBuffer, std::uint32_t nBytesToWrite) const throw()
 {
    return impl_->write(lpBuffer, nBytesToWrite);
 }

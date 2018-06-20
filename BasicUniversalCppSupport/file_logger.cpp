@@ -39,7 +39,7 @@ public:
    };
 
    ///<summary> copy constructor.</summary>
-   impl(const impl& other) :
+   impl(const impl& other) /*noexcept*/ :
       fileName(other.fileName),
       filter(other.filter),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
@@ -144,7 +144,7 @@ public:
       writeln(level, e.what());
    }
 
-   std::string read_all() override
+   std::string read_all() const override
    {
       std::ifstream t = std::ifstream(fileName);
       std::string str((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
@@ -169,7 +169,7 @@ file_logger::file_logger() noexcept :
 {
 }
 
-file_logger::file_logger(std::string fileName, LogFilter filter) :
+file_logger::file_logger(std::string fileName, LogFilter filter) /*noexcept*/ :
    impl_(spimpl::make_impl<impl>(fileName, filter))
 {
 }
@@ -198,7 +198,7 @@ LogFilter file_logger::get_log_filter() const noexcept
    return impl_->get_log_filter();
 }
 
-void file_logger::write(LogLevel level, std::string line)
+void file_logger::write(LogLevel level, std::string line) 
 {
    return impl_->write(level, line);
 }
@@ -213,7 +213,7 @@ void file_logger::write(LogLevel level, std::exception e)
    return impl_->write(level, e);
 }
 
-std::string file_logger::read_all()
+std::string file_logger::read_all() const
 {
    return impl_->read_all();
 }

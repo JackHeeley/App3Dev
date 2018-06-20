@@ -22,30 +22,7 @@
 
 #include <spimpl.hpp>
 
-#include "mmf_vector.hpp"
-
 #pragma warning (disable:4251 4290)
-
-///<summary> provides support for custom allocator (see mmf_vector.hpp).</summary>
-extern "C"
-{
-   ///<summary> static address of a MemoryMappedFile buffer.</summary>
-   ///<remarks> c++14 limits allocators to be stateless, so this is as good as it gets.</remarks>
-   static unsigned char* s_buffer_ptr;
-
-   ///<summary> simple (thread unsafe) mmf_malloc.</summary>
-   ///<returns> pointer to allocated memory (within memory mapped file buffer).</returns>
-   inline void* __cdecl mmf_malloc(size_t _Size) noexcept
-   {
-      size_t s_buffer_initial = reinterpret_cast<size_t>(s_buffer_ptr);
-      s_buffer_ptr = reinterpret_cast<unsigned char*>(s_buffer_initial + _Size);
-      return reinterpret_cast<unsigned char*>(s_buffer_initial);
-   };
-
-   ///<summary> simple (thread unsafe) mmf_free.</summary>
-   ///<remarks> actual delete is deferred (and done by memory mapped file).</remarks>
-   inline void __cdecl mmf_free(void* _Block) noexcept { };
-}
 
 ///<summary> wraps the system memory mapped file facility.</summary>
 class EXTENDEDUNIVERSALCPPSUPPORT_API MemoryMappedFile
@@ -53,10 +30,10 @@ class EXTENDEDUNIVERSALCPPSUPPORT_API MemoryMappedFile
 
 public:
    ///<summary> helper for working in kilobytes</summary>
-   static constexpr inline uint32_t kilobytes(int n) noexcept { return n*1024; };
+   static constexpr inline uint64_t kilobytes(uint64_t n) noexcept { return n*1024; };
    
    ///<summary> helper for working in megabytes.</summary>
-   static constexpr inline uint32_t megabytes(int n) noexcept { return n*kilobytes(1024); };
+   static constexpr inline uint64_t megabytes(uint64_t n) noexcept { return n*kilobytes(1024); };
 
    ///<summary> construct a memory mapped file object</summary>
    ///<param name='file_path'> path name of file to be used.</param>
@@ -70,23 +47,19 @@ public:
 
    ///<summary> get path name of disk file used as swap space for buffer</summary>
    ///<returns> text string representing file name</returns>
-   const std::string get_file_path();
+   const std::string get_file_path() const;
 
    ///<summary> get name of memory buffer.</summary>
    ///<returns> text string representing memory buffer name</returns>
-   const std::string get_buffer_name();
-
-   ///<summary> get base address of buffer (a user space virtual address).</summary>
-   ///<returns> address of memory buffer</returns>
-   void* get_buffer_address() noexcept;
-
-   ///<summary> get buffer as a vector of bytes.</summary>
-   ///<returns> a vector of bytes (with content in address space of the memory mapped file)</returns>
-   mmf_vector get_buffer();
+   const std::string get_buffer_name() const;
 
    ///<summary> get buffer size.</summary>
    ///<returns> length memory buffer in bytes.</returns>
-   uint64_t get_buffer_size() noexcept;
+   const uint64_t get_buffer_size() const noexcept;
+
+   ///<summary> get buffer as a gsl::span.</summary>
+   ///<returns> a gsl span (with content in address space of the memory mapped file)</returns>
+   gsl::span<unsigned char> get_span() const;
 
    ///<summary> commit buffer to disk and release memory.</summary>
    void release();

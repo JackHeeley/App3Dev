@@ -41,7 +41,7 @@ public:
 
    ///<summary> construct a DeviceDiscoverer::private_impl object used to enumerate the devices of a particular device interface class.</summary>
    ///<param name = "anInterfaceClassGuid"> the device interface class to be enumerated.</param>
-   impl(const GUID& anInterfaceClassGuid) :
+   impl(const GUID& anInterfaceClassGuid) /*noexcept*/ :
       device_path_data()
    {
       INTERFACE_CLASS_GUID = (LPGUID)(&anInterfaceClassGuid);
@@ -59,7 +59,7 @@ public:
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean accessible data is identical.</remarks>
-   bool impl::operator==(const impl& other) const
+   const bool impl::operator==(const impl& other) const
    {
       if ((this == nullptr) || (&other == nullptr)) return false;       // moved object
       if (this == &other) return true; // same object
@@ -72,7 +72,7 @@ public:
 
    ///<summary> not equals comparison operator.</summary>
    ///<remarks> defines not equals to mean accessible data differs.</remarks>
-   bool impl::operator!=(const impl& other) const
+   const bool impl::operator!=(const impl& other) const
    {
       return (!((*this) == other));
    }
@@ -98,7 +98,7 @@ public:
 private:
    ///<summary> get handle to device information set corresponding to the interface class guid supplied.</summary>
    ///<param name ="anInterfaceClassGuid"> pointer to setup interface class guid or device class guid to interrogate.</param>
-   HDEVINFO getDevInfoHandle(LPCGUID anInterfaceClassGuid)
+   const HDEVINFO getDevInfoHandle(LPCGUID anInterfaceClassGuid) const
    {
       const DWORD Flags = DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
 
@@ -118,7 +118,7 @@ private:
    ///<summary> Get deviceInterfaceData for this interface class.</summary>
    ///<param name ="memberIndex"> zero based device number for the device instance.</param>
    ///<returns> true if device interface data is found for this device.</returns>
-   bool getDeviceInterfaceData(int memberIndex, SP_DEVICE_INTERFACE_DATA& deviceInterfaceData)
+   const bool getDeviceInterfaceData(int memberIndex, SP_DEVICE_INTERFACE_DATA& deviceInterfaceData) const
    {
       const BOOLEAN result =
          SetupDiEnumDeviceInterfaces(m_hDevInfo,
@@ -142,7 +142,7 @@ private:
 
    ///<summary> Get deviceInterfaceDetailData for a particular instance of a device of this interface class.</summary>
    ///<returns> std::wstring form of the device path (the specific device interface detail data fetched from DeviceDiscoverer).</returns>
-   std::wstring getDevicePath(SP_DEVICE_INTERFACE_DATA deviceInterfaceData)
+   const std::wstring getDevicePath(SP_DEVICE_INTERFACE_DATA deviceInterfaceData) const
    {
       ULONG predictedLength = 0;
       ULONG requiredLength = 0;
@@ -210,14 +210,14 @@ DeviceDiscoverer::DeviceDiscoverer(const GUID& anInterfaceClassGuid) :
 
 ///<summary> equals comparison operator.</summary>
 ///<remarks> objects considered equal if private_impl's are equal.</remarks>
-bool DeviceDiscoverer::operator==(const DeviceDiscoverer& other) const
+const bool DeviceDiscoverer::operator==(const DeviceDiscoverer& other) const
 {
    return *impl_.get() == *other.impl_.get();
 }
 
 ///<summary> not equals comparison operator.</summary>
 ///<remarks> objects considered not equal if private_impl's differ.</remarks>
-bool DeviceDiscoverer::operator!=(const DeviceDiscoverer& other) const
+const bool DeviceDiscoverer::operator!=(const DeviceDiscoverer& other) const
 {
    return !(*this == other);
 }
