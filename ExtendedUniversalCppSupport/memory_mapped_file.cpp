@@ -169,19 +169,6 @@ public:
       return utf8::convert::from_utf16(bufferNameW);
    };
 
- //  const void* get_buffer_address() const noexcept
- //  {
- //     return buffer_ptr;
- //  };
-
-   /////<summary> get buffer as a vector of bytes.</summary>
-   /////<returns> vector of bytes (in mmf).</returns>
-   //mmf_vector get_buffer() const
-   //{
-   //   s_buffer_ptr = static_cast<unsigned char*>(buffer_ptr);  // TODO: weak point & not threadsafe
-   //   return mmf_vector(gsl::narrow_cast<size_t>(get_buffer_size()));
-   //};
-   
    ///<summary> get buffer as a gsl::span.</summary>
    ///<returns> gsl::span (in mmf).</returns>
    gsl::span<unsigned char> get_span() const
