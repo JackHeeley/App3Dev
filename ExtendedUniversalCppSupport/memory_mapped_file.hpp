@@ -20,6 +20,7 @@
 #include <memory>
 #include <string>
 
+#include <gsl.h>
 #include <spimpl.hpp>
 
 #pragma warning (disable:4251 4290)
