@@ -42,14 +42,14 @@ namespace UnitTestAbstractDevice
             {
                m_cdr.lock();
             }
-            ///<summary> default copy constructor.</summary>
-            TrayDoorLock(TrayDoorLock& other) = default;
+            ///<summary> deleted copy constructor.</summary>
+            TrayDoorLock(TrayDoorLock& other) = delete;
 
             ///<summary> deleted move constructor.</summary>
             TrayDoorLock(TrayDoorLock&& other) = delete;
 
-            ///<summary> default copy assignment.</summary>
-            TrayDoorLock& operator=(TrayDoorLock& other) = default;
+            ///<summary> deleted copy assignment.</summary>
+            TrayDoorLock& operator=(TrayDoorLock& other) = delete;
 
             ///<summary> deleted move assignment.</summary>
             TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
@@ -193,14 +193,14 @@ namespace UnitTestAbstractDevice
 //            {
 //               m_cdr.lock();
 //            }
-//            ///<summary> default copy constructor.</summary>
-//            TrayDoorLock(TrayDoorLock& other) = default;
+//            ///<summary> deleted copy constructor.</summary>
+//            TrayDoorLock(TrayDoorLock& other) = delete;
 //
 //            ///<summary> deleted move constructor.</summary>
 //            TrayDoorLock(TrayDoorLock&& other) = delete;
 //
-//            ///<summary> default copy assignment.</summary>
-//            TrayDoorLock& operator=(TrayDoorLock& other) = default;
+//            ///<summary> deleted copy assignment.</summary>
+//            TrayDoorLock& operator=(TrayDoorLock& other) = delete;
 //
 //            ///<summary> deleted move assignment.</summary>
 //            TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
@@ -225,11 +225,11 @@ namespace UnitTestAbstractDevice
 //            // prepare for test (construct a device for the system's first enumerated cdrom)...
 //            CdromDevice cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0]);
 //
-//            // ...create buffer
-//            std::vector<unsigned char> buffer;            // x32 and x64 vector sizes differ dramatically in capacity
-//            buffer.resize(cdrom.get_image_size());        // x32 will fail here with large CDROM or DVD images
+//            // ...create buffer. On x32 resize will throw std::exception("vector<T> too long) if CDROM/DVD image is too large for a byte vector
+//            std::vector<unsigned char> buffer;
+//            buffer.resize(gsl::narrow<std::vector<unsigned char>::size_type>(cdrom.get_image_size()));    
 //
-//            // diable media eject (also operator initiated) during test
+//            // disable media eject (also operator initiated) during test
 //            TrayDoorLock scoped_lock(cdrom);
 //
 //            bool test_done = false;    // cdrom drive may not be in ready state
@@ -238,7 +238,7 @@ namespace UnitTestAbstractDevice
 //               try
 //               {
 //                  // perform the operation under test (read full device content)...
-//                  cdrom.get_image(buffer);    // doesnt require an explicit gsl::as_span<unsignedchar>(buffer)
+//                  cdrom.get_image(buffer);    // doesn't require an explicit gsl::as_span<unsigned char>(buffer)
 //                  test_done = true;
 //               }
 //               catch (std::exception& e)

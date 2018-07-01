@@ -45,16 +45,20 @@ public:
       m_cdr.lock(); 
    }
 
-   ///<summary> default copy constructor.</summary>
-   TrayDoorLock(TrayDoorLock& other) = default;
+   ///<summary> deleted copy constructor.</summary>
+   ///<remarks> avoids premature unlocks via inactive object.</remarks>
+   TrayDoorLock(TrayDoorLock& other) = delete;
 
    ///<summary> deleted move constructor.</summary>
+   ///<remarks> avoids premature unlocks via inactive object.</remarks>
    TrayDoorLock(TrayDoorLock&& other) = delete;
 
-   ///<summary> default copy assignment.</summary>
-   TrayDoorLock& operator=(TrayDoorLock& other) = default;
+   ///<summary> deleted copy assignment.</summary>
+   ///<remarks> avoids premature unlocks via inactive object.</remarks>
+   TrayDoorLock& operator=(TrayDoorLock& other) = delete;
 
    ///<summary> deleted move assignment.</summary>
+   ///<remarks> avoids premature unlocks via inactive object.</remarks>
    TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
 
    ///<summary>unlock tray door in all return paths</summary>
