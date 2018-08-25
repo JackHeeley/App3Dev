@@ -7,12 +7,18 @@
 //
 #pragma once
 
+#ifdef EXTENDEDUNIVERSALCPPSUPPORT_EXPORTS
+#define EXTENDEDUNIVERSALCPPSUPPORT_API __declspec(dllexport)
+#else
+#define EXTENDEDUNIVERSALCPPSUPPORT_API __declspec(dllimport)
+#endif
+
 #include <string>
 #include <memory>
 #include <vector>
 #include <spimpl.hpp>
 
-#include <memory_mapped_file.hpp>     // mmf_vector type (and dependent custom allocator support functions)
+#include "memory_mapped_file.hpp"     // mmf_vector type (and dependent custom allocator support functions)
 
 #pragma warning (disable:4251 4290)
 
@@ -21,7 +27,7 @@
 /// based on low level serial reads. We don't consider seek and read position which 
 /// likely means limitations and exceptions if extending the current scope. We don't 
 /// attempt write support, and this would pose some big challenges.</remarks> 
-class CdromDevice 
+class EXTENDEDUNIVERSALCPPSUPPORT_API CdromDevice
 {
 public:
    ///<summary> constructs a user mode Device that can be used to access a particular system cdrom instance.</summary>

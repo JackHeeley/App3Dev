@@ -1,5 +1,5 @@
 //
-// CdromDevice.cpp : implements the cdrom device object
+// cd_rom_device.cpp : implements the cdrom device object
 //
 // Here we provide a capability to create concrete objects for cdrom device(s).
 // The default deviceNumber (=0), selects the first device found.
@@ -7,10 +7,14 @@
 // Copyright (c) 2005-2017 Jack Heeley, all rights reserved
 //
 #include "stdafx.h"
+#include <winioctl.h>
+#include <ntddcdrm.h>
+
+#include "device.hpp"
 #include "cd_rom_device.hpp"
 
 #include <limits>
-#include <ntddcdrm.h>
+
 
 /*
 * ***************************************************************************

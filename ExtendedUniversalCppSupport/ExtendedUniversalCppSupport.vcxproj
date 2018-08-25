@@ -176,6 +176,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cd_rom_device.hpp" />
     <ClInclude Include="device.hpp" />
     <ClInclude Include="device_discoverer.hpp" />
     <ClInclude Include="memory_mapped_file.hpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cd_rom_device.cpp" />
     <ClCompile Include="device.cpp" />
     <ClCompile Include="device_discoverer.cpp" />
     <ClCompile Include="memory_mapped_file.cpp" />

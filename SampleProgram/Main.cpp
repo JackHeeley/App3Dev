@@ -9,8 +9,6 @@
 //
 #include "stdafx.h"
 
-#include "cd_rom_device.hpp"
-
 #include <vector>
 #include <string>
 #include <iostream>
@@ -18,8 +16,8 @@
 
 #pragma warning(disable:26426)
 
-///<summary> the file logger in use.</summary>
-static file_logger Logger("ripper.log", LogFilter::Full);
+///<summary> declare the (single) file logger in use.</summary>
+file_logger Logger("ripper.log", LogFilter::Full);
 
 ///<summary> filename for ripped image</summary>
 const static std::string fileName("cdrom_image.iso");
@@ -29,95 +27,6 @@ const static std::string fileName("cdrom_image.iso");
 ///<summary> number of times to test for an absent device.</summary>
 const static int  MAX_RETRIES = 3;
 
-///<summary> RAII object used to lock the physical media tray door on CDROM.</summary>
-///<remarks> Be aware that signalled process termination (Eg CRTL+C or CTRL+BREAK) won't invoke destructors!</remarks>
-class TrayDoorLock
-{
-private:
-   ///<summary> the referenced cdrom.</summary>
-   CdromDevice& m_cdr;
-
-public:
-   ///<summary> lock tray door at construction time.</summary>
-   ///<param name='cdr'> a reference to the cdrom to lock.</param>
-   TrayDoorLock(CdromDevice& cdr) : m_cdr(cdr) 
-   { 
-      m_cdr.lock(); 
-   }
-
-   ///<summary> deleted copy constructor.</summary>
-   ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   TrayDoorLock(TrayDoorLock& other) = delete;
-
-   ///<summary> deleted move constructor.</summary>
-   ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   TrayDoorLock(TrayDoorLock&& other) = delete;
-
-   ///<summary> deleted copy assignment.</summary>
-   ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   TrayDoorLock& operator=(TrayDoorLock& other) = delete;
-
-   ///<summary> deleted move assignment.</summary>
-   ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
-
-   ///<summary>unlock tray door in all return paths</summary>
-#pragma warning (disable:26447)
-   ~TrayDoorLock() noexcept
-   {
-      try
-      {
-         LOG_INFO("~TrayDoorLock invoked");
-         m_cdr.unlock();
-      }
-      catch (...)
-      {
-         try
-         {
-            LOG_ERROR("Exception in ~TrayDoorLock.");
-         }
-         catch (...)
-         {
-            // dismiss is still least bad option here
-         }
-      }
-   }
-#pragma warning (default:26447)
-
-};
-
-///<summary> functor class to rip image.</summary>
-class Ripper
-{
-private:
-   ///<summary> the cdrom to be ripped.</summary>
-   CdromDevice m_cdr;
-   
-   ///<summary> the (memory mapped) file to receive the (iso 9660) image.</summary>
-   MemoryMappedFile m_mmf;
-
-public:
-   ///<summary> construct a ripper.</summary>
-   ///<param name='devicePath'> the utf8 name of a raw system cdrom device containing media.</param>
-   ///<param name='filePath'> the utf8 name of a file to receive the (iso 9660) image.</param>
-   Ripper(std::string devicePath, std::string filePath) :
-      m_cdr(devicePath), 
-      m_mmf(filePath, "", m_cdr.get_image_size())
-   { 
-      LOG_INFO(std::string("Ripper Device ").append(devicePath));
-      LOG_INFO(std::string("Ripping to ").append(filePath));
-   }
-   
-   ///<summary> functor to perform the rip operation.</summary>
-   void operator()()
-   {
-      TrayDoorLock lock(m_cdr);
-      const auto span = m_mmf.get_span();
-      m_cdr.get_image(span);
-   }
-
-};
-
 ///<summary> program entrypoint.</summary>
 ///<param name = "argc"> number of command line parameters (expected 1).</param>
 ///<param name = "argv"> array of supplied command line parameters (expect only argv[0] i.e. program path).</param>
@@ -125,7 +34,6 @@ public:
 ///<remarks> uses system pause and stdout to interact with user.</remarks>
 int main(int argc, char* argv[])
 {
-
    ////HINT for non-ascii programmers...
    //SetConsoleOutputCP(CP_UTF8);  // TODO: platform specific code (function is windows)
    //setvbuf(stdout, nullptr, _IOFBF, 1000);

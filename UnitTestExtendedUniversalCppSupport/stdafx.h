@@ -31,6 +31,7 @@
 #include <device.hpp>
 #include <device_discoverer.hpp>
 #include <memory_mapped_file.hpp>
+#include <cd_rom_device.hpp>
 
 #include <vector>
 #include <string>

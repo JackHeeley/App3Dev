@@ -193,13 +193,16 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cd_rom_device.hpp" />
+    <ClInclude Include="ripper.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="the_logger.hpp" />
+    <ClInclude Include="tray_door_lock.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cd_rom_device.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ripper.cpp" />
+    <ClCompile Include="tray_door_lock.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

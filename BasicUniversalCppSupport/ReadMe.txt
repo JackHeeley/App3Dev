@@ -40,21 +40,21 @@ should add to or customize.
 /////////////////////////////////////////////////////////////////////////////
 Programmers notes:
 
-StdAfx.h, targtver.h modified to target windows 7 and higher
+stdAfx.h, targtver.h modified to target windows 7 and higher
 
-Logger.hpp
+logger.hpp
     Abstract logging support
 
 error_context.hpp
     An error::context type (featuring context tagging on std::exception 'what').
 
-FileLogger.hpp, FileLogger.cpp
+file_logger.hpp, file_logger.cpp
     A simple logger implementation using a filesystem file.
 
 spimpl.hpp
     Templates support for smart pointer to implementation paradigm using rule of zero. 
 
-SystemError.hpp, SystemError.cpp
+system_error.hpp, system_error.cpp
     These files provide a service to fetch the system error text in the 
     default locale.
 
@@ -64,3 +64,6 @@ utc_timestamp.hpp
 utf8_convert.hpp
     This header includes minimum conversions needed to support the 
     utf8 anywhere programming paradigm (on windows). 
+
+uf8_assert.hpp
+    This header is a utf8 wrapper for Microsoft's CppUnitTest Assert class. 

@@ -42,18 +42,22 @@ Programmers notes:
 
 StdAfx.h, targtver.h modified to target windows 7 and higher
 
-Device.hpp, Device.cpp
+device.hpp, device.cpp
     These files wrap the windows kernel mode device API with enough 
     functionality to perform read, write and i/o control operations
     on instances of specific device types.
 
-DeviceDiscoverer.hpp, DeviceDiscoverer.cpp
+device_discoverer.hpp, device_discoverer.cpp
     These files wrap the windows SetupDi API with enough functionality to
     name and open enumerated instances of permanent and removable devices, 
     discovered in real-time by their system device type identifier 
     (interface class guid), and zero based ordinal index.
 
-MemoryMappedFile.hpp, MemoryMappedFile.cpp
+memory_mapped_file.hpp, memory_mapped_file.cpp
     These files wrap the windows memory mapping functions with enough 
     functionality to supply a shared memory buffer backed by a file system
     (eg disk) file.
+
+cd_rom_device.cpp, cd_rom_device.hpp
+    These files represent a CDROM device with enough functionality to
+    acquire (read) raw content, and perform some basic ioctls.

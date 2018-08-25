@@ -176,6 +176,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="logger.hpp" />
     <ClInclude Include="utc_timestamp.hpp" />
+    <ClInclude Include="utf8_assert.hpp" />
     <ClInclude Include="utf8_convert.hpp" />
   </ItemGroup>
   <ItemGroup>

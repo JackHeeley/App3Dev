@@ -31,8 +31,10 @@
 #include <device.hpp>
 #include <device_discoverer.hpp>
 #include <memory_mapped_file.hpp>
-
 #include <cd_rom_device.hpp>
+
+#include <tray_door_lock.hpp>
+#include <ripper.hpp>
 
 #include <vector>
 #include <string>

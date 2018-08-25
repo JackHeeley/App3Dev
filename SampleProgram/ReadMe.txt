@@ -42,10 +42,6 @@ Programmers notes:
 
 StdAfx.h is modified to target windows 7 and higher
 
-CdromDevice.hpp, CdromDevice.cpp
-    These files represent a CDROM device with enough functionality to
-    acquire (read) raw content, and perform some basic ioctls.
-
 
 
 History & todo list
@@ -89,12 +85,15 @@ DONE:
 33. Cleaned up mmf_vector implementation.
 34. Obsoleted mmf_vector in favour of gsl:span.
 35. Replced c++98 style parameter frames (using raw pointers and buffer sizes) with gsl::span.
+36. Addressed long standing encapsulation niggles (moved cdrom_device, and utf8_assert to the support libraries, split out private classes in main, reworked unit tests accordingly)
 
 IN PROGRESS:
 
 TODO:
 
-1. consider how to more conveniently share a single file_logger in a multi-dll program.
+1. Consider how to more conveniently share a single file_logger in a multi-dll program.
 
 2. File logger entry layout could be improved.
+
+3. LOGGER #defines are probably candidates for revision (change to a modern CPP way of working).
 
