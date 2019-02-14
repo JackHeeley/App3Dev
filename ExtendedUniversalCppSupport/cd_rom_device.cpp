@@ -190,7 +190,7 @@ public:
    void impl::load(void) const
    {
       const DWORD nBytesReturned =
-         ioctl(IOCTL_STORAGE_LOAD_MEDIA, NULL, 0, NULL, 0);
+         ioctl(IOCTL_STORAGE_LOAD_MEDIA, nullptr, 0, nullptr, 0);
 
       if (nBytesReturned != 0)
       {
@@ -203,7 +203,7 @@ public:
    void impl::eject(void) const
    {
       const DWORD nBytesReturned =
-         ioctl(IOCTL_STORAGE_EJECT_MEDIA, NULL, 0, NULL, 0);
+         ioctl(IOCTL_STORAGE_EJECT_MEDIA, nullptr, 0, nullptr, 0);
 
       if (nBytesReturned != 0)
       {
@@ -222,7 +222,7 @@ private:
       lpInBuffer.PreventMediaRemoval = aLockedValue;
 
       const DWORD nBytesReturned =
-         ioctl(IOCTL_STORAGE_MEDIA_REMOVAL, &lpInBuffer, sizeof(PREVENT_MEDIA_REMOVAL), NULL, 0);
+         ioctl(IOCTL_STORAGE_MEDIA_REMOVAL, &lpInBuffer, sizeof(PREVENT_MEDIA_REMOVAL), nullptr, 0);
 
       if (nBytesReturned != 0)
       {
@@ -238,7 +238,7 @@ private:
       DISK_GEOMETRY disk_geometry;
 
       const DWORD nBytesReturned =
-         ioctl(IOCTL_CDROM_GET_DRIVE_GEOMETRY, NULL, 0, &disk_geometry, sizeof(DISK_GEOMETRY));    // (re-)fetch from device
+         ioctl(IOCTL_CDROM_GET_DRIVE_GEOMETRY, nullptr, 0, &disk_geometry, sizeof(DISK_GEOMETRY));    // (re-)fetch from device
 
       if (nBytesReturned != sizeof(DISK_GEOMETRY))
       {

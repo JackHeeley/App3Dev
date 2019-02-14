@@ -29,6 +29,5 @@ Ripper::Ripper(std::string devicePath, std::string filePath) :
 void Ripper::operator()()
 {
    TrayDoorLock lock(m_cdr);
-   const auto span = m_mmf.get_span();
-   m_cdr.get_image(span);
+   m_cdr.get_image(m_mmf.get_span());
 }

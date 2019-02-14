@@ -52,7 +52,7 @@ public:
 
       buffer_ptr(nullptr),
       hFile(INVALID_HANDLE_VALUE),
-      hFileMap(0)
+      hFileMap(nullptr)
    {
       bufferSize.QuadPart = aBufferSize;
       openFile();
@@ -73,7 +73,7 @@ public:
 
       buffer_ptr(nullptr),
       hFile(INVALID_HANDLE_VALUE),
-      hFileMap(0)
+      hFileMap(nullptr)
    {
       bufferSize.QuadPart = other.bufferSize.QuadPart;
       openFile();
@@ -95,7 +95,7 @@ public:
    {
       bufferSize.QuadPart = other.bufferSize.QuadPart;
       other.hFile = INVALID_HANDLE_VALUE;
-      other.hFileMap = 0;
+      other.hFileMap = nullptr;
    }
 
    ///<summary> copy assignment operator.</summary>
@@ -108,7 +108,7 @@ public:
 
          buffer_ptr = nullptr;
          hFile = INVALID_HANDLE_VALUE;
-         hFileMap = 0;
+         hFileMap = nullptr;
          
          bufferSize.QuadPart = other.bufferSize.QuadPart;
          openFile();
@@ -135,7 +135,7 @@ public:
          bufferSize.QuadPart = other.bufferSize.QuadPart;
       
          ((impl&)other).hFile = INVALID_HANDLE_VALUE;
-         ((impl&)other).hFileMap = 0;
+         ((impl&)other).hFileMap = nullptr;
       }
       return (*this);
    }
@@ -220,19 +220,19 @@ public:
    void impl::createFileMapping() 
    {
       hFileMap = CreateFileMapping(hFile,
-         NULL,
+         nullptr,
          PAGE_READWRITE,
          bufferSize.HighPart,
          bufferSize.LowPart,
          bufferNameW.c_str()
       );
 
-      if (hFileMap != 0) 
+      if (hFileMap != nullptr) 
       {
          if (GetLastError() == ERROR_ALREADY_EXISTS) 
          {
             CloseHandle(hFileMap);
-            hFileMap = 0;
+            hFileMap = nullptr;
             throw error_context("CreateFileMapping failed");
          }
       }
@@ -249,7 +249,7 @@ public:
          0  // entire file
       );
 
-      if (buffer_ptr == NULL) 
+      if (buffer_ptr == nullptr) 
       {
          throw error_context("MapViewOfFile failed");
       }
@@ -258,10 +258,10 @@ public:
    ///<summary> commit buffer to disk and release memory.</summary>
    void impl::release() 
    {
-      if (hFileMap != 0) 
+      if (hFileMap != nullptr) 
       {
          CloseHandle(hFileMap);
-         hFileMap = 0;
+         hFileMap = nullptr;
       }
 
       if (hFile != INVALID_HANDLE_VALUE) 
@@ -273,7 +273,7 @@ public:
       filePathW = L"";
       bufferNameW = L"";
       bufferSize.QuadPart = 0;
-      buffer_ptr = NULL;
+      buffer_ptr = nullptr;
    }
 };
 

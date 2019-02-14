@@ -22,7 +22,7 @@ namespace UnitTestBasicUniversalCppSupport
             // test succeeds if values match...
             utf8::Assert::AreEqual(expected, actual, "converted GUID does not match expected value");
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }

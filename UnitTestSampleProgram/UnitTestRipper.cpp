@@ -25,7 +25,7 @@ namespace UnitTestExtendedUniversalCppSupport
             //perform operation under test
             Ripper(deviceName, fileName)();
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }

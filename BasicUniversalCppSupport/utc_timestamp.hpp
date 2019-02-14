@@ -16,7 +16,7 @@
 #include <locale>
 #include <algorithm>
 
-#pragma warning (disable: 26444)
+#pragma warning (disable: 26444 26489)
 
 // trim from start (in place)
 static inline void ltrim(std::string &s) 
@@ -61,7 +61,7 @@ static inline std::string trim_copy(std::string s) {
 ///<returns> a date time string, the format is system dependent</returns>
 const auto utc_timestamp = []()
 {
-   const time_t now = time(0);
+   const time_t now = time(nullptr);
    tm gmtm;
    if (gmtime_s(&gmtm, &now) !=0)
       throw std::domain_error("utc timestamp failed");
@@ -72,4 +72,4 @@ const auto utc_timestamp = []()
    return trim_copy({ timebuf });
 };
 
-//#pragma warning (default: 26444)
+//#pragma warning (default: 26444 26489 )

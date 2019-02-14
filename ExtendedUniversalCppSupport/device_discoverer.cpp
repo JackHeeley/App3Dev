@@ -103,8 +103,8 @@ private:
       const DWORD Flags = DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
 
       HDEVINFO hDI = SetupDiGetClassDevs(anInterfaceClassGuid,
-         NULL,
-         NULL,
+         nullptr,
+         nullptr,
          Flags
       );
 
@@ -122,7 +122,7 @@ private:
    {
       const BOOLEAN result =
          SetupDiEnumDeviceInterfaces(m_hDevInfo,
-            0,
+            nullptr,
             INTERFACE_CLASS_GUID,
             memberIndex,
             &deviceInterfaceData

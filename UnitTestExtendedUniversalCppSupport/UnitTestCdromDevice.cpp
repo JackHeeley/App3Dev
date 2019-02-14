@@ -24,7 +24,7 @@ namespace UnitTestAbstractDevice
             // test succeeds if construction doesn't throw
             cdrom.unlock();
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }
@@ -92,7 +92,7 @@ namespace UnitTestAbstractDevice
                   // check results (expect fail with invalid function)
                   utf8::Assert::Fail("tray door could be opened despite being locked");
                }
-               catch (std::exception& e)
+               catch (const std::exception& e)
                {
                   switch (SystemError().get_error_code())
                   {
@@ -122,7 +122,7 @@ namespace UnitTestAbstractDevice
             {
                cdrom0.load();            // check results (visually confirm that tray closes)
             }
-            catch (std::exception& e)
+            catch (const std::exception& e)
             {
                switch (SystemError().get_error_code())
                {
@@ -133,7 +133,7 @@ namespace UnitTestAbstractDevice
                }
             }
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::Fail(e.what()); // something went wrong
          }
@@ -156,7 +156,7 @@ namespace UnitTestAbstractDevice
                   const auto size = cdrom.get_image_size();
                   break;
                }
-               catch (std::exception& e)
+               catch (const std::exception& e)
                {
                   switch (SystemError().get_error_code())
                   {
@@ -173,7 +173,7 @@ namespace UnitTestAbstractDevice
 
             // considered success if a size is returned.
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }

@@ -84,8 +84,9 @@ DONE:
 33. Fixed debug build custom allocator problem.
 33. Cleaned up mmf_vector implementation.
 34. Obsoleted mmf_vector in favour of gsl:span.
-35. Replced c++98 style parameter frames (using raw pointers and buffer sizes) with gsl::span.
+35. Replaced c++98 style parameter frames (using raw pointers and buffer sizes) with gsl::span.
 36. Addressed long standing encapsulation niggles (moved cdrom_device, and utf8_assert to the support libraries, split out private classes in main, reworked unit tests accordingly)
+37. Warning improvements for VS15.9.6/7 applied - nullptr in place of NULL - catching exceptions as const - lifetime of spans - pragma disables on affected foreign includes
 
 IN PROGRESS:
 

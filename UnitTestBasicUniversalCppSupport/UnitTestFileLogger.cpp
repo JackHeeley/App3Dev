@@ -16,7 +16,7 @@ namespace UnitTestBasicUniversalCppSupport
             // perform the operation under test...
             throw error_context("we blew it");
          }
-         catch (error::context& e)
+         catch (const error::context& e)
          {
 #pragma warning(disable:26489)   // known false positive
             const std::string what_string(e.full_what());
@@ -42,7 +42,7 @@ namespace UnitTestBasicUniversalCppSupport
             // test succeeds if log_text with this unique timestamp attached, is found in the log...
             utf8::Assert::IsFalse((Logger.read_all().find(log_text) == std::string::npos), "logged text was not found in log");
          }
-         catch (error::context& e)
+         catch (const error::context& e)
          {
             utf8::Assert::IsTrue(false, e.full_what()); // something went wrong
          }

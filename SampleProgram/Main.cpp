@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
       LOG_ERROR(error_text);
       exit(-1);
    }
-   catch (std::exception& e)
+   catch (const std::exception& e)
    {
       LOG_WARNING("A std::exception was thrown. (design intent is to always use error::context).");
       std::string error_text = "Unhandled Std Exception: "; error_text.append(e.what());   // simple what

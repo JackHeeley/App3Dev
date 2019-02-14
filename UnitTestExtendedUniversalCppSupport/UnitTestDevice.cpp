@@ -26,7 +26,7 @@ namespace UnitTestExtendedUniversalCppSupport
 
             // test succeeds if construction doesn't throw
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }
@@ -42,7 +42,7 @@ namespace UnitTestExtendedUniversalCppSupport
             Device cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0]);
 
             // perform the operation under test (issue valid ioctl to the device)...
-            auto nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_EJECT_MEDIA, NULL, 0, NULL, 0);
+            auto nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_EJECT_MEDIA, nullptr, 0, nullptr, 0);
 
             // check results (the cdrom tray should open) and programatically...
             utf8::Assert::IsTrue(nBytesReturned == 0, "ioctl returned an out-of-spec byte count");
@@ -50,10 +50,10 @@ namespace UnitTestExtendedUniversalCppSupport
             // restore the system state (close the tray)...
             try
             {
-               nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_LOAD_MEDIA, NULL, 0, NULL, 0);
+               nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_LOAD_MEDIA, nullptr, 0, nullptr, 0);
                utf8::Assert::IsTrue(nBytesReturned == 0, "ioctl returned an out-of-spec byte count");
             }
-            catch (std::exception& e)
+            catch (const std::exception& e)
             {
                switch (SystemError().get_error_code())
                {
@@ -69,10 +69,10 @@ namespace UnitTestExtendedUniversalCppSupport
             // continue with an exception path test (issue a bad ioctl to the device)...
             try
             {
-               nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_BAD_IOCTL, NULL, 0, NULL, 0);
+               nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_BAD_IOCTL, nullptr, 0, nullptr, 0);
                utf8::Assert::IsTrue(false,"ioctl didn't reject a foreign ctl_code");
             }
-            catch (std::exception& e)
+            catch (const std::exception& e)
             {
                switch (SystemError().get_error_code())
                {
@@ -86,7 +86,7 @@ namespace UnitTestExtendedUniversalCppSupport
                }
             }
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }
@@ -117,7 +117,7 @@ namespace UnitTestExtendedUniversalCppSupport
                   nBytesReturned = cdrom.read(buffer.data(), BLOCK_SIZE);
                   break;
                }
-               catch (std::exception& e)
+               catch (const std::exception& e)
                {
                   switch (SystemError().get_error_code())
                   {
@@ -146,7 +146,7 @@ namespace UnitTestExtendedUniversalCppSupport
             }
 
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }

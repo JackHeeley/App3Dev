@@ -8,9 +8,9 @@
 #include "targetver.h"
 
 // Headers for CppUnitTest
-#pragma warning(disable : 26429  26432 26433 26439 26440 26443 26447 26461 26466 26485 26490 26495 26496)
+#pragma warning(disable : 26429  26432 26433 26439 26440 26443 26447 26455 26461 26466 26477 26485 26490 26495 26496)
 #include "CppUnitTest.h"
-#pragma warning(default : 26429  26432 26433 26439 26440 26443 26447 26461 26466 26485 26490 26495 26496)
+#pragma warning(default : 26429  26432 26433 26439 26440 26443 26447 26455 26461 26466 26477 26485 26490 26495 26496)
 
 // TODO: reference additional headers your program requires here
 #define NOMINMAX

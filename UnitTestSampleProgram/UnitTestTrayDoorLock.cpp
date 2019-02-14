@@ -24,7 +24,7 @@ namespace UnitTestExtendedUniversalCppSupport
             //perform operation under test
             TrayDoorLock lock(m_cdr);
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }

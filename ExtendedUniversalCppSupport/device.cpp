@@ -80,7 +80,7 @@ public:
       //LPSECURITY_ATTRIBUTES lpSecurityAttributes = NULL;
       const DWORD dwCreateDisposition = OPEN_EXISTING;
       const DWORD dwFlagsAndAttributes = FILE_ATTRIBUTE_NORMAL;
-      HANDLE hTemplateFile = NULL;
+      HANDLE hTemplateFile = nullptr;
 
       hDevice = CreateFile(device_path_w.c_str(),
          dwDesiredAccess,

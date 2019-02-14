@@ -1,5 +1,5 @@
 #pragma once
-#pragma warning(disable:  26402 26409 26432)
+#pragma warning(disable:  26402 26409 26432 26487)
 /*
 ====================================================================
 A Smart Pointer to IMPLementation (i.e. Smart PIMPL or just SPIMPL).

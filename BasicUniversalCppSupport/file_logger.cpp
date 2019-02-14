@@ -22,9 +22,9 @@ private:
    std::ofstream stream;
 
 public:
-#pragma warning (disable:26439)
+#pragma warning (disable:26439 26455)
    impl() /*noexcept*/ :
-#pragma warning (default:26439)
+#pragma warning (default:26439 26455)
       fileName("LogFile.log"),
       filter(LogFilter::None),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))

@@ -22,7 +22,7 @@ namespace UnitTestBasicUniversalCppSupport
             utf8::Assert::AreEqual(lastError.get_error_code(), 0, "an error was detected when none were triggered");
 
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }
@@ -43,7 +43,7 @@ namespace UnitTestBasicUniversalCppSupport
                utf8::Assert::AreEqual(lastError.get_error_code(), i, "a different error_code was returned from the one constructed");
             }
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }
@@ -62,7 +62,7 @@ namespace UnitTestBasicUniversalCppSupport
             // check that the target matches source...
             utf8::Assert::IsTrue((error_b == error_a), "Source or destination was corrupted by copy operation");
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // report what went wrong
          }
@@ -90,7 +90,7 @@ namespace UnitTestBasicUniversalCppSupport
             // check result
             utf8::Assert::IsTrue((error_a == error_b), "SystemErrors didn't match after copy");
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // report what went wrong
          }
@@ -118,7 +118,7 @@ namespace UnitTestBasicUniversalCppSupport
             // after moves source must be left in a valid (but unspecified) state. In this case we find source addressable (as required), and not equal (acceptable).
             utf8::Assert::IsTrue((error_b != error_b_copy), "moved from object is still equal after move (suspicious)");
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }
@@ -139,7 +139,7 @@ namespace UnitTestBasicUniversalCppSupport
             // test succeeds if error_code matches
             utf8::Assert::IsTrue((actual_value == expected_value), "SystemError returned unexpected error code");
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }
@@ -163,7 +163,7 @@ namespace UnitTestBasicUniversalCppSupport
             // test succeeds if construction doesn't throw and error_code is 1, and get_error_text() returns the expected string value
             utf8::Assert::IsTrue((actual_value == expected_value), "SystemError returned unexpected error text");
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }
@@ -196,7 +196,7 @@ namespace UnitTestBasicUniversalCppSupport
                std::cout << ss.str().c_str();
             }
          }
-         catch (std::exception& e)
+         catch (const std::exception& e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }
