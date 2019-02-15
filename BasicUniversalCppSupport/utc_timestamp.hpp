@@ -72,4 +72,4 @@ const auto utc_timestamp = []()
    return trim_copy({ timebuf });
 };
 
-//#pragma warning (default: 26444 26489 )
+#pragma warning (default: 26444 26489 )
