@@ -48,7 +48,7 @@ private:
 
    ///<summary> unique pointer to private implementation.</summary>
    ///<remarks> with default copy, move and compare support.</remarks>
-   spimpl::impl_ptr<impl> impl_;
+   spimpl::impl_ptr<impl> pimpl;
 
 public:
    ///<summary> references a std::map listing the device paths for the system devices corresponding to 

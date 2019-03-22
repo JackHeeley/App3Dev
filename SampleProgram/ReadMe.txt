@@ -88,6 +88,7 @@ DONE:
 36. Addressed long standing encapsulation niggles (moved cdrom_device, and utf8_assert to the support libraries, split out private classes in main, reworked unit tests accordingly)
 37. Warning improvements for VS15.9.6/7 applied - nullptr in place of NULL - catching exceptions as const - lifetime of spans - pragma disables on affected foreign includes
 38. Bugfix: restore warnings to default in utc_timestamp.hpp
+39. Clarity: renamed impl_ to pimpl in all the pimpl implementatioms
 
 IN PROGRESS:
 

@@ -73,7 +73,7 @@ private:
 
    ///<summary> smart unique pointer to private implementation.</summary>
    ///<remarks> with default copy, move and compare support.</remarks>
-   spimpl::impl_ptr<impl> impl_;
+   spimpl::impl_ptr<impl> pimpl;
 };
 
 #pragma warning (default:4251 4290)

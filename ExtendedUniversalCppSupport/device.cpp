@@ -220,26 +220,26 @@ public:
 ///<exception cref='std::exception'> if construction fails.</exception>
 ///<remarks>opens the device</remarks>
 Device::Device(std::string a_device_path) : 
-   impl_(spimpl::make_unique_impl<impl>(a_device_path))
+   pimpl(spimpl::make_unique_impl<impl>(a_device_path))
 {
 }
 
 const std::uint32_t Device::ioctl(std::uint32_t dwIoControlCode, void* lpInBuffer, std::uint32_t nInBufferSize, void* lpOutBuffer, std::uint32_t nOutBufferSize) const throw()
 {
-   return impl_->ioctl(dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize);
+   return pimpl->ioctl(dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize);
 }
 
 const std::uint32_t Device::read(void* lpBuffer, std::uint32_t nBytesToRead) const throw()
 {
-   return impl_->read(lpBuffer, nBytesToRead);
+   return pimpl->read(lpBuffer, nBytesToRead);
 }
 
 const std::uint32_t Device::write(void* lpBuffer, std::uint32_t nBytesToWrite) const throw()
 {
-   return impl_->write(lpBuffer, nBytesToWrite);
+   return pimpl->write(lpBuffer, nBytesToWrite);
 }
 
 void Device::reset()
 {
-   impl_->reset();
+   pimpl->reset();
 }

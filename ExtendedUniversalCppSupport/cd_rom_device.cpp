@@ -275,7 +275,7 @@ private:
 ///<param name='device_path'> the system name of the cdrom device to use.</param>
 ///<exception cref='std::exception'>if construction fails.</exception>
 CdromDevice::CdromDevice(std::string device_path) :
-   impl_(spimpl::make_unique_impl<impl>(device_path))
+   pimpl(spimpl::make_unique_impl<impl>(device_path))
 {
 }
 
@@ -284,7 +284,7 @@ CdromDevice::CdromDevice(std::string device_path) :
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
 const uint64_t CdromDevice::get_image_size(void) const 
 {
-   return impl_->get_image_size();
+   return pimpl->get_image_size();
 }
 
 ///<summary>get image of media into span.</summary>
@@ -293,38 +293,38 @@ const uint64_t CdromDevice::get_image_size(void) const
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
 void CdromDevice::get_image(gsl::span<unsigned char>span) const
 {
-   impl_->get_image(span);
+   pimpl->get_image(span);
 }
 
 ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>
 void CdromDevice::lock(void)
 {
-   impl_->lock();
+   pimpl->lock();
 }
 
 ///<summary> allows media removal. If the toaster is already in the unlocked state, then this method does nothing.</summary>
 void CdromDevice::unlock(void)
 {
-   impl_->unlock();
+   pimpl->unlock();
 }
 
 ///<summary>query the locked state of the cdrom.</summary>
 ///<returns>true if the cdrom is locked.</returns>
 const bool CdromDevice::get_locked(void) const noexcept
 {
-   return impl_->get_locked();
+   return pimpl->get_locked();
 }
 
 ///<summary> load the media (closes the door of the CD drive)</summary>
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
 void CdromDevice::load(void) const
 {
-   impl_->load();
+   pimpl->load();
 }
 
 ///<summary> eject the media (opens the door of the CD drive)</summary>
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
 void CdromDevice::eject(void) const
 {
-   impl_->eject();
+   pimpl->eject();
 }

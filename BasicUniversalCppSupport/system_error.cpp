@@ -146,14 +146,14 @@ public:
 
 ///<summary> constructs a system error for the last system error.</summary>
 SystemError::SystemError() noexcept :
-   impl_(spimpl::make_impl<impl>())
+   pimpl(spimpl::make_impl<impl>())
 {
 }
 
 ///<summary> constructs a system error from an error code.</summary>
 SystemError::SystemError(int errorCode) noexcept :
 #pragma warning (disable : 26447)
-   impl_(spimpl::make_impl<impl>(errorCode))
+   pimpl(spimpl::make_impl<impl>(errorCode))
 #pragma warning (default : 26447)
 {
 }
@@ -162,7 +162,7 @@ SystemError::SystemError(int errorCode) noexcept :
 ///<remarks> objects considered equal if impl's are equal.</remarks>
 bool SystemError::operator==(const SystemError& other) const
 {
-   return *impl_.get() == *other.impl_.get();   
+   return *pimpl.get() == *other.pimpl.get();   
 }
 
 ///<summary> not equals comparison operator.</summary>
@@ -175,11 +175,11 @@ bool SystemError::operator!=(const SystemError& other) const
 ///<summary> gets the system error text from an error code.</summary>
 const std::string SystemError::get_error_text() const
 {
-   return impl_->get_error_text();
+   return pimpl->get_error_text();
 }
 
 ///<summary> gets the system error code.</summary>
 const int SystemError::get_error_code() const noexcept
 {
-   return impl_->get_error_code();
+   return pimpl->get_error_code();
 }

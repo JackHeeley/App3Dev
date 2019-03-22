@@ -71,7 +71,7 @@ private:
 
    ///<summary> smart unique pointer to private implementation.</summary>
    ///<remarks> supports default move semantics.</remarks>
-   spimpl::unique_impl_ptr<impl> impl_;
+   spimpl::unique_impl_ptr<impl> pimpl;
 };
 
 #pragma warning (default:4251 4290)

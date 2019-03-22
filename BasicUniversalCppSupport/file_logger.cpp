@@ -165,12 +165,12 @@ public:
 
 ///<summary> constructs a default file_logger.</summary>
 file_logger::file_logger() noexcept :
-   impl_(spimpl::make_impl<impl>())
+   pimpl(spimpl::make_impl<impl>())
 {
 }
 
 file_logger::file_logger(std::string fileName, LogFilter filter) /*noexcept*/ :
-   impl_(spimpl::make_impl<impl>(fileName, filter))
+   pimpl(spimpl::make_impl<impl>(fileName, filter))
 {
 }
 
@@ -178,7 +178,7 @@ file_logger::file_logger(std::string fileName, LogFilter filter) /*noexcept*/ :
 ///<remarks> defines equals to mean identical fileName members.</remarks>
 bool file_logger::operator==(const file_logger& other) const noexcept
 {
-   return *impl_.get() == *other.impl_.get();
+   return *pimpl.get() == *other.pimpl.get();
 }
 
 ///<summary> not equals comparison operator.</summary>
@@ -190,36 +190,36 @@ bool file_logger::operator!=(const file_logger& other) const noexcept
 
 void file_logger::set_log_filter(LogFilter filter) noexcept
 {
-   impl_->set_log_filter(filter);
+   pimpl->set_log_filter(filter);
 }
 
 LogFilter file_logger::get_log_filter() const noexcept
 {
-   return impl_->get_log_filter();
+   return pimpl->get_log_filter();
 }
 
 void file_logger::write(LogLevel level, std::string line) 
 {
-   return impl_->write(level, line);
+   return pimpl->write(level, line);
 }
 
 void file_logger::writeln(LogLevel level, std::string line)
 {
-   return impl_->writeln(level, line);
+   return pimpl->writeln(level, line);
 }
 
 void file_logger::write(LogLevel level, std::exception e)
 {
-   return impl_->write(level, e);
+   return pimpl->write(level, e);
 }
 
 std::string file_logger::read_all() const
 {
-   return impl_->read_all();
+   return pimpl->read_all();
 }
 
 void file_logger::clear()
 {
-   impl_->clear();
+   pimpl->clear();
 }
 

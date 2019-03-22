@@ -203,8 +203,8 @@ private:
 ///<summary> constructs a DeviceDiscoverer for the chosen device interface class.</summary>
 ///<param name='anInterfaceClassGuid'>guid representing the system interface class for a chosen device type</param>
 DeviceDiscoverer::DeviceDiscoverer(const GUID& anInterfaceClassGuid) :
-   impl_(spimpl::make_impl<impl>(anInterfaceClassGuid)),
-   device_path_map(std::ref<std::map<int,std::string>>(impl_->device_path_data))
+   pimpl(spimpl::make_impl<impl>(anInterfaceClassGuid)),
+   device_path_map(std::ref<std::map<int,std::string>>(pimpl->device_path_data))
 {
 }
 
@@ -212,7 +212,7 @@ DeviceDiscoverer::DeviceDiscoverer(const GUID& anInterfaceClassGuid) :
 ///<remarks> objects considered equal if private_impl's are equal.</remarks>
 const bool DeviceDiscoverer::operator==(const DeviceDiscoverer& other) const
 {
-   return *impl_.get() == *other.impl_.get();
+   return *pimpl.get() == *other.pimpl.get();
 }
 
 ///<summary> not equals comparison operator.</summary>

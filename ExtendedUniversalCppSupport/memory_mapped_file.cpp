@@ -292,7 +292,7 @@ public:
 /// (and persisted to the backing disk file when the buffer was released).</remarks>
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
 MemoryMappedFile::MemoryMappedFile(const std::string& file_path, const std::string& buffer_name, uint64_t buffer_size) :
-   impl_(spimpl::make_impl<impl>(file_path, buffer_name, buffer_size))
+   pimpl(spimpl::make_impl<impl>(file_path, buffer_name, buffer_size))
 {
 }
 
@@ -300,32 +300,32 @@ MemoryMappedFile::MemoryMappedFile(const std::string& file_path, const std::stri
 ///<returns> text string representing file name</returns>
 const std::string MemoryMappedFile::get_file_path() const
 { 
-   return impl_->get_file_path();
+   return pimpl->get_file_path();
 };
 
 ///<summary> get name of memory buffer.</summary>
 ///<returns> text string representing memory buffer name</returns>
 const std::string MemoryMappedFile::get_buffer_name() const
 { 
-   return impl_->get_buffer_name();
+   return pimpl->get_buffer_name();
 };
 
 ///<summary> get buffer as a gsl::span.</summary>
 ///<returns> gsl::span (in mmf)</returns>
 gsl::span<unsigned char> MemoryMappedFile::get_span() const
 {
-   return impl_->get_span();
+   return pimpl->get_span();
 };
 
 ///<summary> get base address of buffer (a user space virtual address).</summary>
 ///<returns> address of memory buffer</returns>
 const uint64_t MemoryMappedFile::get_buffer_size() const noexcept
 {
-   return impl_->get_buffer_size();
+   return pimpl->get_buffer_size();
 };
 
 ///<summary> commit buffer to disk and release memory.</summary>
 void MemoryMappedFile::release()
 {
-   impl_->release();
+   pimpl->release();
 }
