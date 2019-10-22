@@ -18,7 +18,7 @@ namespace UnitTestExtendedUniversalCppSupport
             // prepare for test...
             const std::string file_path("test.iso");
             const std::string buffer_name("test_buffer");
-            const uint64_t buffer_size = 1024;
+            constexpr uint64_t buffer_size = 1024;
 
             // perform the operation under test (construct a memory mapped file with a constructor)...
             MemoryMappedFile mmf(file_path, buffer_name, buffer_size);
@@ -55,7 +55,7 @@ namespace UnitTestExtendedUniversalCppSupport
             // prepare for test...
             const std::string file_path("test.iso");
             const std::string buffer_name("test_buffer");
-            const uint64_t buffer_size = 1024;
+            constexpr uint64_t buffer_size = 1024;
             // perform the operation under test (construct a memory mapped file with a constructor)...
             MemoryMappedFile mmf(file_path, buffer_name, buffer_size);
 

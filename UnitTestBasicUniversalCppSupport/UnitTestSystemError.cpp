@@ -129,8 +129,8 @@ namespace UnitTestBasicUniversalCppSupport
          try
          {
             // prepare for test...
-            const int error_code = 1;
-            const int expected_value = 1;
+            constexpr int error_code = 1;
+            constexpr int expected_value = 1;
             SystemError lastError(error_code);
 
             // perform the operation under test (get error_code from SystemError)...
@@ -150,7 +150,7 @@ namespace UnitTestBasicUniversalCppSupport
          try
          {
             // prepare for test...
-            const int error_code = 1;
+            constexpr int error_code = 1;
             const std::string expected_value("Incorrect function.\r\n");
             SystemError lastError(error_code);
 

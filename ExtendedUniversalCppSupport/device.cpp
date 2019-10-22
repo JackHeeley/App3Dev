@@ -75,11 +75,11 @@ public:
    ///<exception cref='std::exception'>if the operation cannot be completed.</exception>
    void open()
    {
-      const DWORD dwDesiredAccess = GENERIC_READ | GENERIC_WRITE;
-      const DWORD dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
+      constexpr DWORD dwDesiredAccess = GENERIC_READ | GENERIC_WRITE;
+      constexpr DWORD dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
       //LPSECURITY_ATTRIBUTES lpSecurityAttributes = NULL;
-      const DWORD dwCreateDisposition = OPEN_EXISTING;
-      const DWORD dwFlagsAndAttributes = FILE_ATTRIBUTE_NORMAL;
+      constexpr DWORD dwCreateDisposition = OPEN_EXISTING;
+      constexpr DWORD dwFlagsAndAttributes = FILE_ATTRIBUTE_NORMAL;
       HANDLE hTemplateFile = nullptr;
 
       hDevice = CreateFile(device_path_w.c_str(),

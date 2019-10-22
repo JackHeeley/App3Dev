@@ -25,7 +25,7 @@ const static std::string fileName("cdrom_image.iso");
 #pragma warning(default:26426)
 
 ///<summary> number of times to test for an absent device.</summary>
-const static int  MAX_RETRIES = 3;
+constexpr static int  MAX_RETRIES = 3;
 
 ///<summary> program entrypoint.</summary>
 ///<param name = "argc"> number of command line parameters (expected 1).</param>
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
          std::system("pause");
       }
 
-      DeviceDiscoverer cdromDevices(GUID_DEVINTERFACE_CDROM);  // TODO: platform specific code (GUID is windows)
+      const DeviceDiscoverer cdromDevices(GUID_DEVINTERFACE_CDROM);  // TODO: platform specific code (GUID is windows)
 
       if (cdromDevices.device_path_map.get().empty())
       {

@@ -101,7 +101,7 @@ namespace UnitTestExtendedUniversalCppSupport
 
             // cdroms are only readable in exact block size units that depend on disk geometry
             // this test hard codes a safe size (doesn't query actual geometry of the disk)
-            const int BLOCK_SIZE = 4096;     
+            constexpr int BLOCK_SIZE = 4096;     
             std::vector<unsigned char>buffer;
             buffer.reserve(BLOCK_SIZE);
 

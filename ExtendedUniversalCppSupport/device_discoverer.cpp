@@ -100,7 +100,7 @@ private:
    ///<param name ="anInterfaceClassGuid"> pointer to setup interface class guid or device class guid to interrogate.</param>
    const HDEVINFO getDevInfoHandle(LPCGUID anInterfaceClassGuid) const
    {
-      const DWORD Flags = DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
+      constexpr DWORD Flags = DIGCF_PRESENT | DIGCF_DEVICEINTERFACE;
 
       HDEVINFO hDI = SetupDiGetClassDevs(anInterfaceClassGuid,
          nullptr,
