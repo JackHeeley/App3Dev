@@ -258,9 +258,11 @@ private:
    {
       for (uint64_t nBlock = 0; nBlock < cBlocks; nBlock++)
       {
+#pragma warning (disable:26486 26487)
          read(lpabyBufferMemoryAddress, gsl::narrow_cast<uint32_t>(cbyBlockSize)); // see remarks above
          lpabyBufferMemoryAddress += cbyBlockSize;
-      }
+#pragma warning (default:26486 26487)
+	  }
    }
 };
 

@@ -76,9 +76,11 @@ public:
    {
       if (this != &other)
       {
-         fileName = other.fileName;
+		 fileName = other.fileName;
          filter = other.filter;
-         stream = std::ofstream(fileName, std::ofstream::out | std::ofstream::app);
+#pragma warning (disable:26486)
+		 stream = std::ofstream(fileName, std::ofstream::out | std::ofstream::app);
+#pragma warning (default:26486)
       }
       return (*this);
    }
@@ -93,8 +95,10 @@ public:
       {
          fileName = other.fileName;
          filter = other.filter;
-         stream = std::ofstream(fileName, std::ofstream::out | std::ofstream::app);
-      }
+#pragma warning (disable:26486)
+		 stream = std::ofstream(fileName, std::ofstream::out | std::ofstream::app);
+#pragma warning (default:26486)
+	  }
       return (*this);
    }
 
@@ -165,7 +169,9 @@ public:
 
 ///<summary> constructs a default file_logger.</summary>
 file_logger::file_logger() noexcept :
+#pragma warning (disable:26447)
    pimpl(spimpl::make_impl<impl>())
+#pragma warning (default:26447)
 {
 }
 

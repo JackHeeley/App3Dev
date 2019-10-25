@@ -146,7 +146,9 @@ public:
 
 ///<summary> constructs a system error for the last system error.</summary>
 SystemError::SystemError() noexcept :
-   pimpl(spimpl::make_impl<impl>())
+#pragma warning (disable:26447)
+	pimpl(spimpl::make_impl<impl>())
+#pragma warning (default:26447)
 {
 }
 
