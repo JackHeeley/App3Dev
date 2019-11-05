@@ -19,7 +19,7 @@
 
 #pragma warning (disable:4251 4275)
 
-///<summary>use the predefined ANSI/ISO C99 C preprocessor macros to inject locus & context details when constructing an error::context</summary>
+///<summary>use the predefined ANSI/ISO C99 C preprocessor macros to inject locus and context details when constructing an error::context</summary>
 #define error_context(_text) error::context(__FILE__, __LINE__, __func__, (_text))
 
 namespace error
