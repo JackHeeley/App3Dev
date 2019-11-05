@@ -61,9 +61,11 @@ system_error.hpp, system_error.cpp
 utc_timestamp.hpp
     Timestamp support (used for logging purposes, and available for etc.)
 
+utf8_assert.hpp
+    This header is a utf8 wrapper for Microsoft's CppUnitTest Assert class. 
+
 utf8_convert.hpp
     This header includes minimum conversions needed to support the 
     utf8 anywhere programming paradigm (on windows). 
 
-uf8_assert.hpp
-    This header is a utf8 wrapper for Microsoft's CppUnitTest Assert class. 
+

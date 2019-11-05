@@ -91,6 +91,8 @@ DONE:
 39. Clarity: renamed impl_ to pimpl in all the pimpl implementatioms
 40. Update to VS 2019 (some warnings addressed)
 41. Completed warning treatment so that VS2019 proj compiles clean
+42. Correction to XML (use of & replaced with 'and')
+43. Updated spimpl.hpp to latest version (1.2) with warning suppression extended and added inside the header
 
 IN PROGRESS:
 
