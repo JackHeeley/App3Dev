@@ -96,8 +96,6 @@ namespace UnitTestExtendedUniversalCppSupport
             const auto n_disk_devices_before = disk.device_path_map.get().size();
             const auto n_cdrom_devices_before = cdrom.device_path_map.get().size();
 
-            utf8::Assert::IsTrue((n_disk_devices_before != n_cdrom_devices_before), "number of cdrom and disks (being equal) may not be ideal to support this test");
-
             // check pre-condition
             utf8::Assert::IsTrue((disk != cdrom), "DeviceDiscoverer objects matched before copy");
 

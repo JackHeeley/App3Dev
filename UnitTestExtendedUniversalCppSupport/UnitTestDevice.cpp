@@ -101,31 +101,34 @@ namespace UnitTestExtendedUniversalCppSupport
 
             // cdroms are only readable in exact block size units that depend on disk geometry
             // this test hard codes a safe size (doesn't query actual geometry of the disk)
-            constexpr int BLOCK_SIZE = 4096;     
+            constexpr int BLOCK_SIZE = 4096;
             std::vector<unsigned char>buffer;
             buffer.reserve(BLOCK_SIZE);
 
             uint32_t nBytesReturned = 0;
 
-            // this test may start before CD is ready (after another test potentially changed the cd)
-            int retries = 10;                          // cdrom drive may not be in ready state
-            while (--retries > 0)
+            int retries = 60;
+            while (--retries >= 0 && nBytesReturned != BLOCK_SIZE)
             {
                try
                {
+                  // dismiss possible errors from previous pass
+                  SystemError().clear_error_code();
+
                   // perform the operation under test (issue a read on the device)...
                   nBytesReturned = cdrom.read(buffer.data(), BLOCK_SIZE);
                   break;
                }
-               catch (const std::exception& e)
+               catch (const std::exception & e)
                {
                   switch (SystemError().get_error_code())
                   {
+                  // some cases are worth retrying
                   case ERROR_NOT_READY:
                   case ERROR_MEDIA_CHANGED:
                   case ERROR_IO_DEVICE:
-                     std::this_thread::sleep_for(2s); // not ready conditions, expected in some test sequences
-                     break;
+                     std::this_thread::sleep_for(1s);
+                     break; 
 
                   default: throw e;
                   }
@@ -134,8 +137,6 @@ namespace UnitTestExtendedUniversalCppSupport
 
             // check results...
             SystemError lastError;
-
-            //FIXME: lastError persists after successes?
             if (lastError.get_error_code() == ERROR_SUCCESS)
             {
                utf8::Assert::IsTrue(nBytesReturned == BLOCK_SIZE, "read returned an unexpected byte count");
@@ -144,9 +145,9 @@ namespace UnitTestExtendedUniversalCppSupport
             {
                utf8::Assert::IsTrue(false, lastError.get_error_text().c_str());
             }
-
+            
          }
-         catch (const std::exception& e)
+         catch (const std::exception & e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }

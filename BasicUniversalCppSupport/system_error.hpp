@@ -42,6 +42,9 @@ public:
    ///<summary> get the error code.</summary>
    const int get_error_code() const noexcept;
 
+   ///<summary> clear the error code.</summary>
+   void clear_error_code() const noexcept;
+
 private:
    ///<summary> forward reference to private implementation.</summary>
    class impl;

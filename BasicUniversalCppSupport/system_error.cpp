@@ -132,6 +132,11 @@ public:
       return (int)error_code;
    }
 
+   void clear_error_code() const noexcept
+   {
+	   SetLastError(ERROR_SUCCESS);
+   }
+
    ~impl()
    {
       LocalFree(lpBuffer);
@@ -184,4 +189,9 @@ const std::string SystemError::get_error_text() const
 const int SystemError::get_error_code() const noexcept
 {
    return pimpl->get_error_code();
+}
+
+void SystemError::clear_error_code() const noexcept
+{
+	pimpl->clear_error_code();
 }
