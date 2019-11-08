@@ -93,6 +93,7 @@ DONE:
 41. Completed warning treatment so that VS2019 proj compiles clean
 42. Correction to XML (use of & replaced with 'and')
 43. Updated spimpl.hpp to latest version (1.2) with warning suppression extended and added inside the header
+44. Fixed a couple of unit test issues.
 
 IN PROGRESS:
 
