@@ -23,8 +23,6 @@
 #include <gsl.h>
 #include <spimpl.hpp>
 
-#pragma warning (disable:4251 4290)
-
 ///<summary> wraps the system memory mapped file facility.</summary>
 class EXTENDEDUNIVERSALCPPSUPPORT_API MemoryMappedFile
 {
@@ -73,7 +71,8 @@ private:
 
    ///<summary> smart unique pointer to private implementation.</summary>
    ///<remarks> with default copy, move and compare support.</remarks>
+#pragma warning (disable:4251)
    spimpl::impl_ptr<impl> pimpl;
+#pragma warning (default:4251)
 };
 
-#pragma warning (default:4251 4290)

@@ -48,6 +48,15 @@
     <ClInclude Include="utf8_assert.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="spimpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gsl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CppUnitTest.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -24,15 +24,15 @@
 #include <map>
 #include <spimpl.hpp>
 
-#pragma warning (disable:4251 4290)
-
 ///<summary> wraps the system device interface.</summary>
 class EXTENDEDUNIVERSALCPPSUPPORT_API DeviceDiscoverer {
 
 public:
    ///<summary> construct an interface object used to enumerate the devices of a particular device interface class.</summary>
    ///<param name = "anInterfaceClassGuid"> the device interface class to be enumerated.</param>
+#pragma warning (disable:4290)
    DeviceDiscoverer(const GUID& anInterfaceClassGuid) throw (std::exception);
+#pragma warning (default:4290)
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean identical device path content.</remarks>
@@ -48,7 +48,9 @@ private:
 
    ///<summary> unique pointer to private implementation.</summary>
    ///<remarks> with default copy, move and compare support.</remarks>
+#pragma warning (disable:4251)
    spimpl::impl_ptr<impl> pimpl;
+#pragma warning (default:4251)
 
 public:
    ///<summary> references a std::map listing the device paths for the system devices corresponding to 
@@ -56,10 +58,10 @@ public:
    /// instances discovered at construction time. Entries are std::strings containing utf8 encoded content.</summary>
    /// <remarks> unlike a raw reference, std::reference_wrapper is copyable (a feature we need to support DeviceDiscoverer
    /// move operations with the current implementation choices).</remarks>
+#pragma warning (disable:4251)
    std::reference_wrapper<std::map<int, std::string>> device_path_map;
-
+#pragma warning (default:4251)
 };
 
-#pragma warning (default:4251 4290)
 
 

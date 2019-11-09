@@ -168,8 +168,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CppUnitTest.hpp" />
     <ClInclude Include="error_context.hpp" />
     <ClInclude Include="file_logger.hpp" />
+    <ClInclude Include="gsl.hpp" />
+    <ClInclude Include="spimpl.h" />
     <ClInclude Include="spimpl.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system_error.hpp" />

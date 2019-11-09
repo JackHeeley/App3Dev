@@ -12,18 +12,14 @@
 #define NOMINMAX
 #include <windows.h>
 
-#pragma warning(disable : 26429 26440 26427 26434 26447 26472 26473 26486 26496 26814)
-#include <gsl.h>
-#pragma warning(default : 26429 26440 26427 26434 26447 26472 26473 26486 26496 26814)
-
 #include <sstream>
 #include <string>
 #include <time.h>
 
-
 // Additional headers dll requires are here...
 #include "error_context.hpp"
 #include "file_logger.hpp"
+#include "gsl.hpp"
 #include "logger.hpp"
 #include "spimpl.hpp"
 #include "system_error.hpp"
