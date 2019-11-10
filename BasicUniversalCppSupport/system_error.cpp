@@ -159,9 +159,9 @@ SystemError::SystemError() noexcept :
 
 ///<summary> constructs a system error from an error code.</summary>
 SystemError::SystemError(int errorCode) noexcept :
-#pragma warning (disable : 26447)
+#pragma warning (disable:26447)
    pimpl(spimpl::make_impl<impl>(errorCode))
-#pragma warning (default : 26447)
+#pragma warning (default:26447)
 {
 }
 

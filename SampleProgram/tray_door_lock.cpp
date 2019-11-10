@@ -20,7 +20,6 @@ TrayDoorLock::TrayDoorLock(CdromDevice& cdr) : m_cdr(cdr)
 }
 
 ///<summary>unlock tray door in all return paths</summary>
-#pragma warning (disable:26447)
 TrayDoorLock::~TrayDoorLock() noexcept
 {
    try
@@ -40,4 +39,3 @@ TrayDoorLock::~TrayDoorLock() noexcept
       }
    }
 }
-#pragma warning (default:26447)

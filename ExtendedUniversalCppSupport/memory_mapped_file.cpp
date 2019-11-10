@@ -83,11 +83,11 @@ public:
    }
 
    ///<summary> move constructor.</summary>
-#pragma warning (disable:26439)
-   impl(impl&& other) /*noexcept*/ :
-#pragma warning (default:26439)
+   impl(impl&& other) noexcept :
+#pragma warning(disable:26447)
       filePathW(other.filePathW),
       bufferNameW(other.bufferNameW),
+#pragma warning(default:26447)
 
       buffer_ptr(other.buffer_ptr),
       hFile(other.hFile),
@@ -120,14 +120,19 @@ public:
    }
 
    ///<summary> move assignment operator.</summary>
-#pragma warning (disable:26439)
-   impl& impl::operator=(impl&& other) /*noexcept*/
-#pragma warning (default:26439)
+   impl& impl::operator=(impl&& other) noexcept
    {
       if (this != &other)
       {
-         filePathW = other.filePathW;
-         bufferNameW = other.bufferNameW;
+         try
+         {
+            filePathW = other.filePathW;
+            bufferNameW = other.bufferNameW;
+         }
+         catch (std::exception)
+         {
+            //TODO: consider stderr
+         }
 
          buffer_ptr = other.buffer_ptr;
          hFile = other.hFile;
@@ -145,13 +150,11 @@ public:
    {
       try
       {
-#pragma warning (disable:26447)
          release();
-#pragma warning (default:26447)
       }
       catch (std::exception&)
       {
-         // catch and dismiss is least bad strategy
+         // TODO: consider stderr
       }
    }
 

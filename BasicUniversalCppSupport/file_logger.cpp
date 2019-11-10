@@ -6,6 +6,8 @@
 
 #include "stdafx.h"
 
+#pragma warning (disable: 26447 26486)
+
 /*
 * ***************************************************************************
 * PIMPL idiom - private implementation of file_logger class (Rule of 5)
@@ -22,16 +24,14 @@ private:
    std::ofstream stream;
 
 public:
-#pragma warning (disable:26439 26455)
-   impl() /*noexcept*/ :
-#pragma warning (default:26439 26455)
+   impl() noexcept :
       fileName("LogFile.log"),
       filter(LogFilter::None),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
    {
    };
 
-   impl(const std::string fileName, LogFilter filter) /*noexcept*/ :
+   impl(const std::string fileName, LogFilter filter) noexcept :
       fileName(fileName),
       filter(filter),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
@@ -39,7 +39,7 @@ public:
    };
 
    ///<summary> copy constructor.</summary>
-   impl(const impl& other) /*noexcept*/ :
+   impl(const impl& other) noexcept :
       fileName(other.fileName),
       filter(other.filter),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
@@ -47,27 +47,24 @@ public:
    }
 
    ///<summary> move constructor.</summary>
-#pragma warning (disable:26439)
-   impl(impl&& other) /*noexcept*/ :
-#pragma warning (default:26439)
+   impl(impl&& other) noexcept :
       fileName(other.fileName),
       filter(other.filter),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
    {
    }
 
+
    ///<summary> destructor.</summary>
    ~impl() noexcept
    {
       try
       {
-#pragma warning (disable:26447)
          clear();
-#pragma warning (default:26447)
       }
       catch (std::exception&)
       {
-         // catch and dismiss is least bad option
+         // TODO: consider writing to stderr
       }
    }
    
@@ -76,29 +73,22 @@ public:
    {
       if (this != &other)
       {
-		 fileName = other.fileName;
+		   fileName = other.fileName;
          filter = other.filter;
-#pragma warning (disable:26486)
-		 stream = std::ofstream(fileName, std::ofstream::out | std::ofstream::app);
-#pragma warning (default:26486)
+         stream = std::ofstream(fileName, std::ofstream::out | std::ofstream::app);
       }
       return (*this);
    }
 
    ///<summary> move assignment operator.</summary>
-#pragma warning (disable:26439)
-   impl& impl::operator=(impl&& other) /*noexcept*/
-#pragma warning (default:26439)
-
+   impl& impl::operator=(impl&& other) noexcept
    {
       if (this != &other)
       {
          fileName = other.fileName;
          filter = other.filter;
-#pragma warning (disable:26486)
-		 stream = std::ofstream(fileName, std::ofstream::out | std::ofstream::app);
-#pragma warning (default:26486)
-	  }
+         stream = std::ofstream(fileName, std::ofstream::out | std::ofstream::app);
+      }
       return (*this);
    }
 
@@ -169,13 +159,11 @@ public:
 
 ///<summary> constructs a default file_logger.</summary>
 file_logger::file_logger() noexcept :
-#pragma warning (disable:26447)
    pimpl(spimpl::make_impl<impl>())
-#pragma warning (default:26447)
 {
 }
 
-file_logger::file_logger(std::string fileName, LogFilter filter) /*noexcept*/ :
+file_logger::file_logger(std::string fileName, LogFilter filter) noexcept :
    pimpl(spimpl::make_impl<impl>(fileName, filter))
 {
 }
@@ -228,4 +216,4 @@ void file_logger::clear()
 {
    pimpl->clear();
 }
-
+#pragma warning (default: 26447 26486)

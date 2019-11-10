@@ -54,19 +54,17 @@ namespace UnitTestAbstractDevice
             ///<summary> deleted move assignment.</summary>
             TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
 
-#pragma warning (disable:26447)
             ~TrayDoorLock()
             {
                try
                {
                   m_cdr.unlock();
                }
-               catch (...)
+               catch (std::exception)
                {
-                 // dismiss is still least bad option here
+                 // TODO: consider stderr
                }
             }
-#pragma warning (default:26447)
          };
 
          // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
@@ -205,19 +203,17 @@ namespace UnitTestAbstractDevice
 //            ///<summary> deleted move assignment.</summary>
 //            TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
 //
-//#pragma warning (disable:26447)
 //            ~TrayDoorLock()
 //            {
 //               try
 //               {
 //                  m_cdr.unlock();
 //               }
-//               catch (...)
+//               catch (std::exception)
 //               {
-//                  // dismiss is still least bad option here
+//                  // TODO: consider stderr
 //               }
 //            }
-//#pragma warning (default:26447)
 //         };
 //
 //         try

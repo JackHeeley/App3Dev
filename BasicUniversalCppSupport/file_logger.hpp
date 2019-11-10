@@ -27,8 +27,7 @@ public:
    ///<summary>construct logger</summary>
    ///<param name='fileName'>path and name of the log file.</param>
    ///<param name='filter'>bitmask used to filter log write events.</param>
-   ///<exception cref='std::exception'>if underlying ofstream could not be opened</exception>
-   file_logger(const std::string fileName, LogFilter filter); /*noexcept*/
+   file_logger(const std::string fileName, LogFilter filter) noexcept;
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean identical member content.</remarks>

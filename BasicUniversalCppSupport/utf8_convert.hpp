@@ -54,5 +54,35 @@ namespace utf8
 
          return ss.str();
       }
+
+      ///<summary>convert utf8 std::string to GUID</summary>
+      ///<param name='aGuidString'>a utf8 encoded string representation of aGuid in the form
+      /// "0xhhhhhhhhL, 0xhhhh, 0xhhhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh"
+      /// where h is any hex digit (lowercase)
+      ///<returns>const GUID (e.g. as supplied in winioctl.h)</returns>
+      static inline GUID to_guid(const std::string aGuidString)
+      {
+        throw error_context("utf8::to_guid() is not implemented");
+
+        //FIXME: This code is work in progress...
+
+        GUID aGuid;
+
+         std::stringstream ss;
+
+         ss << aGuidString;
+         
+         ss >> aGuid.Data1 >> aGuid.Data2 >> aGuid.Data3;
+
+         auto span = gsl::as_span(aGuid.Data4);
+
+         for (auto& elem : span)
+         {
+            ss >> elem;
+         }
+
+         return aGuid;
+      }
+
    };
 }

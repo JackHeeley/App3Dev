@@ -94,6 +94,7 @@ DONE:
 42. Correction to XML (use of & replaced with 'and')
 43. Updated spimpl.hpp to latest version (1.2) with warning suppression extended and added inside the header
 44. Fixed a couple of unit test issues.
+45. Reviewed and revised warning supression for newest compiler
 
 IN PROGRESS:
 
@@ -104,4 +105,7 @@ TODO:
 2. File logger entry layout could be improved.
 
 3. LOGGER #defines are probably candidates for revision (change to a modern CPP way of working).
+
+4. Replace GUID params with strings as a step towards support for PURE ANSI C++ SampleProgram)
+	utf8::to_GUID() and utf8::from_GUID() are under development
 

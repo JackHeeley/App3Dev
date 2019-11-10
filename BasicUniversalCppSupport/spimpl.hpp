@@ -1,9 +1,10 @@
 //
 // spimple.hpp : wrapper for spimpl.h - used to suppress warnings in externally provided source
 //
-// Copyright (c) 2017 Jack Heeley, all rights reserved
+// Copyright (c) 2019 Jack Heeley, all rights reserved
 //
 #pragma once
-#pragma warning(disable : 26402 26409 26432 26434 26440 26456 26486 26487 26489)
+#define SPIMPLE_WARNINGS_SUPPRESSED 26402 26409 26432 26434 26440 26456 26486 26487 26489
+#pragma warning(disable: SPIMPLE_WARNINGS_SUPPRESSED)
 #include "spimpl.h"
-#pragma warning(default : 26402 26409 26432 26434 26440 26456 26486 26487 26489)
+#pragma warning(default: SPIMPLE_WARNINGS_SUPPRESSED)

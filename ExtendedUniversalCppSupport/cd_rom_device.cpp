@@ -55,9 +55,7 @@ public:
       {
          try
          {
-#pragma warning (disable:26447)
             unlock();
-#pragma warning (default:26447)
          }
          catch (std::exception&)
          {
