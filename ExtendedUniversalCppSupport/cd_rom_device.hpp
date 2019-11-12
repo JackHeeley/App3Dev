@@ -20,7 +20,7 @@
 
 #include "memory_mapped_file.hpp"     // mmf_vector type (and dependent custom allocator support functions)
 
-#pragma warning (disable:4251 4290)
+#pragma warning (disable:4251)
 
 ///<summary> CdromDevice offers a limited feature set specific to CD ROM Devices</summary>
 ///<remarks> raw device access (without CDFS) allows us to build a one time rip feature 
@@ -75,4 +75,4 @@ private:
    spimpl::unique_impl_ptr<impl> pimpl;
 };
 
-#pragma warning (default:4251 4290)
+#pragma warning (default:4251)

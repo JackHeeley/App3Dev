@@ -94,7 +94,8 @@ DONE:
 42. Correction to XML (use of & replaced with 'and')
 43. Updated spimpl.hpp to latest version (1.2) with warning suppression extended and added inside the header
 44. Fixed a couple of unit test issues.
-45. Reviewed and revised warning supression for newest compiler
+45. Reviewed and revised warning supression for VS 16.3.8
+46. Reviewed and reduced warning supression for VS 16.3.9
 
 IN PROGRESS:
 

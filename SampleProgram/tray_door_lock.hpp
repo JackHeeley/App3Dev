@@ -37,8 +37,5 @@ public:
    TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
 
    ///<summary>unlock tray door in all return paths</summary>
-#pragma warning (disable:26447)
    ~TrayDoorLock() noexcept;
-#pragma warning (default:26447)
-
 };

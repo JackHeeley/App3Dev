@@ -17,8 +17,6 @@
 
 #include "system_error.hpp"
 
-#pragma warning (disable:4251 4275 4290)
-
 ///<summary> strong type naming all allowable combinations of (single bit) flags as used to configure a logger.</summary>
 enum class BASICUNIVERSALCPPSUPPORT_API LogFilter : int
 {
@@ -205,5 +203,3 @@ public:
    virtual void clear() = 0;
 
 };
-
-#pragma warning (default:4251 4275 4290)
