@@ -17,9 +17,10 @@ namespace UnitTestExtendedUniversalCppSupport
             // check test preconditions (at least one physical cdrom needed)
             DeviceDiscoverer cdrom_interface(GUID_DEVINTERFACE_CDROM);
             utf8::Assert::IsFalse(cdrom_interface.device_path_map.get().empty(), "no system cdrom devices were discovered");
+            std::atomic<int> progress;
 
             //prepare test 
-            CdromDevice m_cdr(cdrom_interface.device_path_map.get()[0]);
+            CdromDevice m_cdr(cdrom_interface.device_path_map.get()[0], progress);
 
             //perform operation under test
             TrayDoorLock lock(m_cdr);

@@ -96,17 +96,18 @@ DONE:
 44. Fixed a couple of unit test issues.
 45. Reviewed and revised warning supression for VS 16.3.8
 46. Reviewed and reduced warning supression for VS 16.3.9
+47. Added a progress indication to SampleProgram.
 
 IN PROGRESS:
 
 TODO:
 
-1. Consider how to more conveniently share a single file_logger in a multi-dll program.
+1. Consider strategies for logging in a multi-dll program.
 
 2. File logger entry layout could be improved.
 
 3. LOGGER #defines are probably candidates for revision (change to a modern CPP way of working).
 
 4. Replace GUID params with strings as a step towards support for PURE ANSI C++ SampleProgram)
-	utf8::to_GUID() and utf8::from_GUID() are under development
+	- utf8::to_GUID() and utf8::from_GUID() are under development
 

@@ -18,8 +18,10 @@ namespace UnitTestAbstractDevice
             DeviceDiscoverer cdrom_interface(GUID_DEVINTERFACE_CDROM);
             utf8::Assert::IsFalse(cdrom_interface.device_path_map.get()[0] == "", "no system cdrom devices were discovered");
 
+            std::atomic<int> progress;
+
             // perform the operation under test (construct a device for the system's first enumerated cdrom)...
-            CdromDevice cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0]);
+            CdromDevice cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0], progress);
 
             // test succeeds if construction doesn't throw
             cdrom.unlock();
@@ -70,8 +72,9 @@ namespace UnitTestAbstractDevice
          // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
          try
          {
+            std::atomic<int> progress;
             std::string device_path = DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0];
-            CdromDevice cdrom0(device_path);
+            CdromDevice cdrom0(device_path, progress);
 
             int retries = 10;
 
@@ -142,8 +145,10 @@ namespace UnitTestAbstractDevice
 
          try
          {
+            std::atomic<int> progress;
+
             // prepare for test (construct a device for the system's first enumerated cdrom)...
-            CdromDevice cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0]);
+            CdromDevice cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0], progress);
                        
             int retries = 10;                          // cdrom drive may not be in ready state
             while (--retries > 0)
@@ -177,85 +182,87 @@ namespace UnitTestAbstractDevice
          }
       }
 
-//      TEST_METHOD(TestCdromDeviceReadImage)
-//      {
-//         utf8::Assert::Fail("Test deprecated (takes too long). Use <testapp> (tbs) instead, or comment out this fail.");
-//
-//         // RAII door lock helper
-//         class TrayDoorLock
-//         {
-//            CdromDevice& m_cdr;
-//
-//         public:
-//            TrayDoorLock(CdromDevice& cdrom) : m_cdr(cdrom)
-//            {
-//               m_cdr.lock();
-//            }
-//            ///<summary> deleted copy constructor.</summary>
-//            TrayDoorLock(TrayDoorLock& other) = delete;
-//
-//            ///<summary> deleted move constructor.</summary>
-//            TrayDoorLock(TrayDoorLock&& other) = delete;
-//
-//            ///<summary> deleted copy assignment.</summary>
-//            TrayDoorLock& operator=(TrayDoorLock& other) = delete;
-//
-//            ///<summary> deleted move assignment.</summary>
-//            TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
-//
-//            ~TrayDoorLock()
-//            {
-//               try
-//               {
-//                  m_cdr.unlock();
-//               }
-//               catch (std::exception)
-//               {
-//                  // TODO: consider stderr
-//               }
-//            }
-//         };
-//
-//         try
-//         {
-//            // prepare for test (construct a device for the system's first enumerated cdrom)...
-//            CdromDevice cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0]);
-//
-//            // ...create buffer. On x32 resize will throw std::exception("vector<T> too long) if CDROM/DVD image is too large for a byte vector
-//            std::vector<unsigned char> buffer;
-//            buffer.resize(gsl::narrow<std::vector<unsigned char>::size_type>(cdrom.get_image_size()));    
-//
-//            // disable media eject (also operator initiated) during test
-//            TrayDoorLock scoped_lock(cdrom);
-//
-//            bool test_done = false;    // cdrom drive may not be in ready state
-//            while (!test_done)
-//            {
-//               try
-//               {
-//                  // perform the operation under test (read full device content)...
-//                  cdrom.get_image(buffer);    // doesn't require an explicit gsl::as_span<unsigned char>(buffer)
-//                  test_done = true;
-//               }
-//               catch (std::exception& e)
-//               {
-//                  // other tests can appear to have 'swapped' media...
-//                  if (SystemError().get_error_code() != ERROR_MEDIA_CHANGED) throw e;
-//               }
-//            };
-//
-//            // write to file (confirm by mounting iso)
-//            std::ofstream file("test.iso", std::ios::out | std::ios::binary);
-//            file.unsetf(std::ios::skipws); // Don't eat new lines in binary mode!!!
-//            file.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
-//            file.close();
-//
-//            // check results (by hand) - image is good if file mounts and is readable.
-//         }
-//         catch (std::exception& e)
-//         {
-//            utf8::Assert::IsTrue(false, e.what()); // something went wrong
-//         }
-//      }
+      //TEST_METHOD(TestCdromDeviceReadImage)
+      //{
+      //   utf8::Assert::Fail("Test deprecated (takes too long). Use <testapp> (tbs) instead, or comment out this fail.");
+
+      //   // RAII door lock helper
+      //   class TrayDoorLock
+      //   {
+      //      CdromDevice& m_cdr;
+
+      //   public:
+      //      TrayDoorLock(CdromDevice& cdrom) : m_cdr(cdrom)
+      //      {
+      //         m_cdr.lock();
+      //      }
+      //      ///<summary> deleted copy constructor.</summary>
+      //      TrayDoorLock(TrayDoorLock& other) = delete;
+
+      //      ///<summary> deleted move constructor.</summary>
+      //      TrayDoorLock(TrayDoorLock&& other) = delete;
+
+      //      ///<summary> deleted copy assignment.</summary>
+      //      TrayDoorLock& operator=(TrayDoorLock& other) = delete;
+
+      //      ///<summary> deleted move assignment.</summary>
+      //      TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
+
+      //      ~TrayDoorLock()
+      //      {
+      //         try
+      //         {
+      //            m_cdr.unlock();
+      //         }
+      //         catch (std::exception)
+      //         {
+      //            // TODO: consider stderr
+      //         }
+      //      }
+      //   };
+
+      //   try
+      //   {
+      //      // prepare for test (construct a device for the system's first enumerated cdrom)...
+      //      std::atomic<int> progress;
+
+      //      CdromDevice cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0], progress);
+
+      //      // ...create buffer. On x32 resize will throw std::exception("vector<T> too long) if CDROM/DVD image is too large for a byte vector
+      //      std::vector<unsigned char> buffer;
+      //      buffer.resize(gsl::narrow<std::vector<unsigned char>::size_type>(cdrom.get_image_size()));    
+
+      //      // disable media eject (also operator initiated) during test
+      //      TrayDoorLock scoped_lock(cdrom);
+
+      //      bool test_done = false;    // cdrom drive may not be in ready state
+      //      while (!test_done)
+      //      {
+      //         try
+      //         {
+      //            // perform the operation under test (read full device content)...
+      //            cdrom.get_image(buffer);    // doesn't require an explicit gsl::as_span<unsigned char>(buffer)
+      //            test_done = true;
+      //         }
+      //         catch (const std::exception& e)
+      //         {
+      //            // other tests can appear to have 'swapped' media...
+      //            if (SystemError().get_error_code() != ERROR_MEDIA_CHANGED) throw e;
+      //         }
+      //      };
+
+      //      // write to file (confirm by mounting iso)
+      //      std::ofstream file("test.iso", std::ios::out | std::ios::binary);
+      //      file.unsetf(std::ios::skipws); // Don't eat new lines in binary mode!!!
+      //      file.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
+      //      file.close();
+
+      //      // check results (by hand) - image is good if file mounts and is readable.
+      //   }
+      //   catch (const std::exception& e)
+      //   {
+      //      utf8::Assert::IsTrue(false, e.what()); // something went wrong
+      //   }
+      //}
    };
 }

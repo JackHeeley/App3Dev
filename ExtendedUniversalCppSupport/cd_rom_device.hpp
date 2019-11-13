@@ -3,7 +3,7 @@
 //
 // Here we provide a capability to create concrete objects for cd rom device(s).
 //
-// Copyright (c) 2005-2017 Jack Heeley, all rights reserved
+// Copyright (c) 2005-2019 Jack Heeley, all rights reserved
 //
 #pragma once
 
@@ -13,6 +13,7 @@
 #define EXTENDEDUNIVERSALCPPSUPPORT_API __declspec(dllimport)
 #endif
 
+#include <atomic>
 #include <string>
 #include <memory>
 #include <vector>
@@ -32,8 +33,9 @@ class EXTENDEDUNIVERSALCPPSUPPORT_API CdromDevice
 public:
    ///<summary> constructs a user mode Device that can be used to access a particular system cdrom instance.</summary>
    ///<param name='device_path'> the system name of the cdrom device to use.</param>
+   ///<param name='a_progress'> reference to percentage progress used in get_image.</param>
    ///<exception cref='std::exception'>if construction fails.</exception>
-   CdromDevice(std::string device_path);
+   CdromDevice::CdromDevice(std::string device_path, std::atomic<int>& a_progress);
 
    ///<summary> get size of media image.</summary>
    ///<returns> size in bytes of image data.</returns>

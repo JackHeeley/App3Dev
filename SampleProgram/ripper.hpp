@@ -1,9 +1,11 @@
 //
 // ripper.hpp : implements the ripper helper class
 //
-// Copyright (c) 2005-2018 Jack Heeley, all rights reserved
+// Copyright (c) 2005-2019 Jack Heeley, all rights reserved
 //
 #pragma once
+
+#include <atomic>
 
 ///<summary> functor class to rip image.</summary>
 class Ripper
@@ -19,7 +21,8 @@ public:
    ///<summary> construct a ripper.</summary>
    ///<param name='devicePath'> the utf8 name of a raw system cdrom device containing media.</param>
    ///<param name='filePath'> the utf8 name of a file to receive the (iso 9660) image.</param>
-   Ripper(std::string devicePath, std::string filePath);
+   ///<param name='a_progress'> reference to where percentage read progress will be maintained (during the rip operation).</param>
+   Ripper(std::string devicePath, std::string filePath, std::atomic<int>& a_progress);
 
    ///<summary> functor to perform the rip operation.</summary>
    void operator()();

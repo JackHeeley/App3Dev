@@ -3,7 +3,7 @@
 //
 // supplies a functor for the console application.
 //
-// Copyright (c) 2018 Jack Heeley, all rights reserved
+// Copyright (c) 2018-2019 Jack Heeley, all rights reserved
 //
 #include "stdafx.h"
 
@@ -17,8 +17,9 @@ extern file_logger Logger;
 ///<summary> construct a ripper.</summary>
 ///<param name='devicePath'> the utf8 name of a raw system cdrom device containing media.</param>
 ///<param name='filePath'> the utf8 name of a file to receive the (iso 9660) image.</param>
-Ripper::Ripper(std::string devicePath, std::string filePath) :
-      m_cdr(devicePath),
+///<param name='a_progress'> reference to percentage progess of the rip</param>
+Ripper::Ripper(std::string devicePath, std::string filePath, std::atomic<int>& a_progress) :
+      m_cdr(devicePath, a_progress),
       m_mmf(filePath, "", m_cdr.get_image_size())
 {
    LOG_INFO(std::string("Ripper Device ").append(devicePath));

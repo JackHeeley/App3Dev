@@ -21,9 +21,10 @@ namespace UnitTestExtendedUniversalCppSupport
             //prepare test 
             auto deviceName = cdromDevices.device_path_map.get()[0];
             const static std::string fileName("cdrom_image.iso");
+            std::atomic<int> progress;
 
             //perform operation under test
-            Ripper(deviceName, fileName)();
+            Ripper(deviceName, fileName, progress)();
          }
          catch (const std::exception& e)
          {

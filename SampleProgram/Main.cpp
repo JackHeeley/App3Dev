@@ -5,7 +5,7 @@
 // enumerated system device drive, and writes it to a (disk) file 
 // with a fixed name.
 //
-// Copyright (c) 2017 Jack Heeley, all rights reserved
+// Copyright (c) 2017-2019 Jack Heeley, all rights reserved
 //
 #include "stdafx.h"
 
@@ -13,6 +13,12 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <atomic>
+#include <thread>
+#include <chrono>
+#include <future>
+
+using namespace std::chrono_literals;
 
 #pragma warning(disable:26426)
 
@@ -63,8 +69,28 @@ int main(int argc, char* argv[])
       std::cout << "Ripping cd image from medium. Please wait..." << std::endl;
 
       auto deviceName = cdromDevices.device_path_map.get()[0];
+      std::atomic<int> progress=0;
 
-      Ripper(deviceName, fileName)();
+      auto func = [&progress]
+      {
+         int percent = 0;
+         while (true)
+         {
+            percent = progress; 
+            std::this_thread::sleep_for(1s);
+            std::cout << "\r" << "[" << std::string(percent / 5, (char)254u) << std::string(gsl::narrow_cast<int>(100 / 5 - percent / 5), ' ') << "]";
+            std::cout << percent << "%";
+            std::cout.flush();
+            if (percent == 100) break;
+         }
+         std::cout << std::endl;
+         std::cout.flush();
+      };
+
+      std::thread show_progress(func);
+      Ripper(deviceName, fileName, progress)();
+      progress = 100; // failsafe terminate show_progress
+      show_progress.join();
 
       std::cout << "Ripping completed successfully. It is now safe to remove the CDROM device" << std::endl;
       LOG_INFO("Ripping completed successfully.");

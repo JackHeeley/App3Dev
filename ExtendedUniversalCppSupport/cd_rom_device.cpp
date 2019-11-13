@@ -4,7 +4,7 @@
 // Here we provide a capability to create concrete objects for cdrom device(s).
 // The default deviceNumber (=0), selects the first device found.
 //
-// Copyright (c) 2005-2017 Jack Heeley, all rights reserved
+// Copyright (c) 2005-2019 Jack Heeley, all rights reserved
 //
 #include "stdafx.h"
 #include <winioctl.h>
@@ -15,6 +15,13 @@
 
 #include <limits>
 
+///<summary>simulate_resource_limitation</summary>
+///<remarks>can be used to force multiple smaller reads (which allows for progress tracking)</remarks>
+static void simulate_resource_limitation(void)
+{
+   SetLastError(ERROR_NO_SYSTEM_RESOURCES);
+   throw std::exception("simulated resource limitation");
+}
 
 /*
 * ***************************************************************************
@@ -31,11 +38,15 @@ private:
    ///<summary> physical locked state of drive door</summary>
    bool locked;
 
+   ///<summary> reference to the external location where get_image() %progress is maintained</summary>
+   std::atomic<int>& m_progress;
+
 public:
    ///<summary> construct a cdrom device.</summary> 
    ///<param name='device_path'>the path selecting the physical device instance</param>
-   impl(std::string device_path) :
-      Device(device_path)
+   impl(std::string device_path, std::atomic<int>& a_progress) :
+      Device(device_path),
+      m_progress(a_progress)
    {
       locked = false;
    };
@@ -101,6 +112,11 @@ public:
 
       try
       {
+         m_progress = 0;
+
+         // force multiple smaller reads (where a granular progress tracker can be maintained)
+         simulate_resource_limitation();
+
          // reading full image in one go is most probable scenario (at least for CD's)
          read_blocks(lpabyBufferMemoryAddress, 1, span.size_bytes()); 
       }
@@ -260,7 +276,16 @@ private:
          read(lpabyBufferMemoryAddress, gsl::narrow_cast<uint32_t>(cbyBlockSize)); // see remarks above
          lpabyBufferMemoryAddress += cbyBlockSize;
 #pragma warning (default:26486 26487)
+
+         // track progress 
+         // FIXME: this simplified tracking is good for ripping using full-media or cylinder or track or sector reads... 
+         // but it won't work with a combination - i.e. if a partial successful read_blocks is interrupted with an 
+         // ERROR_NO_SYSTEM_RESOURCES and the exception handling takes over remaining cylinders tracks or sectors to 
+         // be read with a finer granularity (see get image). We have never seen a real resource error in pratice.
+
+         m_progress = gsl::narrow<int>((100 * nBlock) / cBlocks);
 	  }
+     m_progress = 100; // handle possible rounding error
    }
 };
 
@@ -273,9 +298,10 @@ private:
 
 ///<summary> constructs a user mode Device that can be used to access a particular system cdrom instance.</summary>
 ///<param name='device_path'> the system name of the cdrom device to use.</param>
+///<param name='a_progress'> reference to percentage progress used in get_image.</param>
 ///<exception cref='std::exception'>if construction fails.</exception>
-CdromDevice::CdromDevice(std::string device_path) :
-   pimpl(spimpl::make_unique_impl<impl>(device_path))
+CdromDevice::CdromDevice(std::string device_path, std::atomic<int>& a_progress) :
+   pimpl(spimpl::make_unique_impl<impl>(device_path, a_progress))
 {
 }
 
