@@ -68,29 +68,31 @@ int main(int argc, char* argv[])
       LOG_INFO("Ripping cd image from medium.");
       std::cout << "Ripping cd image from medium. Please wait..." << std::endl;
 
-      auto deviceName = cdromDevices.device_path_map.get()[0];
-      std::atomic<int> progress=0;
-
-      auto func = [&progress]
       {
-         int percent = 0;
-         while (true)
-         {
-            percent = progress; 
-            std::this_thread::sleep_for(1s);
-            std::cout << "\r" << "[" << std::string(percent / 5, (char)254u) << std::string(gsl::narrow_cast<int>(100 / 5 - percent / 5), ' ') << "]";
-            std::cout << percent << "%";
-            std::cout.flush();
-            if (percent == 100) break;
-         }
-         std::cout << std::endl;
-         std::cout.flush();
-      };
+         auto deviceName = cdromDevices.device_path_map.get()[0];
+         std::atomic<int> progress = 0;
+         bool signal_done = false;
 
-      std::thread show_progress(func);
-      Ripper(deviceName, fileName, progress)();
-      progress = 100; // failsafe terminate show_progress
-      show_progress.join();
+         auto show = [&progress, &signal_done]
+         {
+            int percent = 0;
+            while (!signal_done && percent < 100)
+            {
+               std::this_thread::sleep_for(1s);
+               percent = progress;
+               std::cout << "\r" << "[" << std::string(percent/5, '\xfe') << std::string(gsl::narrow_cast<size_t>(100/5 - percent/5), ' ') << "]";
+               std::cout << percent << "%";
+               std::cout.flush();
+            }
+            std::cout << std::endl;
+            std::cout.flush();
+         };
+
+         thread_RAII r(std::thread(show), thread_RAII::DtorAction::join);
+
+         Ripper(deviceName, fileName, progress)();
+         signal_done = true;
+      }
 
       std::cout << "Ripping completed successfully. It is now safe to remove the CDROM device" << std::endl;
       LOG_INFO("Ripping completed successfully.");

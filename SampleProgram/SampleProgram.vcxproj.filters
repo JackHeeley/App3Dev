@@ -30,6 +30,9 @@
     <ClInclude Include="the_logger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="thread_RAII.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

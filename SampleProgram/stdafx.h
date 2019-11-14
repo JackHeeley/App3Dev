@@ -33,3 +33,4 @@
 #include "ripper.hpp"
 #include "the_logger.hpp"
 #include "tray_door_lock.hpp"
+#include "thread_RAII.hpp"

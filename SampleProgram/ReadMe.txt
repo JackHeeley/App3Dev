@@ -97,6 +97,7 @@ DONE:
 45. Reviewed and revised warning supression for VS 16.3.8
 46. Reviewed and reduced warning supression for VS 16.3.9
 47. Added a progress indication to SampleProgram.
+48. Cleaned up progress indication implementation.
 
 IN PROGRESS:
 

@@ -197,6 +197,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="the_logger.hpp" />
+    <ClInclude Include="thread_RAII.hpp" />
     <ClInclude Include="tray_door_lock.hpp" />
   </ItemGroup>
   <ItemGroup>
