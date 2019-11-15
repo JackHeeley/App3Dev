@@ -196,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTestRipper.cpp" />
+    <ClCompile Include="UnitTestThreadRAII.cpp" />
     <ClCompile Include="UnitTestTrayDoorLock.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -31,6 +31,7 @@
 
 #include <tray_door_lock.hpp>
 #include <ripper.hpp>
+#include <thread_RAII.hpp>
 
 #include <vector>
 #include <string>
