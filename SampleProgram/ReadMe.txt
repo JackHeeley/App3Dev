@@ -98,6 +98,7 @@ DONE:
 46. Reviewed and reduced warning supression for VS 16.3.9
 47. Added a progress indication to SampleProgram.
 48. Cleaned up progress indication implementation.
+49. Completed unique_ptr treatment for CdRomDevice/Device - explicit delete in place of redundant move/copy constructors and assignment operators in impls (points missed at step 13 earlier)
 
 IN PROGRESS:
 
@@ -111,4 +112,4 @@ TODO:
 
 4. Replace GUID params with strings as a step towards support for PURE ANSI C++ SampleProgram)
 	- utf8::to_GUID() and utf8::from_GUID() are under development
-
+	

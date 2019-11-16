@@ -38,27 +38,13 @@ public:
       open();
    }
 
-   ///<summary> copy constructor.</summary>
-   ///<remarks>copies device name, and opens another handle on device</remarks>
-   impl(const impl& other) :
-      device_path_w(other.device_path_w),
-      hDevice(INVALID_HANDLE_VALUE)
-   {
-      open();
-   }
+   ///<summary> copy constructor deleted for unique ptr.</summary>
+   impl(const impl& other) = delete;
 
-   ///<summary> move constructor.</summary>
-   ///<remarks>copies device name, and takes ownership of other.hDevice</remarks>
-   impl(impl&& other) noexcept :
-#pragma warning(disable:26447)
-      device_path_w(other.device_path_w),
-#pragma warning(default:26447)
-      hDevice(other.hDevice)
-   {
-      other.hDevice = INVALID_HANDLE_VALUE; // avoid double or premature CloseHandle
-   }
+   ///<summary> move constructor deleted.</summary>
+  impl(impl&& other) noexcept = delete;
 
-   ///<summary> no copy assignment operator (class has const member)</summary>
+   ///<summary> no copy assignment operator (class has unique ptr and const member)</summary>
    impl& impl::operator=(impl& other) = delete;
  
    ///<summary> no move assignment operator (class has const member)</summary>

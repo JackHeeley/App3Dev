@@ -4,7 +4,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std::chrono_literals;
 using namespace utf8;
 
-namespace UnitTestExtendedUniversalCppSupport
+namespace UnitTestSampleProgram
 {
    TEST_CLASS(UnitTestTrayDoorLock)
    {

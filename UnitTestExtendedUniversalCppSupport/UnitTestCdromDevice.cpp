@@ -4,7 +4,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std::chrono_literals;
 using namespace utf8;
 
-namespace UnitTestAbstractDevice
+namespace UnitTestExtendedUniversalCppSupport
 {
    TEST_CLASS(UnitTestCdromDevice)
    {
@@ -26,7 +26,7 @@ namespace UnitTestAbstractDevice
             // test succeeds if construction doesn't throw
             cdrom.unlock();
          }
-         catch (const std::exception& e)
+         catch (const std::exception & e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }

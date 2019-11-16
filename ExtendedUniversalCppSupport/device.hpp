@@ -70,7 +70,7 @@ private:
    class impl;
 
    ///<summary> smart unique pointer to private implementation.</summary>
-   ///<remarks> supports default move semantics.</remarks>
+   ///<remarks> Non copyable, with move limitations.</remarks>
    spimpl::unique_impl_ptr<impl> pimpl;
 };
 

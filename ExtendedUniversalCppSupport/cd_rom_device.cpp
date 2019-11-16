@@ -51,13 +51,16 @@ public:
       locked = false;
    };
 
-   impl(const impl &other) = default;
+   // no copy constructor (unique ptr)
+   impl(const impl &other) = delete;
+   
+   impl(impl&& other) = delete;
 
-   impl(impl&& other) = default;
+   // (unique ptr= NonCopyable)
+   impl& impl::operator=(impl& other) = delete;
 
-   impl& impl::operator=(impl& other) = default;
-
-   impl& impl::operator=(impl&& other) = default;
+   // base class has const members (non-moveable after construction)
+   impl& impl::operator=(impl&& other) = delete; 
 
    ///<summary> destructor maintains accessible device state at end of use.</summary> 
    ~impl(void)
