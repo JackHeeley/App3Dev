@@ -1,9 +1,21 @@
 //
 // ripper.cpp : implements the ripper helper class 
 //
-// supplies a functor for the console application.
+// supplies a functor to rip the CD image for the console application. 
 //
-// Copyright (c) 20018-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Choosing a memory mapped file for the read buffer means that immediately the get_image() from
+// CdRomDevice has completed, the data is instantly available as a file in the filesystem (cache).
+
+// The operating system will automatically take care of keeping a permanent copy (on disk), in a 
+// later timeframe, and without us seeing any loss of service, or having to explicitly code any 
+// write-side instructions. Persistence of data on disk happens at a time of system choosing, and
+// at some point after the memory_mapped_file destructor closes the handles on the view and file.
+//
+// This approach can be anything up to twice as responsive as coding explict write-side data saving
+// to a normal disk file, as that would mean waiting for another step before the data is externally 
+// available. This is an important design consideration, due to the time/data quantities involved.
+//
+// Copyright (c) 2018-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #include "stdafx.h"
 
