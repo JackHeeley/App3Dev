@@ -39,6 +39,7 @@ should add to or customize.
 
 /////////////////////////////////////////////////////////////////////////////
 Programmers notes:
+Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 
 StdAfx.h, targtver.h modified to target windows 7 and higher
 

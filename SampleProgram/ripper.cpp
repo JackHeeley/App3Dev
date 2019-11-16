@@ -3,7 +3,7 @@
 //
 // supplies a functor for the console application.
 //
-// Copyright (c) 2018-2019 Jack Heeley, all rights reserved
+// Copyright (c) 20018-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #include "stdafx.h"
 

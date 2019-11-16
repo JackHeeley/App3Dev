@@ -3,7 +3,7 @@
 //				this is a windows platform implementation
 //				builds and runs on x86 & x64 architectures
 //
-// Copyright (c) 2015 Jack Heeley
+// Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 // 
 #pragma once
 

@@ -1,3 +1,8 @@
+//
+// UnitTestSystemError.cpp : a utf8 everywhere component unit test 
+//
+// Copyright (c) 2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+//
 #include "stdafx.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

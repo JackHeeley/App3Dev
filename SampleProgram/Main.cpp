@@ -5,7 +5,7 @@
 // enumerated system device drive, and writes it to a (disk) file 
 // with a fixed name.
 //
-// Copyright (c) 2017-2019 Jack Heeley, all rights reserved
+// Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #include "stdafx.h"
 

@@ -4,7 +4,7 @@
 // Here we implement methods wrapping system calls. This offloads the
 // parameterization of these functions from clients, for ease of use.
 //
-// Copyright (c) 2003-2017 Jack Heeley, all rights reserved
+// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #pragma once
 #pragma warning (disable:4251 4290)

@@ -1,7 +1,7 @@
 //
 // tray_door_lock.hpp : implements the tray door lock helper class
 //
-// Copyright (c) 2005-2018 Jack Heeley, all rights reserved
+// Copyright (c) 2005-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #pragma once
 

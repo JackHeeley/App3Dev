@@ -4,7 +4,7 @@
 // Here we implement methods which wrap the Win32 calls. This offloads the
 // parameterization of these functions from clients, for ease of use.
 //
-// Copyright (c) 2003-2016 Jack Heeley, all rights reserved
+// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #include "stdafx.h"
 #include "device.hpp"

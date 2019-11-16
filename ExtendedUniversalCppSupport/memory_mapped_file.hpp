@@ -7,7 +7,7 @@
 //
 // Memory mapped files are named shared objects which are efficiently backed to disk. 
 //
-// Copyright (c) 2003-2017 Jack Heeley, all rights reserved
+// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #pragma once
 

@@ -3,7 +3,7 @@
 //
 // RAII object to manage cd rom tray door locking 
 //
-// Copyright (c) 2018 Jack Heeley, all rights reserved
+// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #include "stdafx.h"
 

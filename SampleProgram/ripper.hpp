@@ -1,7 +1,7 @@
 //
 // ripper.hpp : implements the ripper helper class
 //
-// Copyright (c) 2005-2019 Jack Heeley, all rights reserved
+// Copyright (c) 2005-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #pragma once
 

@@ -9,7 +9,7 @@
 //
 // See: Microsoft Knowledge Base Article - 259695 
 //
-// Copyright (c) 2003-2016 Jack Heeley, all rights reserved
+// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #include "stdafx.h"
 #include "device_discoverer.hpp"

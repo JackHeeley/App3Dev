@@ -7,7 +7,7 @@
 //
 // See: Microsoft Knowledge Base Article - 259695 
 //
-// Copyright (c) 2003-2017 Jack Heeley, all rights reserved
+// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #pragma once
 

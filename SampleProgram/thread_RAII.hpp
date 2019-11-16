@@ -3,7 +3,7 @@
 //
 //    Allows an RAII thread to abnormally end, without a program abort arising from the ensuing improper thread state.
 //
-// Copyright (c) 2019 Jack Heeley, all rights reserved
+// Copyright (c) 2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #pragma once
 #include <thread>

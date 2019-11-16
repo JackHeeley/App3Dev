@@ -1,7 +1,7 @@
 //
 // utf8_convert.hpp : conversions to support utf8 everywhere coding paradigm
 //
-// Copyright (c) 2016-2017 Jack Heeley, all rights reserved
+// Copyright (c) 2016-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #pragma once
 

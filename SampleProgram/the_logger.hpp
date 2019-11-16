@@ -1,7 +1,7 @@
 //
 // the_logger.hpp : implements the actual logger
 //
-// Copyright (c) 2018 Jack Heeley, all rights reserved
+// Copyright (c) 2018-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #pragma once
 #include <file_logger.hpp>

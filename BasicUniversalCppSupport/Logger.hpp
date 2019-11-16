@@ -1,7 +1,7 @@
 //
 // logger.hpp : implements logging, and exception message support
 //
-// Copyright (c) 2017 Jack Heeley, all rights reserved
+// Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #pragma once
 

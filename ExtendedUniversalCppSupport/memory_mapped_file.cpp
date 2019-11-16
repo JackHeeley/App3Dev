@@ -1,7 +1,9 @@
 //
 // memory_mapped_file.cpp : implements memory mapped file mechanisms
 //
-// Copyright (c) 2003-2017 Jack Heeley, all rights reserved
+// see https://docs.microsoft.com/en-gb/windows/win32/memory/file-mapping
+//
+// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #include "stdafx.h"
 #include "memory_mapped_file.hpp"
