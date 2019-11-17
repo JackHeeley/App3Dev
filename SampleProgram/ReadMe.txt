@@ -100,6 +100,7 @@ DONE:
 47. Added a progress indication to SampleProgram.
 48. Cleaned up progress indication implementation.
 49. Completed unique_ptr treatment for CdRomDevice/Device - explicit delete in place of redundant move/copy constructors and assignment operators in impls (points missed at step 13 earlier)
+50. Provided a working utf8::to_guid function.
 
 IN PROGRESS:
 
