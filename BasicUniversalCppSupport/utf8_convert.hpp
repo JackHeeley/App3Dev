@@ -62,23 +62,26 @@ namespace utf8
       ///<returns>const GUID (e.g. as supplied in winioctl.h)</returns>
       static inline GUID to_guid(const std::string aGuidString)
       {
-        throw error_context("utf8::to_guid() is not implemented");
-
-        //FIXME: This code is work in progress...
-
-        GUID aGuid;
-
+         GUID aGuid;
          std::stringstream ss;
+         std::string str(aGuidString);
 
-         ss << aGuidString;
-         
+         auto const removeCharsFromString = [&str](gsl::not_null<const char*>(charsToRemove))
+         {
+            for (unsigned int i = 0; i < strlen(charsToRemove); ++i)
+               str.erase(remove(str.begin(), str.end(), charsToRemove[i]), str.end());
+         };
+
+         removeCharsFromString("Lx,");
+         ss << std::hex << str;
          ss >> aGuid.Data1 >> aGuid.Data2 >> aGuid.Data3;
 
          auto span = gsl::as_span(aGuid.Data4);
-
          for (auto& elem : span)
          {
-            ss >> elem;
+            int value;
+            ss >> value;
+            elem = value;
          }
 
          return aGuid;
