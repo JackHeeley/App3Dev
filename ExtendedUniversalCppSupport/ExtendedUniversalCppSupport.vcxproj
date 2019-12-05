@@ -178,6 +178,7 @@
   <ItemGroup>
     <ClInclude Include="cd_rom_device.hpp" />
     <ClInclude Include="device.hpp" />
+    <ClInclude Include="device_type_directory.hpp" />
     <ClInclude Include="device_discoverer.hpp" />
     <ClInclude Include="memory_mapped_file.hpp" />
     <ClInclude Include="stdafx.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="cd_rom_device.cpp" />
     <ClCompile Include="device.cpp" />
     <ClCompile Include="device_discoverer.cpp" />
+    <ClCompile Include="device_type_directory.cpp" />
     <ClCompile Include="memory_mapped_file.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -16,6 +16,9 @@
 
 #include <setupapi.h>
 
+#include "utf8_win_convert.hpp"
+
+
 /*
 * ***************************************************************************
 * PIMPL idiom - private implementation of DeviceDiscoverer class
@@ -34,17 +37,21 @@ private:
 public:
    ///<summary> class GUID that identifies the device interface (for standard devices see wioctl.h)</summary>
    ///<remarks> This is the same GUID as used by a device driver when calling IoRegisterDeviceInterface.</remarks>
+   const GUID theGuid;
+
+   ///<summary> pointer to class GUID as required by legacy api's</summary>
    LPGUID INTERFACE_CLASS_GUID;
 
    ///<summary> the device path data member.</summary>
    std::map<int, std::string> device_path_data;
 
    ///<summary> construct a DeviceDiscoverer::private_impl object used to enumerate the devices of a particular device interface class.</summary>
-   ///<param name = "anInterfaceClassGuid"> the device interface class to be enumerated.</param>
-   impl(const GUID& anInterfaceClassGuid) /*noexcept*/ :
-      device_path_data()
+   ///<param name = "aDeviceType"> the device type for the interface class to be enumerated.</param>
+   impl(DeviceTypeDirectory::DeviceType aDeviceType) /*noexcept*/ :
+      device_path_data(),
+      theGuid(utf8::win_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(aDeviceType)))
    {
-      INTERFACE_CLASS_GUID = (LPGUID)(&anInterfaceClassGuid);
+      INTERFACE_CLASS_GUID = (LPGUID)(&theGuid);
       m_hDevInfo = getDevInfoHandle(INTERFACE_CLASS_GUID);
 
       SP_DEVICE_INTERFACE_DATA deviceInterfaceData;
@@ -202,8 +209,10 @@ private:
 
 ///<summary> constructs a DeviceDiscoverer for the chosen device interface class.</summary>
 ///<param name='anInterfaceClassGuid'>guid representing the system interface class for a chosen device type</param>
-DeviceDiscoverer::DeviceDiscoverer(const GUID& anInterfaceClassGuid) :
-   pimpl(spimpl::make_impl<impl>(anInterfaceClassGuid)),
+DeviceDiscoverer::DeviceDiscoverer(DeviceTypeDirectory::DeviceType aDeviceType) noexcept :
+#pragma warning (disable:26447)
+   pimpl(spimpl::make_impl<impl>(aDeviceType)),
+#pragma warning (default:26447)
    device_path_map(std::ref<std::map<int,std::string>>(pimpl->device_path_data))
 {
 }

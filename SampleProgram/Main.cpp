@@ -1,4 +1,4 @@
-//
+﻿//
 // main.cpp : Defines the entry point for the console application.
 //
 // The program rips the content of the CD/DVD in the zero'th
@@ -8,6 +8,11 @@
 // Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #include "stdafx.h"
+
+#ifdef UNICODE 
+#define CP_UTF8 65001
+extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int wCodePageID);
+#endif
 
 #include <vector>
 #include <string>
@@ -40,23 +45,25 @@ constexpr static int  MAX_RETRIES = 3;
 ///<remarks> uses system pause and stdout to interact with user.</remarks>
 int main(int argc, char* argv[])
 {
-   ////HINT for non-ascii programmers...
-   //SetConsoleOutputCP(CP_UTF8);  // TODO: platform specific code (function is windows)
-   //setvbuf(stdout, nullptr, _IOFBF, 1000);
-   //std::cout << "\xce\xba\xce\xb1\xce\xbb\xce\xae\x20\xcf\x84\xcf\x8d\xcf\x87\xce\xb7\x21" << std::endl;
+
+#ifdef UNICODE
+   SetConsoleOutputCP(CP_UTF8);
+   setvbuf(stdout, nullptr, _IOFBF, 1000);
+   std::cout << u8"καλή τύχη! Εύσχημα!" << std::endl;
+#endif
 
    try
    {
       LOG_INFO("Sample test program starting.");
       for(int i=0;i<MAX_RETRIES;i++)
       {
-         if (!(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get().empty())) break;
+         if (!(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get().empty())) break;
 
          std::cout << "Please attach an appropriate CDROM device to the system" << std::endl;
          std::system("pause");
       }
 
-      const DeviceDiscoverer cdromDevices(GUID_DEVINTERFACE_CDROM);  // TODO: platform specific code (GUID is windows)
+      const DeviceDiscoverer cdromDevices(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
 
       if (cdromDevices.device_path_map.get().empty())
       {
@@ -75,12 +82,18 @@ int main(int argc, char* argv[])
 
          auto show = [&progress, &signal_done]
          {
+
             int percent = 0;
             while (!signal_done && percent < 100)
             {
                std::this_thread::sleep_for(1s);
                percent = progress;
-               std::cout << "\r" << "[" << std::string(percent/5, '\xfe') << std::string(gsl::narrow_cast<size_t>(100/5 - percent/5), ' ') << "]";
+               const std::string u8FullBlock(u8"█");
+
+               std::string bar("");
+               for (int i = 0; i < percent/5; i++) bar.append(u8FullBlock);
+               std::cout << "\r" << "[" << bar << std::string(gsl::narrow_cast<size_t>(100/5 - percent/5), ' ') << "]";
+               
                std::cout << percent << "%";
                std::cout.flush();
             }
@@ -123,3 +136,4 @@ int main(int argc, char* argv[])
       exit(-1);
    }
 }
+

@@ -23,11 +23,11 @@ namespace UnitTestExtendedUniversalCppSupport
          try
          {
             // prepare for test (ensure suitable test hardware exists on this system)...
-            DeviceDiscoverer cdrom_interface(GUID_DEVINTERFACE_CDROM);
+            DeviceDiscoverer cdrom_interface(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
             utf8::Assert::IsFalse(cdrom_interface.device_path_map.get().empty(), "no system cdrom devices were discovered");
 
             // perform the operation under test (construct a device for the system's first enumerated cdrom)...
-            Device cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0]);
+            Device cdrom(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]);
 
             // test succeeds if construction doesn't throw
          }
@@ -44,7 +44,7 @@ namespace UnitTestExtendedUniversalCppSupport
          try
          {
             // prepare for test (construct a device for the system's first enumerated cdrom)...
-            Device cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0]);
+            Device cdrom(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]);
 
             // perform the operation under test (issue valid ioctl to the device)...
             auto nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_EJECT_MEDIA, nullptr, 0, nullptr, 0);
@@ -102,7 +102,7 @@ namespace UnitTestExtendedUniversalCppSupport
          try
          {
             // prepare for test (construct a device for the system's first enumerated cdrom)...
-            Device cdrom(DeviceDiscoverer(GUID_DEVINTERFACE_CDROM).device_path_map.get()[0]);
+            Device cdrom(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]);
 
             // cdroms are only readable in exact block size units that depend on disk geometry
             // this test hard codes a safe size (doesn't query actual geometry of the disk)

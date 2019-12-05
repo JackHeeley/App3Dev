@@ -20,7 +20,7 @@ namespace UnitTestSampleProgram
          try
          {
             // check test preconditions (at least one physical cdrom needed)
-            DeviceDiscoverer cdrom_interface(GUID_DEVINTERFACE_CDROM);
+            DeviceDiscoverer cdrom_interface(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
             utf8::Assert::IsFalse(cdrom_interface.device_path_map.get().empty(), "no system cdrom devices were discovered");
             std::atomic<int> progress;
 

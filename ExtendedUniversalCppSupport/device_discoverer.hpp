@@ -24,15 +24,15 @@
 #include <map>
 #include <spimpl.hpp>
 
+#include "device_type_directory.hpp"
+
 ///<summary> wraps the system device interface.</summary>
 class EXTENDEDUNIVERSALCPPSUPPORT_API DeviceDiscoverer {
 
 public:
    ///<summary> construct an interface object used to enumerate the devices of a particular device interface class.</summary>
-   ///<param name = "anInterfaceClassGuid"> the device interface class to be enumerated.</param>
-#pragma warning (disable:4290)
-   DeviceDiscoverer(const GUID& anInterfaceClassGuid) throw (std::exception);
-#pragma warning (default:4290)
+   ///<param name = "aDeviceType"> the device type to be enumerated.</param>
+   DeviceDiscoverer(DeviceTypeDirectory::DeviceType aDeviceType) noexcept;
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean identical device path content.</remarks>
@@ -62,6 +62,5 @@ public:
    std::reference_wrapper<std::map<int, std::string>> device_path_map;
 #pragma warning (default:4251)
 };
-
 
 

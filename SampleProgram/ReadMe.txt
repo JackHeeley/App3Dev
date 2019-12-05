@@ -1,4 +1,4 @@
-========================================================================
+﻿========================================================================
     CONSOLE APPLICATION : AbstractDevice Project Overview
 ========================================================================
 
@@ -101,6 +101,12 @@ DONE:
 48. Cleaned up progress indication implementation.
 49. Completed unique_ptr treatment for CdRomDevice/Device - explicit delete in place of redundant move/copy constructors and assignment operators in impls (points missed at step 13 earlier)
 50. Provided a working utf8::to_guid function.
+51. Reworked open portability issues and enabled ISO C++17 Standard (std:c++17) Sample Program project.
+		Replaced (windows type) GUID from api's with an enum and a lookup directory.
+		Moved utf8 guid conversions out of the common headers.
+		Accepted certain C++17 deprecations (in gsl and utf8 conversion) by disabling warnings (for now).
+		Αccepted argument that u8"" (and u8 aware editors) are no longer an obstacle to reuse these days, and ditched utf8 everywhere manifesto advice to encode in hex in source files.
+		Adopted u8"" in main.cpp and elected to save all source documents with utf8 encoding. (It seems that the save option is not enacted by Visual Studio until/unless required).
 
 IN PROGRESS:
 
@@ -112,6 +118,4 @@ TODO:
 
 3. LOGGER #defines are probably candidates for revision (change to a modern CPP way of working).
 
-4. Replace GUID params with strings as a step towards support for PURE ANSI C++ SampleProgram)
-	- utf8::to_GUID() and utf8::from_GUID() are under development
-	
+4. Some of the disabled warnings do indeed indicate deviations from best practice, and attention should be given.

@@ -24,9 +24,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="device_discoverer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="memory_mapped_file.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -34,6 +31,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cd_rom_device.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="device_discoverer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="device_type_directory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cd_rom_device.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="device_type_directory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

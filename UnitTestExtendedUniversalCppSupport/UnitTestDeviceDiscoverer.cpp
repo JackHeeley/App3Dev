@@ -22,7 +22,7 @@ namespace UnitTestExtendedUniversalCppSupport
          try
          {
             // perform the operation under test (happy flow)...
-            DeviceDiscoverer cdrom(GUID_DEVINTERFACE_CDROM);
+            DeviceDiscoverer cdrom(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
 
             // check result (happy flow)  
             utf8::Assert::IsFalse((cdrom.device_path_map.get().empty()), "unexpected that there are no CD ROM devices on this system. If this is true, ignore this test 'failure'.");
@@ -30,8 +30,8 @@ namespace UnitTestExtendedUniversalCppSupport
             utf8::Assert::IsTrue((strlen(cdrom_path0.c_str()) > 0), "the path returned was empty");
 
             // perform the operation under test (unhappy flow)...
-            DeviceDiscoverer bad_device(RANDOM_GUID);
-            utf8::Assert::IsTrue(bad_device.device_path_map.get().empty(), "number of CD ROM devices was unexpected");
+            DeviceDiscoverer bad_device(DeviceTypeDirectory::DeviceType::FLOPPY_DEVICES);
+            utf8::Assert::IsTrue(bad_device.device_path_map.get().empty(), "number of FLOPPY devices was unexpected");
 
             // check result (unhappy flow)  
             std::string bad_device0_path = bad_device.device_path_map.get()[-1]; // try as we might we don't throw here
@@ -49,7 +49,7 @@ namespace UnitTestExtendedUniversalCppSupport
          try
          {
             // prepare for test (fetch cdrom data)
-            DeviceDiscoverer cdrom(GUID_DEVINTERFACE_CDROM);
+            DeviceDiscoverer cdrom(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
 
             // perform the operation under test...
             DeviceDiscoverer cdrom1(cdrom);
@@ -68,7 +68,7 @@ namespace UnitTestExtendedUniversalCppSupport
          try
          {
             // prepare for test (fetch cdrom data)
-            DeviceDiscoverer cdrom(GUID_DEVINTERFACE_CDROM);
+            DeviceDiscoverer cdrom(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
 
             const auto n_cdrom_devices_before = cdrom.device_path_map.get().size();
             const auto cdrom_device0_path = cdrom.device_path_map.get()[0];
@@ -95,8 +95,8 @@ namespace UnitTestExtendedUniversalCppSupport
          try
          {
             // prepare for test (fetch disk and cdrom data)
-            DeviceDiscoverer disk(GUID_DEVINTERFACE_DISK);   // initialize disk with some "irrelevent" data
-            DeviceDiscoverer cdrom(GUID_DEVINTERFACE_CDROM); // fetch the cd_rom data (but to a short-lived local scope object)
+            DeviceDiscoverer disk(DeviceTypeDirectory::DeviceType::DISK_DEVICES);   // initialize disk with some "irrelevent" data
+            DeviceDiscoverer cdrom(DeviceTypeDirectory::DeviceType::CDROM_DEVICES); // fetch the cd_rom data (but to a short-lived local scope object)
 
             const auto n_disk_devices_before = disk.device_path_map.get().size();
             const auto n_cdrom_devices_before = cdrom.device_path_map.get().size();
@@ -127,8 +127,8 @@ namespace UnitTestExtendedUniversalCppSupport
          try
          {
             // prepare for test (fetch disk and cdrom data)
-            DeviceDiscoverer disk(GUID_DEVINTERFACE_DISK);   // initialize disk with some "irrelevent" data
-            DeviceDiscoverer cdrom(GUID_DEVINTERFACE_CDROM); // fetch the cd_rom data
+            DeviceDiscoverer disk(DeviceTypeDirectory::DeviceType::DISK_DEVICES);   // initialize disk with some "irrelevent" data
+            DeviceDiscoverer cdrom(DeviceTypeDirectory::DeviceType::CDROM_DEVICES); // fetch the cd_rom data
 
             DeviceDiscoverer cdrom_copy = cdrom;                      // keep copy for comparison later
             
@@ -155,7 +155,7 @@ namespace UnitTestExtendedUniversalCppSupport
          try
          {
             // prepare the test 
-            DeviceDiscoverer cdrom(GUID_DEVINTERFACE_CDROM);    
+            DeviceDiscoverer cdrom(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);    
             utf8::Assert::IsFalse(cdrom.device_path_map.get().empty(), "a CDROM device is not detected/attached (can't test");
 
             // perform the test (use the retrieved data)...

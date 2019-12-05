@@ -24,9 +24,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utf8_convert.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="utc_timestamp.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -55,6 +52,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CppUnitTest.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utf8_convert.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utf8_win_convert.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
