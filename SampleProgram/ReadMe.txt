@@ -107,6 +107,7 @@ DONE:
 		Accepted certain C++17 deprecations (in gsl and utf8 conversion) by disabling warnings (for now).
 		Αccepted argument that u8"" (and u8 aware editors) are no longer an obstacle to reuse these days, and ditched utf8 everywhere manifesto advice to encode in hex in source files.
 		Adopted u8"" in main.cpp and elected to save all source documents with utf8 encoding. (It seems that the save option is not enacted by Visual Studio until/unless required).
+52. Simplified progress thread and fixed hang after exceptions thrown from main thread (caused by waiting forever on the progress thread)
 
 IN PROGRESS:
 

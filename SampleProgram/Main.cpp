@@ -10,18 +10,18 @@
 #include "stdafx.h"
 
 #ifdef UNICODE 
-#define CP_UTF8 65001
-extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int wCodePageID);
+constexpr auto CP_UTF8 = 65001;
+extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int wCodePageID) ;
 #endif
 
-#include <vector>
-#include <string>
-#include <iostream>
-#include <fstream>
 #include <atomic>
-#include <thread>
 #include <chrono>
+#include <fstream>
 #include <future>
+#include <iostream>
+#include <string>
+#include <thread>
+#include <vector>
 
 using namespace std::chrono_literals;
 
@@ -47,9 +47,9 @@ int main(int argc, char* argv[])
 {
 
 #ifdef UNICODE
+   // on windows, switch platform console support to use the utf8 codepage 
    SetConsoleOutputCP(CP_UTF8);
-   setvbuf(stdout, nullptr, _IOFBF, 1000);
-   std::cout << u8"καλή τύχη! Εύσχημα!" << std::endl;
+   //std::cout << u8"καλή τύχη! Εύσχημα!" << std::endl;
 #endif
 
    try
@@ -74,37 +74,47 @@ int main(int argc, char* argv[])
 
       LOG_INFO("Ripping cd image from medium.");
       std::cout << "Ripping cd image from medium. Please wait..." << std::endl;
-
       {
+         ///<summary>name of the device containing the media to be copied.</summary>
          auto deviceName = cdromDevices.device_path_map.get()[0];
+         
+         ///<summary>atomic int used to track progress.</summary>
          std::atomic<int> progress = 0;
-         bool signal_done = false;
 
-         auto show = [&progress, &signal_done]
+         auto show_progress = [&progress] 
          {
-
-            int percent = 0;
-            while (!signal_done && percent < 100)
+            std::function<std::string(int)> progress_bar = [](int percent)
             {
-               std::this_thread::sleep_for(1s);
-               percent = progress;
-               const std::string u8FullBlock(u8"█");
+               std::stringstream bar;
+               bar << "\r" << "[";
+               for (int i = 0; i < 20; i++)
+               {
+                  bar << ((i < percent / 5) ? u8"█" : " ");
+               }
+               bar << "]" << std::setw(3) << percent << "%";
+               return bar.str();
+            };
 
-               std::string bar("");
-               for (int i = 0; i < percent/5; i++) bar.append(u8FullBlock);
-               std::cout << "\r" << "[" << bar << std::string(gsl::narrow_cast<size_t>(100/5 - percent/5), ' ') << "]";
-               
-               std::cout << percent << "%";
-               std::cout.flush();
+            while (progress<100)
+            {
+               std::this_thread::sleep_for(100ms);
+               std::cout << progress_bar(progress);
             }
-            std::cout << std::endl;
-            std::cout.flush();
+            std::cout << progress_bar(progress) << std::endl;
          };
 
-         thread_RAII r(std::thread(show), thread_RAII::DtorAction::join);
+         LOG_INFO("Launch the progress bar in a separate thread.");
+         thread_RAII separate_thread(std::thread(show_progress), thread_RAII::DtorAction::detach);
 
+         LOG_INFO("Do the ripping from the main thread.");
          Ripper(deviceName, fileName, progress)();
-         signal_done = true;
+
+         // in the case where Ripper returns without an exception being thrown, if the progress indicator 
+         // hasn't reached 100, then this is a programming error. The simplest handling for this scenario
+         // is to allow the program to hang on the 'join' below, and find and fix the root cause.  
+
+         LOG_INFO("Block until progress bar is finished.");
+         separate_thread.get().join(); 
       }
 
       std::cout << "Ripping completed successfully. It is now safe to remove the CDROM device" << std::endl;
