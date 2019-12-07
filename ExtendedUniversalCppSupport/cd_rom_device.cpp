@@ -121,7 +121,7 @@ public:
          simulate_resource_limitation();
 
          // reading full image in one go is most probable scenario (at least for CD's)
-         read_blocks(lpabyBufferMemoryAddress, 1, span.size_bytes()); 
+         read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, 1, span.size_bytes());
       }
       catch (std::exception&)
       {
@@ -146,7 +146,7 @@ public:
             {
                // read remainder of the image in cylinder sized chunks 
                // (not necessarily physical cylinders but guaranteed to be an exact multiple of physical block size)
-               read_blocks(lpabyBufferMemoryAddress, diskGeometry.Cylinders.LowPart, cbyCylinderSize);
+               read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, diskGeometry.Cylinders.LowPart, cbyCylinderSize);
             }
             catch (std::exception&)
             {
@@ -159,7 +159,7 @@ public:
                   {
                      // read remainder of the image in track sized sized chunks 
                      // (not necessarily physical tracks but guaranteed to be an exact multiple of physical block size)
-                     read_blocks(lpabyBufferMemoryAddress, cTracksStillToRead, cbyTrackSize);
+                     read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, cTracksStillToRead, cbyTrackSize);
                   }
                   catch (std::exception&)
                   {
@@ -169,7 +169,7 @@ public:
                      {
                         // read remainder of the image in sector sized sized chunks 
                         // (not necessarily physical sectors but guaranteed to be an exact multiple of physical block size)
-                        read_blocks(lpabyBufferMemoryAddress, cSectorsStillToRead, diskGeometry.BytesPerSector);
+                        read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, cSectorsStillToRead, diskGeometry.BytesPerSector);
                      }
                      else throw;
                   }
@@ -267,28 +267,25 @@ private:
 
    ///<summary> read the entire device as specified number of blocks of a specified size.</summary>
    ///<remarks> for block devices reads must be integral multiples of the physical block size, and block aligned.</remarks>
+   ///<param name='lpabyBufferMemoryBase'>the address where the start of the data is stored</param>
    ///<param name='lpabyBufferMemoryAddress'>the address where the data will be stored after reading</param>
    ///<param name='cBlocks'>the number of blocks to read</param>
    ///<param name='cbyBlockSize'>the size in bytes of the blocks to read</param>
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   void impl::read_blocks(LPBYTE &lpabyBufferMemoryAddress, uint64_t cBlocks, uint64_t cbyBlockSize) const
+   void impl::read_blocks(LPBYTE& lpabyBufferMemoryBase, LPBYTE& lpabyBufferMemoryAddress, uint64_t cBlocks, uint64_t cbyBlockSize) const
    {
       for (uint64_t nBlock = 0; nBlock < cBlocks; nBlock++)
       {
+         seek(lpabyBufferMemoryAddress - lpabyBufferMemoryBase);
+         
 #pragma warning (disable:26486 26487)
          read(lpabyBufferMemoryAddress, gsl::narrow_cast<uint32_t>(cbyBlockSize)); // see remarks above
          lpabyBufferMemoryAddress += cbyBlockSize;
 #pragma warning (default:26486 26487)
 
-         // track progress 
-         // FIXME: this simplified tracking is good for ripping using full-media or cylinder or track or sector reads... 
-         // but it won't work with a combination - i.e. if a partial successful read_blocks is interrupted with an 
-         // ERROR_NO_SYSTEM_RESOURCES and the exception handling takes over remaining cylinders tracks or sectors to 
-         // be read with a finer granularity (see get image). We have never seen a real resource error in pratice.
-
          m_progress = gsl::narrow<int>((100 * nBlock) / cBlocks);
-	  }
-     m_progress = 100; // handle possible rounding error
+      }
+      m_progress = 100; // handle possible rounding error
    }
 };
 

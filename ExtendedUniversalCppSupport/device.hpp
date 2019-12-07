@@ -42,6 +42,11 @@ public:
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
    const std::uint32_t ioctl(std::uint32_t dwIoControlCode, void* lpInBuffer, std::uint32_t nInBufferSize, void* lpOutBuffer, std::uint32_t nOutBufferSize) const throw (std::exception);
 
+   ///<summary> seek in the read/write space of the device (set the file pointer).</summary>
+   ///<param name='cbyOffsetFromStart'> byte offset from start of device.</param>
+   ///<exception cref='std::exception'> if the operation could not be completed.</exception>
+   const void seek(std::uint64_t cbyOffsetFromStart) const throw (std::exception);
+
    ///<summary> issue a synchronous read. The thread is suspended pending completion of the read.</summary>
    ///<param name='lpBuffer'> pointer to buffer which will receive read data.</param>
    ///<param name='nBytesToRead'> number of bytes to read. this must be less than or equal to the available memory at lpBuffer.</param>

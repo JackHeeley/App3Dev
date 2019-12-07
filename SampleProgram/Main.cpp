@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
    {
       std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.full_what()); // fancy what
       //std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.what());    // or simple what if you prefer
-      std::cout << error_text << std::endl;
+      std::cout << std::endl << error_text << std::endl;
       LOG_ERROR(error_text);
       exit(-1);
    }
@@ -133,7 +133,7 @@ int main(int argc, char* argv[])
    {
       LOG_WARNING("A std::exception was thrown. (design intent is to always use error::context).");
       std::string error_text = "Unhandled Std Exception: "; error_text.append(e.what());   // simple what
-      std::cout << error_text << std::endl;
+      std::cout << std::endl << error_text << std::endl;
       LOG_ERROR(error_text);
       exit(-1);
    }
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
    {
       LOG_WARNING("Something odd was thrown. (design intent is to always use error::context).");
       std::string error_text = "Unhandled exception, "; error_text.append(SystemError().get_error_text()); // best effort
-      std::cout << error_text << std::endl;
+      std::cout << std::endl << error_text << std::endl;
       LOG_ERROR(error_text);
       exit(-1);
    }

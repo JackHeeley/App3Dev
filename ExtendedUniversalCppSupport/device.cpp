@@ -119,6 +119,20 @@ public:
       return nBytesReturned;
    }
 
+   ///<summary> seek in the read/write space of the device (set the file pointer).</summary>
+   ///<param name='cbyByteOffsetFromStart'> byte offset from start of device.</param>
+   ///<exception cref='std::exception'> if the operation could not be completed.</exception>
+   const void seek(ULONGLONG cbyByteOffsetFromStart) const
+   {
+      LARGE_INTEGER liDistanceToMove;
+      liDistanceToMove.QuadPart = cbyByteOffsetFromStart;
+
+      if (!SetFilePointerEx(hDevice, liDistanceToMove, nullptr, FILE_BEGIN))
+      {
+         throw error_context("SetFilePointer failed");
+      }
+   }
+
    ///<summary> issue a synchronous read. The thread is suspended pending completion of the read.</summary>
    ///<param name='lpBuffer'> pointer to buffer which will receive read data.</param>
    ///<param name='nBytesToRead'> number of bytes to read. this must be less than or equal to the available memory at lpBuffer.</param>
@@ -213,6 +227,11 @@ Device::Device(std::string a_device_path) :
 const std::uint32_t Device::ioctl(std::uint32_t dwIoControlCode, void* lpInBuffer, std::uint32_t nInBufferSize, void* lpOutBuffer, std::uint32_t nOutBufferSize) const throw()
 {
    return pimpl->ioctl(dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize);
+}
+
+const void Device::seek(std::uint64_t cByOffsetFromStart) const throw()
+{
+   pimpl->seek(cByOffsetFromStart);
 }
 
 const std::uint32_t Device::read(void* lpBuffer, std::uint32_t nBytesToRead) const throw()
