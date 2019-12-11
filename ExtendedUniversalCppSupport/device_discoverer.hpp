@@ -17,30 +17,27 @@
 #define EXTENDEDUNIVERSALCPPSUPPORT_API __declspec(dllimport)
 #endif
 
-#include <string>
-#include <exception>
-#include <vector>
-#include <memory>
 #include <map>
+#include <string>
 #include <spimpl.hpp>
 
 #include "device_type_directory.hpp"
 
 ///<summary> wraps the system device interface.</summary>
-class EXTENDEDUNIVERSALCPPSUPPORT_API DeviceDiscoverer {
+class DeviceDiscoverer {
 
 public:
    ///<summary> construct an interface object used to enumerate the devices of a particular device interface class.</summary>
    ///<param name = "aDeviceType"> the device type to be enumerated.</param>
-   DeviceDiscoverer(DeviceTypeDirectory::DeviceType aDeviceType) noexcept;
+   EXTENDEDUNIVERSALCPPSUPPORT_API DeviceDiscoverer(DeviceTypeDirectory::DeviceType aDeviceType) noexcept;
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean identical device path content.</remarks>
-   const bool DeviceDiscoverer::operator==(const DeviceDiscoverer& other) const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API const bool DeviceDiscoverer::operator==(const DeviceDiscoverer& other) const;
 
    ///<summary> not equals comparison operator.</summary>
    ///<remarks> defines not equals to mean differing device path content.</remarks>
-   const bool DeviceDiscoverer::operator!=(const DeviceDiscoverer& other) const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API const bool DeviceDiscoverer::operator!=(const DeviceDiscoverer& other) const;
 
 private:
    ///<summary> forward reference to private implementation.</summary>
@@ -48,19 +45,13 @@ private:
 
    ///<summary> unique pointer to private implementation.</summary>
    ///<remarks> with default copy, move and compare support.</remarks>
-#pragma warning (disable:4251)
    spimpl::impl_ptr<impl> pimpl;
-#pragma warning (default:4251)
 
 public:
    ///<summary> references a std::map listing the device paths for the system devices corresponding to 
-   /// the interface class GUID supplied at construction time. The map contains entries for all device 
+   /// the device type supplied at construction time. The map contains entries for all device 
    /// instances discovered at construction time. Entries are std::strings containing utf8 encoded content.</summary>
    /// <remarks> unlike a raw reference, std::reference_wrapper is copyable (a feature we need to support DeviceDiscoverer
-   /// move operations with the current implementation choices).</remarks>
-#pragma warning (disable:4251)
+   /// move operations with the current implementation choices). </remarks>
    std::reference_wrapper<std::map<int, std::string>> device_path_map;
-#pragma warning (default:4251)
 };
-
-

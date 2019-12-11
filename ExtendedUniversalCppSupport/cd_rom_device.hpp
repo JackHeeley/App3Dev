@@ -15,58 +15,54 @@
 
 #include <atomic>
 #include <string>
-#include <memory>
-#include <vector>
+
+#include <gsl.hpp>
 #include <spimpl.hpp>
 
-#include "memory_mapped_file.hpp"     // mmf_vector type (and dependent custom allocator support functions)
-
-#pragma warning (disable:4251)
+#include "memory_mapped_file.hpp"
 
 ///<summary> CdromDevice offers a limited feature set specific to CD ROM Devices</summary>
 ///<remarks> raw device access (without CDFS) allows us to build a one time rip feature 
 /// based on low level serial reads. We don't consider seek and read position which 
 /// likely means limitations and exceptions if extending the current scope. We don't 
 /// attempt write support, and this would pose some big challenges.</remarks> 
-class EXTENDEDUNIVERSALCPPSUPPORT_API CdromDevice
+class CdromDevice
 {
 public:
    ///<summary> constructs a user mode Device that can be used to access a particular system cdrom instance.</summary>
    ///<param name='device_path'> the system name of the cdrom device to use.</param>
    ///<param name='a_progress'> reference to percentage progress used in get_image.</param>
    ///<exception cref='std::exception'>if construction fails.</exception>
-   CdromDevice::CdromDevice(std::string device_path, std::atomic<int>& a_progress);
+   EXTENDEDUNIVERSALCPPSUPPORT_API CdromDevice::CdromDevice(std::string device_path, std::atomic<int>& a_progress);
 
    ///<summary> get size of media image.</summary>
    ///<returns> size in bytes of image data.</returns>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   const uint64_t get_image_size(void) const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API const uint64_t get_image_size(void) const;
 
    ///<summary>get image of media into span.</summary>
    ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
    ///<param name ='span'> a gsl::span representing a memory location to receive the image.</param>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void CdromDevice::get_image(gsl::span<unsigned char> span) const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API void CdromDevice::get_image(gsl::span<unsigned char> span) const;
 
    ///<summary> prevents media removal.</summary>
-   void lock(void);
+   EXTENDEDUNIVERSALCPPSUPPORT_API void lock(void);
 
    ///<summary> allows media removal after lock.</summary>
-   void unlock(void);
+   EXTENDEDUNIVERSALCPPSUPPORT_API void unlock(void);
 
    ///<summary>query the locked state of the cdrom.</summary>
    ///<returns>true if the cdrom is locked.</returns>
-   const bool get_locked(void) const noexcept;
+   EXTENDEDUNIVERSALCPPSUPPORT_API const bool get_locked(void) const noexcept;
 
    ///<summary> load the media (closes the door of the CD drive)</summary>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void load(void) const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API void load(void) const;
 
    ///<summary> eject the media (opens the door of the CD drive)</summary>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void eject(void) const;
-
-protected:
+   EXTENDEDUNIVERSALCPPSUPPORT_API void eject(void) const;
 
 private:
    ///<summary> forward reference to private implementation.</summary>
@@ -76,5 +72,3 @@ private:
    ///<remarks> Non copyable, with move limitations.</remarks>
    spimpl::unique_impl_ptr<impl> pimpl;
 };
-
-#pragma warning (default:4251)

@@ -6,8 +6,6 @@
 #pragma once
 
 #include <codecvt>
-#include <iomanip>
-#include <locale>
 #include <string>
 
 namespace utf8

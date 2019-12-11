@@ -12,10 +12,9 @@
 // Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #include "stdafx.h"
-#include "device_discoverer.hpp"
-
 #include <setupapi.h>
 
+#include "device_discoverer.hpp"
 #include "utf8_win_convert.hpp"
 
 

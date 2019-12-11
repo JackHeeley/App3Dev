@@ -11,12 +11,6 @@
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllimport)
 #endif
 
-#include <ctime>
-#include <ostream>
-#include <sstream>
-
-#include "system_error.hpp"
-
 ///<summary> strong type naming all allowable combinations of (single bit) flags as used to configure a logger.</summary>
 enum class BASICUNIVERSALCPPSUPPORT_API LogFilter : int
 {
@@ -88,7 +82,7 @@ enum class BASICUNIVERSALCPPSUPPORT_API LogLevel : int
 #endif
 
 ///<summary>abstract base class for loggers</summary>
-class BASICUNIVERSALCPPSUPPORT_API logger
+class logger
 {
 public:
 
@@ -96,7 +90,7 @@ public:
    ///<returns> text identifying the LogLevel (extended with whitespace to help log alignment).</returns>
    ///<exception cref='std::invalid_argument'> if LogLevel::none is supplied. Puropse is to comment log entries, and in this context LogLevel::None is never valid.</exception>
    ///<exception cref='std::logic_error'> if (after implementation change) an unexpected LogLevel value is supplied that is not (yet) supported here.</exception>
-   const std::string log_level(LogLevel level) const
+   BASICUNIVERSALCPPSUPPORT_API const std::string log_level(LogLevel level) const
    {
       std::string result;
 
@@ -133,44 +127,44 @@ public:
    }
 
    ///<summary> default constructor.</summary>
-   logger() = default;
+   BASICUNIVERSALCPPSUPPORT_API logger() = default;
       
    ///<summary> copy constructor.</summary>
-   logger(const logger& other) = default;
+   BASICUNIVERSALCPPSUPPORT_API logger(const logger& other) = default;
 
    ///<summary> move constructor.</summary>
-   logger(logger&& other) = default;
+   BASICUNIVERSALCPPSUPPORT_API logger(logger&& other) = default;
 
    ///<summary> virtualize copy assignment operator.</summary>
-   virtual logger& operator=(logger& other) = default;
+   BASICUNIVERSALCPPSUPPORT_API virtual logger& operator=(logger& other) = default;
  
    ///<summary> virtualize move assignment operator.</summary>
-   virtual logger& operator=(logger&& other) = default;
+   BASICUNIVERSALCPPSUPPORT_API virtual logger& operator=(logger&& other) = default;
 
    ///<summary> virtual destructor.</summary>
-   virtual ~logger() = default;
+   BASICUNIVERSALCPPSUPPORT_API virtual ~logger() = default;
 
    ///<summary> used to determine which messages get logged
    /// logger implementors compare the bitmask parameter constructed or supplied here 
    /// to the filter parameter supplied with write operations.</summary>
    ///<param name='filter'>LogFilter bitmask value to set. filter is used by logger implementers to select which messages get logged</param>
-   virtual void set_log_filter(LogFilter filter) = 0;
+   BASICUNIVERSALCPPSUPPORT_API virtual void set_log_filter(LogFilter filter) = 0;
 
    ///<summary> Get log flags.</summary>
    ///<returns> The current LogFilter bitmask.</returns>
-   virtual LogFilter get_log_filter() const = 0;
+   BASICUNIVERSALCPPSUPPORT_API virtual LogFilter get_log_filter() const = 0;
 
    ///<summary> test a log level. compares the parameter with the log flags of this logger.</summary>
    ///<param name='aLevel'> the LogLevel to test.</param>
    ///<returns> true if the flag is set in the LogFilter of this logger.</returns> 
-   bool inline test_log_level(LogLevel aLevel) const
+   BASICUNIVERSALCPPSUPPORT_API bool inline test_log_level(LogLevel aLevel) const
    { 
       return (static_cast<int>(get_log_filter()) & static_cast<int>(aLevel)) ? true : false; 
    }
 
    ///<summary> toggle a log level. changes the level in the log flags of this logger.</summary>
    ///<param name='aFlag'> the LogLevel to toggle.</param>
-   void inline toggle_log_level(LogLevel aLevel) 
+   BASICUNIVERSALCPPSUPPORT_API void inline toggle_log_level(LogLevel aLevel)
    { 
       set_log_filter(test_log_level(aLevel) 
          ? static_cast<LogFilter>((static_cast<int>(get_log_filter()) & ~static_cast<int>(aLevel))) 
@@ -181,25 +175,24 @@ public:
    /// <param name="level">the LogLevel used to filter log messages.
    /// write does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask</param>
    /// <param name="line">The message to log</param>
-   virtual void write(LogLevel level, std::string line) = 0;
+   BASICUNIVERSALCPPSUPPORT_API virtual void write(LogLevel level, std::string line) = 0;
 
    /// <summary> Write message to log with newline.</summary>
    /// <param name="level">the LogLevel used to filter log messages.
    /// writeln does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask</param>
    /// <param name="line">The message to log</param>
-   virtual void writeln(LogLevel level, std::string line) = 0;
+   BASICUNIVERSALCPPSUPPORT_API virtual void writeln(LogLevel level, std::string line) = 0;
 
    /// <summary> Write exception to log.</summary>
    /// <param name="level">the LogLevel used to filter log messages.
    /// write does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask</param>
    /// <param name="line">The message to log</param>
-   virtual void write(LogLevel level, std::exception e) = 0;
+   BASICUNIVERSALCPPSUPPORT_API virtual void write(LogLevel level, std::exception e) = 0;
 
    /// <summary> Read the complete log file.</summary>
    /// <returns>The log file contents as a std::string</returns>
-   virtual std::string read_all() const = 0;
+   BASICUNIVERSALCPPSUPPORT_API virtual std::string read_all() const = 0;
 
    /// <summary> Clear log file.</summary>
-   virtual void clear() = 0;
-
+   BASICUNIVERSALCPPSUPPORT_API virtual void clear() = 0;
 };

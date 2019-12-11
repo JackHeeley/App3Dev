@@ -61,9 +61,11 @@ namespace utf8
          auto const removeCharsFromString = [&str](gsl::not_null<const char*>(charsToRemove))
          {
             for (unsigned int i = 0; i < strlen(charsToRemove); ++i)
-#pragma warning(disable: 26486)
+            {
+#pragma warning (disable: 26486)
                str.erase(remove(str.begin(), str.end(), charsToRemove[i]), str.end());
-#pragma warning(default: 26486)
+#pragma warning (default: 26486)
+            }
          };
 
          removeCharsFromString("Lx,");
@@ -80,6 +82,5 @@ namespace utf8
 
          return aGuid;
       }
-
    };
 }

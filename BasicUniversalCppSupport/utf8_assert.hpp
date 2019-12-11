@@ -15,13 +15,6 @@
 
 #include "utf8_convert.hpp"
 
-#include <string>
-#include <vector>
-#include <memory>
-#include <string>
-#include <locale>
-#include <codecvt>
-
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace utf8

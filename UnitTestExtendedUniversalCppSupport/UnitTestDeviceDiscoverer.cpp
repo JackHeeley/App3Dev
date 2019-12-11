@@ -10,9 +10,6 @@ using namespace utf8;
 
 namespace UnitTestExtendedUniversalCppSupport
 {
-   // a randomly generated GUID that doesn't represent any known device
-   GUID RANDOM_GUID = { 0x42047216, 0xc5ce, 0x20ef,{ 0xa3, 0x01, 0x1f, 0xbf, 0x9c, 0xe1, 0xbf, 0xb8 } };
-
    TEST_CLASS(UnitTestDeviceDiscoverer)
 	{
 	public:

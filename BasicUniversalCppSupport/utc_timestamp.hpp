@@ -5,57 +5,58 @@
 //
 #pragma once
 
-#ifdef BASICUNIVERSALCPPSUPPORT_EXPORTS
-#define BASICUNIVERSALCPPSUPPORT_API __declspec(dllexport)
-#else
-#define BASICUNIVERSALCPPSUPPORT_API __declspec(dllimport)
-#endif
-
-#include <string>
-#include <time.h>
-#include <locale>
 #include <algorithm>
+#include <string>
 
-#pragma warning (disable: 26486)
+#include <time.h>
 
 // trim from start (in place)
-static inline void ltrim(std::string &s) 
+const auto ltrim = [](std::string& s)
 {
+#pragma warning (disable: 26486)
    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
       return !std::isspace(ch, std::locale::classic());
    }));
-}
+#pragma warning (default: 26486)
+};
 
 // trim from end (in place)
-static inline void rtrim(std::string &s) {
+const auto rtrim = [](std::string& s)
+{
+#pragma warning (disable: 26486)
    s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
       return !std::isspace(ch, std::locale::classic());
    }).base(), s.end());
-}
+#pragma warning (default: 26486)
+};
 
 // trim from both ends (in place)
-static inline void trim(std::string &s) {
+const auto trim = [](std::string& s)
+{
    ltrim(s);
    rtrim(s);
-}
+};
 
 // trim from start (copying)
-static inline std::string ltrim_copy(std::string s) {
+const auto ltrim_copy = [](std::string s) 
+{
    ltrim(s);
    return s;
-}
+};
 
 // trim from end (copying)
-static inline std::string rtrim_copy(std::string s) {
+const auto rtrim_copy = [](std::string s)
+{
    rtrim(s);
    return s;
-}
+};
 
 // trim from both ends (copying)
-static inline std::string trim_copy(std::string s) {
+const auto trim_copy = [](std::string s) 
+{
    trim(s);
    return s;
-}
+};
 
 ///<summary> get current date and time in UTC</summary>
 ///<returns> a date time string, the format is system dependent</returns>
@@ -71,5 +72,3 @@ const auto utc_timestamp = []()
      
    return trim_copy({ timebuf });
 };
-
-#pragma warning (default: 26486)

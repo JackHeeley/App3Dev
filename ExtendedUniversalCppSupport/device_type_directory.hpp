@@ -15,11 +15,11 @@
 #endif
 
 #include <string>
-#include <map>
+
 #include <spimpl.hpp>
 
 ///<summary> wraps the system device interface.</summary>
-class EXTENDEDUNIVERSALCPPSUPPORT_API DeviceTypeDirectory {
+class DeviceTypeDirectory {
 
 public:
    ///<summary> an enumeration providing platform agnostic names for all the device types recognized by this implementation.</summary>

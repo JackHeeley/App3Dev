@@ -3,10 +3,12 @@
 //
 // Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-
 #include "stdafx.h"
 
-#pragma warning (disable: 26447 26486)
+#include <fstream>
+
+#define FILE_LOGGER_WARNINGS_SUPRESSED 26447 26486
+#pragma warning (disable: FILE_LOGGER_WARNINGS_SUPRESSED)
 
 /*
 * ***************************************************************************
@@ -216,4 +218,4 @@ void file_logger::clear()
 {
    pimpl->clear();
 }
-#pragma warning (default: 26447 26486)
+#pragma warning (default: FILE_LOGGER_WARNINGS_SUPRESSED)

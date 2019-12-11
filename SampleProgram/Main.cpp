@@ -16,8 +16,7 @@ extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int w
 
 #include <atomic>
 #include <chrono>
-#include <fstream>
-#include <future>
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <thread>

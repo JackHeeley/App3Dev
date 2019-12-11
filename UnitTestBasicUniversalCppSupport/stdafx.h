@@ -24,9 +24,10 @@
 #include "utf8_convert.hpp"
 #include "utc_timestamp.hpp"
 
-#include <vector>
+#include <iostream>
+#include <sstream>
 #include <string>
 #include <sstream>
-#include <iostream>
+#include <vector>
 
 #include "utf8_assert.hpp"

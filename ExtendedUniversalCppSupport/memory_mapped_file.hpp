@@ -17,14 +17,13 @@
 #define EXTENDEDUNIVERSALCPPSUPPORT_API __declspec(dllimport)
 #endif
 
-#include <memory>
 #include <string>
 
 #include <gsl.h>
 #include <spimpl.hpp>
 
 ///<summary> wraps the system memory mapped file facility.</summary>
-class EXTENDEDUNIVERSALCPPSUPPORT_API MemoryMappedFile
+class MemoryMappedFile
 {
 
 public:
@@ -42,28 +41,26 @@ public:
    ///<remarks>The zero buffer size option supports re-construction from earlier buffer data created in a previous session
    /// (and persisted to the backing disk file when the buffer was released).</remarks>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   MemoryMappedFile(const std::string& file_path, const std::string& buffer_name, uint64_t buffer_size);
+   EXTENDEDUNIVERSALCPPSUPPORT_API MemoryMappedFile(const std::string& file_path, const std::string& buffer_name, uint64_t buffer_size);
 
    ///<summary> get path name of disk file used as swap space for buffer</summary>
    ///<returns> text string representing file name</returns>
-   const std::string get_file_path() const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API const std::string get_file_path() const;
 
    ///<summary> get name of memory buffer.</summary>
    ///<returns> text string representing memory buffer name</returns>
-   const std::string get_buffer_name() const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API const std::string get_buffer_name() const;
 
    ///<summary> get buffer size.</summary>
    ///<returns> length memory buffer in bytes.</returns>
-   const uint64_t get_buffer_size() const noexcept;
+   EXTENDEDUNIVERSALCPPSUPPORT_API const uint64_t get_buffer_size() const noexcept;
 
    ///<summary> get buffer as a gsl::span.</summary>
    ///<returns> a gsl span (with content in address space of the memory mapped file)</returns>
-   gsl::span<unsigned char> get_span() const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API gsl::span<unsigned char> get_span() const;
 
    ///<summary> commit buffer to disk and release memory.</summary>
    void release();
-
-protected:
 
 private:
    ///<summary> forward reference to private implementation.</summary>
@@ -71,8 +68,6 @@ private:
 
    ///<summary> smart unique pointer to private implementation.</summary>
    ///<remarks> with default copy, move and compare support.</remarks>
-#pragma warning (disable:4251)
    spimpl::impl_ptr<impl> pimpl;
-#pragma warning (default:4251)
 };
 

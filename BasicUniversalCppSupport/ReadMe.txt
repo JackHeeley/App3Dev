@@ -21,9 +21,6 @@ BasicUniversalCppSupport.vcxproj.filters
     similar extensions under a specific node (for e.g. ".cpp" files are associated with the
     "Source Files" filter).
 
-BasicUniversalCppSupport.cpp
-    This is the main DLL source file.
-
 /////////////////////////////////////////////////////////////////////////////
 Other standard files:
 
@@ -69,4 +66,7 @@ utf8_convert.hpp
     This header includes minimum conversions needed to support the 
     utf8 anywhere programming paradigm (on windows). 
 
-
+utf8_win_convert.hpp
+    This header supplies utf8 string conversions to and from windows GUID type.
+    It is not platform independent, and should only be included in a localized
+    way (in .cpp files where an encapsulated windows impl inner class needs it).

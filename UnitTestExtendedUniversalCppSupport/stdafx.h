@@ -18,22 +18,21 @@
 #include <file_logger.hpp>
 #include <gsl.hpp>
 #include <logger.hpp>
-
 #include <spimpl.hpp>
 #include <system_error.hpp>
 #include <utf8_convert.hpp>
 #include <utc_timestamp.hpp>
 
+#include <cd_rom_device.hpp>
 #include <device.hpp>
 #include <device_discoverer.hpp>
 #include <memory_mapped_file.hpp>
-#include <cd_rom_device.hpp>
 
-#include <vector>
-#include <string>
-#include <sstream>
-#include <iostream>
 #include <chrono>
+#include <iostream>
+#include <sstream>
+#include <string>
 #include <thread>
+#include <vector>
 
 #include "utf8_assert.hpp"

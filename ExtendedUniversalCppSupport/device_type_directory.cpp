@@ -7,10 +7,14 @@
 // Copyright (c) 2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 #include "stdafx.h"
+
+#include <map>
+
+#include <winioctl.h>
+
 #include "device_type_directory.hpp"
 #include "utf8_win_convert.hpp"
 
-#include <winioctl.h>
 
 ///<summary> the private implementation of DeviceTypeDirectory. A Singleton.</summary>
 ///<remarks> Motivation for using an inner class is to encapsulate/hide 'GUID' (a Windows specific type).</remarks>
