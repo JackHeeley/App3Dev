@@ -59,34 +59,54 @@ int main(int argc, char* argv[])
 {
 
 #ifdef UNICODE
-   // on windows, switch platform console support to use the utf8 codepage 
+   // on Windows, switch platform console support to use the utf8 codepage. (E.g. std::cout << u8"καλή τύχη! Εύσχημα!" << std::endl;)
    SetConsoleOutputCP(CP_UTF8);
-   //std::cout << u8"καλή τύχη! Εύσχημα!" << std::endl;
  #endif
 
    try
    {
-
-      std::cout << "SampleProgram.exe Copyright(C) 2019 Jack Heeley.\n";
+      std::cout << "SampleProgram.exe Copyright(c) 2019 Jack Heeley.\n";
       std::cout << "This program comes with ABSOLUTELY NO WARRANTY; for details refer to GPL 3.0.\n";
       std::cout << "This is free software, and you are welcome to redistribute it\n";
       std::cout << "under certain conditions; refer to GPL 3.0 for details.\n\n";
 
       std::cout << "You should have received a copy of the GNU General Public License (GPL 3.0)\n";
-      std::cout << "along with this program.If not, see < http://www.gnu.org/licenses/>" << ".\n" << std::endl;
+      std::cout << "along with this program. If not, see < http://www.gnu.org/licenses/" << " >.\n" << std::endl;
 
       LOG_INFO("Sample test program starting.");
+      
+      const std::string NO_DEVICE("");
+
+      ///<summary>name of the device containing the media to be copied.</summary>
+      std::string deviceName = NO_DEVICE;
+
       for(int i=0;i<MAX_RETRIES;i++)
       {
-         if (!(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get().empty())) break;
+         const DeviceDiscoverer attachedDevices(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
 
-         std::cout << "Please attach an appropriate CDROM device to the system" << std::endl;
-         std::system("pause");
+         LOG_INFO("Check if reader is attached...");
+         if (attachedDevices.device_path_map.get().empty())
+         {
+            std::cout << "Please attach a suitable (e.g. usb) CDROM reader to the system" << std::endl;
+            std::system("pause");
+            continue;
+         }
+
+         LOG_INFO("Check if an optical media disk is present in the (first) attached reader...");
+         if (!(CdromDevice::check_for_media(attachedDevices.device_path_map.get()[0])))
+         {
+            std::cout << "Please insert a CD/CDR or DVD into the CDROM reader (and wait for it to spin up)." << std::endl;
+            std::system("pause");
+            continue;
+         }
+
+         LOG_INFO("A viable optical media disk is present in the (first) attached reader...");
+         deviceName = attachedDevices.device_path_map.get()[0];
+         break;
       }
 
-      const DeviceDiscoverer cdromDevices(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
-
-      if (cdromDevices.device_path_map.get().empty())
+      LOG_INFO("Check that we are all ready now.");
+      if (deviceName.compare(NO_DEVICE)==0)
       {
          LOG_ERROR("CDROM media not present or device not attached (program terminating).");
          std::cout << "CDROM media not present or device not attached (program terminating)" << std::endl;
@@ -96,12 +116,10 @@ int main(int argc, char* argv[])
       LOG_INFO("Ripping cd image from medium.");
       std::cout << "Ripping cd image from medium. Please wait..." << std::endl;
       {
-         ///<summary>name of the device containing the media to be copied.</summary>
-         auto deviceName = cdromDevices.device_path_map.get()[0];
          
          ///<summary>atomic int used to track progress.</summary>
          std::atomic<int> progress = 0;
-
+            
          auto show_progress = [&progress] 
          {
             std::function<std::string(int)> progress_bar = [](int percent)

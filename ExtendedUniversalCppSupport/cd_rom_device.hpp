@@ -77,6 +77,21 @@ public:
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
    EXTENDEDUNIVERSALCPPSUPPORT_API void eject(void) const;
 
+   ///<summary> check for media present.</summary>
+   ///<param name='device_path'> the system name of the cdrom device to use.</param>
+   ///<returns>true if a compatible compact disk is recognized as being present in the drive, otherwise false</returns> 
+   static EXTENDEDUNIVERSALCPPSUPPORT_API bool check_for_media(std::string device_path)
+   {
+      std::atomic<int> progress;
+      try
+      {
+         if (CdromDevice(device_path, progress).get_image_size()) return true;
+      }
+      catch (...) {}
+
+      return false;
+   }
+
 private:
    ///<summary> forward reference to private implementation.</summary>
    class impl;

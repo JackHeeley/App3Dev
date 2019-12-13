@@ -125,6 +125,7 @@ DONE:
 53. Fixed blocking issue with showing progress. When doing multiple reads we need to seek on the device (seek capability added to device, and used in cd_rom_device).
 54. Reworked dllexports, warnings and include files. Nice(!) Upgraded compiler to version 16.4.1
 55. Conformed with full recommendations of GPL 3.0 license regarding notices and comments.
+55. Reworked main program pre-checking.
 
 IN PROGRESS:
 
