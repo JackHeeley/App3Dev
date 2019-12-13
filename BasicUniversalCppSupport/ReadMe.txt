@@ -38,6 +38,20 @@ should add to or customize.
 Programmers notes:
 Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 
+    This program is free software : you can redistribute itand /or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.If not, see < http://www.gnu.org/licenses/>.
+
+
 stdAfx.h, targtver.h modified to target windows 7 and higher
 
 logger.hpp

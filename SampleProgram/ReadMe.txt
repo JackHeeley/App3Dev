@@ -41,6 +41,20 @@ should add to or customize.
 Programmers notes:
 Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 
+    This program is free software : you can redistribute itand /or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.If not, see < http://www.gnu.org/licenses/>.
+
+
 StdAfx.h is modified to target windows 7 and higher
 
 
@@ -110,6 +124,7 @@ DONE:
 52. Simplified progress thread and fixed hang after exceptions thrown from main thread (caused by waiting forever on the progress thread)
 53. Fixed blocking issue with showing progress. When doing multiple reads we need to seek on the device (seek capability added to device, and used in cd_rom_device).
 54. Reworked dllexports, warnings and include files. Nice(!) Upgraded compiler to version 16.4.1
+55. Conformed with full recommendations of GPL 3.0 license regarding notices and comments.
 
 IN PROGRESS:
 
