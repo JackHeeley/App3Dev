@@ -115,10 +115,10 @@ public:
       return bufferSize;
    }
  
-   ///<summary>get image of media into span.</summary>
+   ///<summary>get image of media into span, while maintaining a progress indication as we go.</summary>
    ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
    ///<param name ='span'> a gsl::span repesenting a memory location to receive the image.</param>
-   ///<exception cref='std::exception'>if the operation could not be completed.</exception>
+   ///<exception cref='std::exception'>if the operation could not be completed with m_progress==100.</exception>
    void impl::get_image(gsl::span<unsigned char> span) const
    {
 
@@ -192,6 +192,8 @@ public:
          }
          else throw;
       }
+
+      Ensures(m_progress == 100);   // if not, program will deadlock
    }
 
    ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>

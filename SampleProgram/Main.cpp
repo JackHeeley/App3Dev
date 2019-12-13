@@ -75,46 +75,46 @@ int main(int argc, char* argv[])
 
       LOG_INFO("Sample test program starting.");
       
-      const std::string NO_DEVICE("");
+      const std::string NO_DEVICE("device not found");
 
       ///<summary>name of the device containing the media to be copied.</summary>
       std::string deviceName = NO_DEVICE;
 
       for(int i=0;i<MAX_RETRIES;i++)
       {
-         const DeviceDiscoverer attachedDevices(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
+         const DeviceDiscoverer all_cdrom_readers(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
 
-         LOG_INFO("Check if reader is attached...");
-         if (attachedDevices.device_path_map.get().empty())
+         LOG_INFO("Check if at least one reader is attached...");
+         if (all_cdrom_readers.device_path_map.get().empty())
          {
-            std::cout << "Please attach a suitable (e.g. usb) CDROM reader to the system" << std::endl;
+            std::cout << "Please attach a suitable (e.g. usb) optical disk reader to the system" << std::endl;
             std::system("pause");
             continue;
          }
 
-         LOG_INFO("Check if an optical media disk is present in the (first) attached reader...");
-         if (!(CdromDevice::check_for_media(attachedDevices.device_path_map.get()[0])))
+         LOG_INFO("Select the first device, and check if an optical disk is loaded...");
+         if (!(CdromDevice::check_for_media(all_cdrom_readers.device_path_map.get()[0])))
          {
-            std::cout << "Please insert a CD/CDR or DVD into the CDROM reader (and wait for it to spin up)." << std::endl;
+            std::cout << "Please insert an optical disk into the drive (and wait for it to spin up)." << std::endl;
             std::system("pause");
             continue;
          }
 
-         LOG_INFO("A viable optical media disk is present in the (first) attached reader...");
-         deviceName = attachedDevices.device_path_map.get()[0];
+         LOG_INFO("A viable optical disk is present in the (first) attached drive...");
+         deviceName = all_cdrom_readers.device_path_map.get()[0];
          break;
       }
 
       LOG_INFO("Check that we are all ready now.");
-      if (deviceName.compare(NO_DEVICE)==0)
+      if (!deviceName.compare(NO_DEVICE))
       {
-         LOG_ERROR("CDROM media not present or device not attached (program terminating).");
-         std::cout << "CDROM media not present or device not attached (program terminating)" << std::endl;
+         LOG_ERROR("Optical disk not loaded or drive not attached (program terminating).");
+         std::cout << "Optical disk not loaded or drive not attached (program terminating)" << std::endl;
          exit(1);
       }
 
-      LOG_INFO("Ripping cd image from medium.");
-      std::cout << "Ripping cd image from medium. Please wait..." << std::endl;
+      LOG_INFO("Ripping image from optical disk.");
+      std::cout << "Ripping image from optical disk. Please wait..." << std::endl;
       {
          
          ///<summary>atomic int used to track progress.</summary>
@@ -148,15 +148,13 @@ int main(int argc, char* argv[])
          LOG_INFO("Do the ripping from the main thread.");
          Ripper(deviceName, fileName, progress)();
 
-         // in the case where Ripper returns without an exception being thrown, if the progress indicator 
-         // hasn't reached 100, then this is a programming error. The simplest handling for this scenario
-         // is to allow the program to hang on the 'join' below, and find and fix the root cause.  
+         Expects(progress == 100);   // if not, program would deadlock at join
 
          LOG_INFO("Block until progress bar is finished.");
-         separate_thread.get().join(); 
+         separate_thread.get().join();
       }
 
-      std::cout << "Ripping completed successfully. It is now safe to remove the CDROM device" << std::endl;
+      std::cout << "Ripping completed successfully. You may now remove the optical disk." << std::endl;
       LOG_INFO("Ripping completed successfully.");
       exit(0);
    }
