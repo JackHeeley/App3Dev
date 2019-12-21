@@ -35,6 +35,8 @@ extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int w
 #include <thread>
 #include <vector>
 
+#include <signal.h>
+
 using namespace std::chrono_literals;
 
 #pragma warning(disable:26426)
@@ -50,6 +52,25 @@ const static std::string fileName("cdrom_image.iso");
 ///<summary> number of times to test for an absent device.</summary>
 constexpr static int  MAX_RETRIES = 3;
 
+///<summary>signal handler for ctrl-c and ctrl+break. Necessary because RAII techniques are bypassed by signals.</summary> 
+///<remarks>This handler tries to ensures that user initiated program aborts (during rip, when drive door is locked) won't
+/// leave the optical drive door permanently locked. It is best effort and won't work in all circumstances.</remarks>
+void signalHandler(int signum) 
+{
+   try
+   {
+      LOG_INFO("signalHandler invoked!");
+      CdromDevice(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0], std::atomic<int>(0)).unlock();
+   }
+   catch (...)
+   {
+      std::string error_text = "Couldn't unlock the optical drive.";
+      std::cout << std::endl << error_text << "\nIf your drive supports locking you will need to reboot to retrieve the disk." << std::endl;
+      LOG_ERROR(error_text);
+   }
+   exit(signum);
+}
+
 ///<summary> program entrypoint.</summary>
 ///<param name = "argc"> number of command line parameters (expected 1).</param>
 ///<param name = "argv"> array of supplied command line parameters (expect only argv[0] i.e. program path).</param>
@@ -57,9 +78,12 @@ constexpr static int  MAX_RETRIES = 3;
 ///<remarks> uses system pause and stdout to interact with user.</remarks>
 int main(int argc, char* argv[])
 {
+   // Register signal handlers (used to avoid a permanently locked optical drive)
+   signal(SIGINT, signalHandler);
+   signal(SIGBREAK, signalHandler);
 
 #ifdef UNICODE
-   // on Windows, switch platform console support to use the utf8 codepage. (E.g. std::cout << u8"καλή τύχη! Εύσχημα!" << std::endl;)
+   // on Windows, switch platform console support to use the utf8 codepage. (E.g. std::cout << u8"Γειά σου Κόσμε!" << std::endl;)
    SetConsoleOutputCP(CP_UTF8);
  #endif
 
@@ -128,7 +152,7 @@ int main(int argc, char* argv[])
                bar << "\r" << "[";
                for (int i = 0; i < 20; i++)
                {
-                  bar << ((i < percent / 5) ? u8"█" : " ");
+                  bar << ((i < percent / 5) ? u8"█" : " "); 
                }
                bar << "]" << std::setw(3) << percent << "%";
                return bar.str();

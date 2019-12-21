@@ -192,6 +192,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system_error.cpp" />
+    <ClCompile Include="utf8_convert.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

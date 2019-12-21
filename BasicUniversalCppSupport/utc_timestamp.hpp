@@ -19,6 +19,7 @@
 #pragma once
 
 #include <algorithm>
+#include<locale>
 #include <string>
 
 #include <time.h>

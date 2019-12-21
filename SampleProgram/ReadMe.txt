@@ -127,6 +127,8 @@ DONE:
 55. Conformed with full recommendations of GPL 3.0 license regarding notices and comments.
 56. Reworked main program pre-checking.
 57. Revised terminology in output messages, and tightened up the progress reporting design by adding gsl Ensures & Expects.
+58. Reworked the utf8 conversion, since std::wstring_convert is deprecated at C++17.
+59. Added signal handling to unlock the optical disk drive (needed when user initiates program abort).
 
 IN PROGRESS:
 
@@ -134,8 +136,6 @@ TODO:
 
 1. Consider strategies for logging in a multi-dll program.
 
-2. File logger entry layout could be improved.
+2. LOGGER #defines are probably candidates for revision (change to a modern CPP way of working).
 
-3. LOGGER #defines are probably candidates for revision (change to a modern CPP way of working).
-
-4. Some of the disabled warnings do indeed indicate deviations from best practice, and attention should be given.
+3. Should not assume that the need to disable warnings around gsl.h & spimpl.h is caused by issues in the headers themselves. Our code could be the trigger - look again.

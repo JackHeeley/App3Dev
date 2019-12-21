@@ -18,7 +18,12 @@
 //
 #pragma once
 
-#include <codecvt>
+#ifdef BASICUNIVERSALCPPSUPPORT_EXPORTS
+#define BASICUNIVERSALCPPSUPPORT_API __declspec(dllexport)
+#else
+#define BASICUNIVERSALCPPSUPPORT_API __declspec(dllimport)
+#endif
+
 #include <string>
 
 namespace utf8
@@ -31,21 +36,11 @@ namespace utf8
       ///<summary>convert utf16 string to utf8 string</summary>
       ///<param name='wstr'>utf16 encoded string</param>
       ///<returns>utf8 encoded string representation of wstr</returns>
-      static inline std::string from_utf16(const std::wstring& wstr)
-      {
-#pragma warning(disable: 4996)
-         return std::wstring_convert<std::codecvt_utf8_utf16 <wchar_t>, wchar_t>().to_bytes(wstr);
-#pragma warning(default: 4996)
-      }
+      BASICUNIVERSALCPPSUPPORT_API static std::string from_utf16(const std::wstring& wstr);
 
       ///<summary>convert utf8 string to utf16 string</summary>
       ///<param name='str'>utf8 encoded string</param>
       ///<returns>utf16 encoded string representation of str</returns>
-      static inline std::wstring to_utf16(const std::string& str)
-      {
-#pragma warning(disable: 4996)
-         return std::wstring_convert<std::codecvt_utf8_utf16 <wchar_t>, wchar_t>().from_bytes(str);
-#pragma warning(default: 4996)
-      }
-   };
+      BASICUNIVERSALCPPSUPPORT_API static std::wstring to_utf16(const std::string& str);
+  };
 }

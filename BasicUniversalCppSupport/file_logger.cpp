@@ -1,5 +1,5 @@
 ﻿//
-// file_logger.hpp : implements file logging
+// file_logger.cpp : implements file logging
 //
 // Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
