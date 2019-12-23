@@ -54,19 +54,19 @@
     <ClInclude Include="utf8_convert.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utf8_win_convert.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="default_logger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logger_factory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="use_logger.hpp">
+    <ClInclude Include="abstract_logger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logger.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utf8_guid.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

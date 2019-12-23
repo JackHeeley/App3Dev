@@ -26,7 +26,6 @@
 
 #include <exception>
 #include <sstream>
-#include <string>
 
 #include "system_error.hpp"
 

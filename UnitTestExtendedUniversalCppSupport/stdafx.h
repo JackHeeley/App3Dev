@@ -17,12 +17,12 @@
 #include <error_context.hpp>
 #include <file_logger.hpp>
 #include <gsl.hpp>
-#include <logger.hpp>
+#include <abstract_logger.hpp>
 #include <spimpl.hpp>
 #include <system_error.hpp>
 #include <utf8_convert.hpp>
 #include <utc_timestamp.hpp>
-#include <use_logger.hpp>
+#include <logger.hpp>
 
 #include <cd_rom_device.hpp>
 #include <device.hpp>

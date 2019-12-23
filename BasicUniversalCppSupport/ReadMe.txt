@@ -54,8 +54,14 @@ Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/Jac
 
 stdAfx.h, targtver.h modified to target windows 7 and higher
 
-logger.hpp
+abstract_logger.hpp
     Abstract logging support
+    
+CppUnitTest.hpp
+    Wrapper for Microsoft's unit test header CppUnitTest.h (suppression of warnings raised by imported header)
+
+default_logger.hpp
+    A concrete 'do nothing' logger
 
 error_context.hpp
     An error::context type (featuring context tagging on std::exception 'what').
@@ -63,12 +69,14 @@ error_context.hpp
 file_logger.hpp, file_logger.cpp
     A simple logger implementation using a filesystem file.
 
+gsl.hpp
+    Wrapper for Microsoft's Guidlines Support Library header gsl.h (suppression of warnings raised by imported header)
+
 spimpl.hpp
     Templates support for smart pointer to implementation paradigm using rule of zero. 
 
 system_error.hpp, system_error.cpp
-    These files provide a service to fetch the system error text in the 
-    default locale.
+    These files provide a service to fetch the system error text in the default locale.
 
 utc_timestamp.hpp
     Timestamp support (used for logging purposes, and available for etc.)
@@ -76,11 +84,11 @@ utc_timestamp.hpp
 utf8_assert.hpp
     This header is a utf8 wrapper for Microsoft's CppUnitTest Assert class. 
 
-utf8_convert.hpp
-    This header includes minimum conversions needed to support the 
-    utf8 anywhere programming paradigm (on windows). 
+utf8_convert.hpp, utf8_convert.cpp 
+    These files provide minimum conversions needed to support the utf8 anywhere 
+    programming paradigm (on windows). 
 
-utf8_win_convert.hpp
+utf8_guid.hpp
     This header supplies utf8 string conversions to and from windows GUID type.
     It is not platform independent, and should only be included in a localized
     way (in .cpp files where an encapsulated windows impl inner class needs it).

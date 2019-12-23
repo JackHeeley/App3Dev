@@ -28,7 +28,7 @@
 #include <setupapi.h>
 
 #include "device_discoverer.hpp"
-#include "utf8_win_convert.hpp"
+#include "utf8_guid.hpp"
 
 
 /*
@@ -61,7 +61,7 @@ public:
    ///<param name = "aDeviceType"> the device type for the interface class to be enumerated.</param>
    impl(DeviceTypeDirectory::DeviceType aDeviceType) /*noexcept*/ :
       device_path_data(),
-      theGuid(utf8::win_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(aDeviceType)))
+      theGuid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(aDeviceType)))
    {
       INTERFACE_CLASS_GUID = (LPGUID)(&theGuid);
       m_hDevInfo = getDevInfoHandle(INTERFACE_CLASS_GUID);

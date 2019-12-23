@@ -25,7 +25,7 @@
 
 #include "device.hpp"
 #include "cd_rom_device.hpp"
-#include "use_logger.hpp"
+#include "logger.hpp"
 
 #include <limits>
 

@@ -168,7 +168,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="logger.hpp" />
+    <ClInclude Include="abstract_logger.hpp" />
     <ClInclude Include="logger_factory.hpp" />
     <ClInclude Include="CppUnitTest.hpp" />
     <ClInclude Include="default_logger.hpp" />
@@ -180,11 +180,11 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system_error.hpp" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="use_logger.hpp" />
+    <ClInclude Include="logger.hpp" />
     <ClInclude Include="utc_timestamp.hpp" />
     <ClInclude Include="utf8_assert.hpp" />
     <ClInclude Include="utf8_convert.hpp" />
-    <ClInclude Include="utf8_win_convert.hpp" />
+    <ClInclude Include="utf8_guid.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="file_logger.cpp" />

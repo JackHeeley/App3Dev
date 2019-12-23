@@ -31,7 +31,7 @@
 
 ///<summary> the private implementation of file_logger.</summary>
 ///<remarks> Windows types used internally, adheres to "utf8 everywhere" paradigm at public interface</remarks>
-class file_logger::impl : logger
+class file_logger::impl : abstract_logger
 {
 private:
    LogFilter filter;

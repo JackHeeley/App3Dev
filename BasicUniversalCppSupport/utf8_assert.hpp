@@ -24,8 +24,7 @@
 #include <winnt.h>
 
 // Headers for CppUnitTest
-#include <CppUnitTest.hpp>
-
+#include "CppUnitTest.hpp"
 #include "utf8_convert.hpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

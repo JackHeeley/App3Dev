@@ -26,7 +26,7 @@
 #include <winioctl.h>
 
 #include "device_type_directory.hpp"
-#include "utf8_win_convert.hpp"
+#include "utf8_guid.hpp"
 
 
 ///<summary> the private implementation of DeviceTypeDirectory. A Singleton.</summary>
@@ -90,7 +90,7 @@ public:
    std::string get_device_type_as_string(DeviceType aDeviceType)
    {
 #pragma warning(disable: 26486)
-      return utf8::win_convert::from_guid(device_type_map[aDeviceType]);
+      return utf8::guid_convert::from_guid(device_type_map[aDeviceType]);
 #pragma warning(default: 26486)
    }
 

@@ -1,5 +1,5 @@
 //
-// utf8_win_convert.hpp : conversions to support utf8 everywhere coding paradigm
+// utf8_guid.hpp : conversions to support utf8 everywhere coding paradigm
 //
 // *** WARNING: this header is specifically for windows platforms ***
 //
@@ -34,7 +34,7 @@
 namespace utf8
 {
    ///<summary>convert selected windows types to and from utf8</summary>
-   class win_convert
+   class guid_convert
    {
    public:
 

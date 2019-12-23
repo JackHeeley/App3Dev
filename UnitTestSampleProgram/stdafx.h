@@ -17,8 +17,8 @@
 #include <error_context.hpp>
 #include <file_logger.hpp>
 #include <gsl.hpp>
+#include <abstract_logger.hpp>
 #include <logger.hpp>
-#include <use_logger.hpp>
 
 #include <spimpl.hpp>
 #include <system_error.hpp>

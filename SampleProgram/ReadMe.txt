@@ -133,11 +133,14 @@ DONE:
         Factory now allows main to build a singleton file logger, that can be used anywhere in the dll stack.
         LOGGER #defines revised to a modern c++17 style (with lambdas).
 61. Fixed compile time disabling of logging (so that it too builds without errors or warnings).
-      
-IN PROGRESS: 
-        1. Probably now need a way to disable logging for specific facilities/dlls.
-        2. dll's have TODO:'s where logging should be added.
+62. Reworked BasicUniversalCppSupport (header cleanup).
 
 TODO:
 
-1. Should not assume that the need to disable warnings around gsl.h & spimpl.h is necessarily caused by issues in the headers themselves. Our code could be the trigger - look again.
+1. Consider logging design issues: 
+    - how to disable logging for specific facilities/dlls under program control
+    - how to allow threads and facilities/dll's to manage log filters independently 
+
+2. Rework ExtendedUniversalCppSupport SampleProgram & Unit Tests (header cleanup).
+
+3. Stop assuming that the need to disable warnings around gsl.h & spimpl.h is necessarily caused by issues in the headers themselves. Review own code (it could be the trigger).

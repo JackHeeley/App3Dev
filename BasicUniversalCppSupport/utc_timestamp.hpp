@@ -19,9 +19,8 @@
 #pragma once
 
 #include <algorithm>
-#include<locale>
+#include <locale>
 #include <string>
-
 #include <time.h>
 
 // trim from start (in place)

@@ -24,13 +24,11 @@
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllimport)
 #endif
 
-#include <string>
-
-#include "logger.hpp"
+#include "abstract_logger.hpp"
 #include "spimpl.hpp"
 
 ///<summary>file logger for ansi c++11/utf8 code clients</summary>
-class file_logger : public logger
+class file_logger : public abstract_logger
 {
 public:
    ///<summary> construct a default file_logger.</summary>

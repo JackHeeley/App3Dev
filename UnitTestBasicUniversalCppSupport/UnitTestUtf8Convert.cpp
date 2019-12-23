@@ -18,7 +18,7 @@
 //
 #include "stdafx.h"
 
-#include "utf8_win_convert.hpp" 
+#include "utf8_guid.hpp" 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace utf8;
@@ -37,7 +37,7 @@ namespace UnitTestBasicUniversalCppSupport
             const std::string expected("0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b");
 
             // perform the operation under test (convert actual guid to string)...
-            std::string actual = utf8::win_convert::from_guid(GUID_DEVINTERFACE_CDROM);
+            std::string actual = utf8::guid_convert::from_guid(GUID_DEVINTERFACE_CDROM);
 
             // test succeeds if values match...
             utf8::Assert::AreEqual(expected, actual, "converted GUID does not match expected value");
@@ -61,10 +61,10 @@ namespace UnitTestBasicUniversalCppSupport
             const GUID expected_guid = GUID_DEVINTERFACE_CDROM; // this IS "0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b"
 
             // perform the operation under test (convert string to GUID)...
-            const GUID actual_guid = utf8::win_convert::to_guid(initial_guid_string);
+            const GUID actual_guid = utf8::guid_convert::to_guid(initial_guid_string);
 
             //round trip to get back to a string (since we have no utf8::Assert::AreEqual for GUID type)
-            std::string actual_guid_string = utf8::win_convert::from_guid(actual_guid);
+            std::string actual_guid_string = utf8::guid_convert::from_guid(actual_guid);
 
             // test succeeds if string values match...
             utf8::Assert::AreEqual(expected_guid_string, actual_guid_string, "converted GUID does not match expected value");
@@ -88,10 +88,10 @@ namespace UnitTestBasicUniversalCppSupport
             const GUID expected_guid = GUID_DEVINTERFACE_CDROM; // this IS "0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b"
 
             // perform the operation under test (convert string to GUID)...
-            const GUID actual_guid = utf8::win_convert::to_guid(initial_guid_string);
+            const GUID actual_guid = utf8::guid_convert::to_guid(initial_guid_string);
 
             //round trip to get back to a string (since we have no utf8::Assert::AreEqual for GUID type)
-            std::string actual_guid_string = utf8::win_convert::from_guid(actual_guid);
+            std::string actual_guid_string = utf8::guid_convert::from_guid(actual_guid);
 
             // test succeeds if string values match...
             utf8::Assert::AreEqual(expected_guid_string, actual_guid_string, "converted GUID does not match expected value");

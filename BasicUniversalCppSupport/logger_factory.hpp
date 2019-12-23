@@ -24,9 +24,7 @@
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllimport)
 #endif
 
-#include <string>
-
-#include "logger.hpp"
+#include "abstract_logger.hpp"
 #include "default_logger.hpp"
 #include "file_logger.hpp"
 
@@ -52,9 +50,9 @@ public:
    ///<param name='logFilter'> If this is the first call to getInstance, and type is file_logger, then this 
    /// value will be used to select which messages will be logged, (otherwise the parameter is ignored).</param>
    ///<returns> a shared pointer to the singleton logger instance.</returns>
-   static std::shared_ptr<logger> getInstance(type logger_type=type::default_logger, std::string filePath="", LogFilter logFilter = LogFilter::None)
+   static std::shared_ptr<abstract_logger> getInstance(type logger_type=type::default_logger, std::string filePath="", LogFilter logFilter = LogFilter::None)
    {
-      static std::shared_ptr<logger> singleton = createLogger(logger_type, filePath, logFilter);
+      static std::shared_ptr<abstract_logger> singleton = createLogger(logger_type, filePath, logFilter);
       return singleton;
    }
 
@@ -63,7 +61,7 @@ private:
    ///<summary> static createLogger.</summary>
    ///<param name='logger_type'> factory construct a logger instance of this type.</param>
    ///<returns> a shared pointer to the logger instance created.</returns>
-   static std::shared_ptr<logger> createLogger(type logger_type, std::string filePath, LogFilter logFilter)
+   static std::shared_ptr<abstract_logger> createLogger(type logger_type, std::string filePath, LogFilter logFilter)
    {
       switch (logger_type)
       {
