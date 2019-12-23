@@ -59,7 +59,7 @@ private:
       }
       catch (...)
       {
-         //TODO: consider stderr here
+         LOG_WARNING("DeviceTypeDirectory::impl constructor had an issue!");
       }
    }
 

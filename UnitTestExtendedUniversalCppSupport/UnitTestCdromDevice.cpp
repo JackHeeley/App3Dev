@@ -24,6 +24,8 @@ using namespace utf8;
 
 namespace UnitTestExtendedUniversalCppSupport
 {
+   CREATE_LOGGER(logger_factory::type::file_logger, "MyUnitTestExtendedUniversalCppSupport.log", LogFilter::Full);
+
    TEST_CLASS(UnitTestCdromDevice)
    {
    public:
@@ -80,9 +82,9 @@ namespace UnitTestExtendedUniversalCppSupport
                {
                   m_cdr.unlock();
                }
-               catch (std::exception)
+               catch (const std::exception& e)
                {
-                 // TODO: consider stderr
+                  LOG_WARNING(e.what());
                }
             }
          };
@@ -232,9 +234,9 @@ namespace UnitTestExtendedUniversalCppSupport
       //         {
       //            m_cdr.unlock();
       //         }
-      //         catch (std::exception)
+      //         catch (std::exception& e)
       //         {
-      //            // TODO: consider stderr
+      //            LOG_WARNING(e.what());
       //         }
       //      }
       //   };

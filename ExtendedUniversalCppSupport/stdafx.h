@@ -22,5 +22,6 @@
 #include <logger.hpp>
 #include <spimpl.hpp>
 #include <system_error.hpp>
+#include <use_logger.hpp>
 #include <utf8_convert.hpp>
 #include <utc_timestamp.hpp>

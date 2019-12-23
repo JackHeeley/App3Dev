@@ -77,9 +77,9 @@ public:
       {
          clear();
       }
-      catch (std::exception&)
+      catch (const std::exception& e)
       {
-         // TODO: consider writing to stderr
+         LOG_WARNING(e.what());
       }
    }
    

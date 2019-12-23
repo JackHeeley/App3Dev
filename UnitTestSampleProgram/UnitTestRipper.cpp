@@ -24,6 +24,8 @@ using namespace utf8;
 
 namespace UnitTestSampleProgram
 {
+   CREATE_LOGGER(logger_factory::type::file_logger, "MyUnitTestSampleProgram.log", LogFilter::Full);
+
    TEST_CLASS(UnitTestRipper)
    {
    public:

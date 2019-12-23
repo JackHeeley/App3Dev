@@ -1,5 +1,5 @@
 //
-// logger.hpp : implements logging, and exception message support
+// logger.hpp : abstract base class for logging
 //
 // Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
@@ -17,6 +17,9 @@
 //    along with this program.If not, see < http://www.gnu.org/licenses/>.
 //
 #pragma once
+
+#include <stdexcept>
+#include <string>
 
 #ifdef BASICUNIVERSALCPPSUPPORT_EXPORTS
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllexport)
@@ -48,51 +51,6 @@ enum class BASICUNIVERSALCPPSUPPORT_API LogLevel : int
    Warning = static_cast<int>(LogFilter::Warning),
    Error = static_cast<int>(LogFilter::Error)
 };
-
-// decoration of log entries: by default include source and line number info in debug build, exclude it in the release build
-#ifndef LOG_TEXT
-
-// developers often want to temporaily fine control the logging levels
-// you can/should do this WITHOUT CHANGING THE LOG STATEMENT (temporary changes just get forgotten)
-// better is to control logging by locally redefining these log flag macros (Eg #define LOG_INFO /*nothing*/)
-// the compiler will raise a MACRO REDEFINITION WARNING to remind you of where you have done this
-
-// USE THESE LOG_LEVEL_MACROS IN LOG WRITE LINES 
-#define LOGGER Logger
-#define LOG_NONE(text) (LOGGER.writeln(LogLevel::None, LOG_TEXT(text)))
-#define LOG_TRACE(text) (LOGGER.writeln(LogLevel::Trace, LOG_TEXT(text)))
-#define LOG_DEBUG(text) (LOGGER.writeln(LogLevel::Debug, LOG_TEXT(text)))
-#define LOG_INFO(text) (LOGGER.writeln(LogLevel::Info, LOG_TEXT(text)))
-#define LOG_WARNING(text) (LOGGER.writeln(LogLevel::Warning, LOG_TEXT(text)))
-#define LOG_ERROR(text) (LOGGER.writeln(LogLevel::Error, LOG_TEXT(text)))
-
-#define S1(x) #x
-#define S2(x) S1(x)
-
-#define DECORATED_LOG_TEXT(y) std::string(__FILE__ " : " S2(__LINE__) " ").append(y)
-#define PLAIN_LOG_TEXT(y) y
-
-#define LOG_LEVEL(level) (LOGGER.test_log_level(level))
-#define TOGGLE_LOG_LEVEL(level) (LOGGER.toggle_log_level(level))
-
-#ifdef _DEBUG
-   //* <<< add or delete a second leading '/' on this line to toggle the global decoration option for Debug configuration
-   // use this to decorate the logger::write line parameter so that location details are included in the logentry
-#define LOG_TEXT DECORATED_LOG_TEXT
-   /*/
-   // use this for undecorated version
-   #define LOG_TEXT PLAIN_LOG_TEXT
-   //*/
-#else
-   /* <<< add or delete a second leading '/' on this line to toggle the global decoration option for Release configuration
-   // use this to decorate the logger::write line parameter so that location details are included in the logentry
-   #define LOG_TEXT DECORATED_LOG_TEXT
-   /*/
-   // use this for undecorated version
-#define LOG_TEXT PLAIN_LOG_TEXT
-   //*/
-#endif
-#endif
 
 ///<summary>abstract base class for loggers</summary>
 class logger
@@ -141,7 +99,7 @@ public:
 
    ///<summary> default constructor.</summary>
    BASICUNIVERSALCPPSUPPORT_API logger() = default;
-      
+
    ///<summary> copy constructor.</summary>
    BASICUNIVERSALCPPSUPPORT_API logger(const logger& other) = default;
 
@@ -150,7 +108,7 @@ public:
 
    ///<summary> virtualize copy assignment operator.</summary>
    BASICUNIVERSALCPPSUPPORT_API virtual logger& operator=(logger& other) = default;
- 
+
    ///<summary> virtualize move assignment operator.</summary>
    BASICUNIVERSALCPPSUPPORT_API virtual logger& operator=(logger&& other) = default;
 
@@ -171,17 +129,17 @@ public:
    ///<param name='aLevel'> the LogLevel to test.</param>
    ///<returns> true if the flag is set in the LogFilter of this logger.</returns> 
    BASICUNIVERSALCPPSUPPORT_API bool inline test_log_level(LogLevel aLevel) const
-   { 
-      return (static_cast<int>(get_log_filter()) & static_cast<int>(aLevel)) ? true : false; 
+   {
+      return (static_cast<int>(get_log_filter())& static_cast<int>(aLevel)) ? true : false;
    }
 
    ///<summary> toggle a log level. changes the level in the log flags of this logger.</summary>
    ///<param name='aFlag'> the LogLevel to toggle.</param>
    BASICUNIVERSALCPPSUPPORT_API void inline toggle_log_level(LogLevel aLevel)
-   { 
-      set_log_filter(test_log_level(aLevel) 
-         ? static_cast<LogFilter>((static_cast<int>(get_log_filter()) & ~static_cast<int>(aLevel))) 
-         : static_cast<LogFilter>((static_cast<int>(get_log_filter()) | static_cast<int>(aLevel)))); 
+   {
+      set_log_filter(test_log_level(aLevel)
+         ? static_cast<LogFilter>((static_cast<int>(get_log_filter()) & ~static_cast<int>(aLevel)))
+         : static_cast<LogFilter>((static_cast<int>(get_log_filter()) | static_cast<int>(aLevel))));
    }
 
    /// <summary> Write message to log without newline.</summary>

@@ -18,6 +18,7 @@
 #include <file_logger.hpp>
 #include <gsl.hpp>
 #include <logger.hpp>
+#include <use_logger.hpp>
 
 #include <spimpl.hpp>
 #include <system_error.hpp>

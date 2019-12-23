@@ -39,19 +39,6 @@ extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int w
 
 using namespace std::chrono_literals;
 
-#pragma warning(disable:26426)
-
-///<summary> declare the (single) file logger in use.</summary>
-file_logger Logger("ripper.log", LogFilter::Full);
-
-///<summary> filename for ripped image</summary>
-const static std::string fileName("cdrom_image.iso");
-
-#pragma warning(default:26426)
-
-///<summary> number of times to test for an absent device.</summary>
-constexpr static int  MAX_RETRIES = 3;
-
 ///<summary>signal handler for ctrl-c and ctrl+break. Necessary because RAII techniques are bypassed by signals.</summary> 
 ///<remarks>This handler tries to ensures that user initiated program aborts (during rip, when drive door is locked) won't
 /// leave the optical drive door permanently locked. It is best effort and won't work in all circumstances.</remarks>
@@ -78,6 +65,15 @@ void signalHandler(int signum)
 ///<remarks> uses system pause and stdout to interact with user.</remarks>
 int main(int argc, char* argv[])
 {
+   ///<summary> create a file logger for use by the full stack.</summary>
+   CREATE_LOGGER(logger_factory::type::file_logger, "ripper.log", LogFilter::Full);
+
+   ///<summary> filename for ripped image</summary>
+   const static std::string fileName("cdrom_image.iso");
+
+   ///<summary> number of times to test for an absent device.</summary>
+   constexpr static int  MAX_RETRIES = 3;
+
    // Register signal handlers (used to avoid a permanently locked optical drive)
    signal(SIGINT, signalHandler);
    signal(SIGBREAK, signalHandler);

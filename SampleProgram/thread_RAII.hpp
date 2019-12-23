@@ -62,7 +62,7 @@ public:
       }
       catch (...)
       {
-         // TODO: consider using stderr
+         LOG_WARNING("~thread_RAII had an issue!");
       }
    }
 

@@ -14,10 +14,14 @@
 #define NOMINMAX
 #include <windows.h>
 
-#include "error_context.hpp"
-#include "file_logger.hpp"
-#include "gsl.hpp"
 #include "logger.hpp"
+#include "default_logger.hpp"
+#include "file_logger.hpp"
+#include "logger_factory.hpp"
+#include "use_logger.hpp"
+
+#include "error_context.hpp"
+#include "gsl.hpp"
 
 #include "spimpl.hpp"
 #include "system_error.hpp"

@@ -144,9 +144,9 @@ public:
             filePathW = other.filePathW;
             bufferNameW = other.bufferNameW;
          }
-         catch (std::exception)
+         catch (const std::exception& e)
          {
-            //TODO: consider stderr
+            LOG_WARNING(e.what());
          }
 
          buffer_ptr = other.buffer_ptr;
@@ -167,9 +167,9 @@ public:
       {
          release();
       }
-      catch (std::exception&)
+      catch (const std::exception& e)
       {
-         // TODO: consider stderr
+         LOG_WARNING(e.what());
       }
    }
 

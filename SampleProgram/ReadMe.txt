@@ -129,13 +129,14 @@ DONE:
 57. Revised terminology in output messages, and tightened up the progress reporting design by adding gsl Ensures & Expects.
 58. Reworked the utf8 conversion, since std::wstring_convert is deprecated at C++17.
 59. Added signal handling to unlock the optical disk drive (needed when user initiates program abort).
-
-IN PROGRESS:
+60. Reworked logger strategy for logging in a multi-dll program.
+        Factory now allows main to build a singleton file logger, that can be used anywhere in the dll stack.
+        LOGGER #defines revised to a modern c++17 style (with lambdas).
+      
+IN PROGRESS: 
+        1. Probably now need a way to disable logging for specific facilities/dlls.
+        2. dll's have TODO:'s where logging should be added.
 
 TODO:
 
-1. Consider strategies for logging in a multi-dll program.
-
-2. LOGGER #defines are probably candidates for revision (change to a modern CPP way of working).
-
-3. Should not assume that the need to disable warnings around gsl.h & spimpl.h is caused by issues in the headers themselves. Our code could be the trigger - look again.
+1. Should not assume that the need to disable warnings around gsl.h & spimpl.h is necessarily caused by issues in the headers themselves. Our code could be the trigger - look again.

@@ -31,6 +31,8 @@ using namespace std::chrono_literals;
 
 namespace UnitTestBasicUniversalCppSupport
 {
+   CREATE_LOGGER(logger_factory::type::file_logger, "MyUnitTestBasicUniversalCppSupport.log", LogFilter::Full);
+
    TEST_CLASS(UnitTestFileLogger)
    {
    public:
@@ -61,7 +63,7 @@ namespace UnitTestBasicUniversalCppSupport
          try
          {
             // prepare for test...
-            const std::string log_file_name = "logfile.log";
+            const std::string log_file_name = "MyUnitTestBasicUniversalCppSupport.log";
             file_logger Logger(log_file_name, LogFilter::Full);
 
             // perform the operation under test...
@@ -82,7 +84,7 @@ namespace UnitTestBasicUniversalCppSupport
          try
          {
             // prepare for test...
-            const std::string log_file_name = "logfile.log";
+            const std::string log_file_name = "MyUnitTestBasicUniversalCppSupport.log";
             file_logger fl0(log_file_name, LogFilter::Full);
 
             // perform the operation under test...
@@ -104,7 +106,7 @@ namespace UnitTestBasicUniversalCppSupport
          try
          {
             // prepare for test...
-            const std::string log_file_name = "logfile.log";
+            const std::string log_file_name = "MyUnitTestBasicUniversalCppSupport.log";
             file_logger fl0(log_file_name, LogFilter::Full);
 
             // perform the operation under test...
@@ -126,7 +128,7 @@ namespace UnitTestBasicUniversalCppSupport
          try
          {
             // prepare for test...
-            const std::string log_file_name = "logfile.log";
+            const std::string log_file_name = "MyUnitTestBasicUniversalCppSupport.log";
             const std::string FILTERED_TEXT = "DON'T show this in the log!";
 
             file_logger Logger(log_file_name, LogFilter::Info);
@@ -149,19 +151,19 @@ namespace UnitTestBasicUniversalCppSupport
                while (progress < 100)
                {
                   // test design is to use a different handle to same file and set a different filter value (just to challenge the coding)
-                  // if threads shared a single logger they would compete over the filter resource setting
-                  const std::string log_file_name = "logfile.log";
-                  file_logger Logger(log_file_name, LogFilter::Trace);        
-
+                  // if threads shared a single logger they would compete over the filter resource setting... and thats what happening now.
                   std::this_thread::sleep_for(1ms);
                   LOG_TRACE(progress_bar(progress));                 // log (A LOT) in the thread (uses TRACE level)
 
                   std::string thread_output_suppressed("separate thread said: "); 
                   thread_output_suppressed.append(FILTERED_TEXT);
-                  LOG_INFO(thread_output_suppressed);                // issue something that should be filtered
+                  LOG_WARNING(thread_output_suppressed);                // issue something that should be filtered
                }
                std::cout << progress_bar(progress) << std::endl;
             };
+
+            if (TEST_LOG_LEVEL(LogLevel::Warning))
+               TOGGLE_LOG_LEVEL(LogLevel::Warning);
 
             LOG_INFO("Launch the progress bar in a separate thread.");
             thread_RAII separate_thread(std::thread(log_progress), thread_RAII::DtorAction::detach);
@@ -175,7 +177,7 @@ namespace UnitTestBasicUniversalCppSupport
 
             std::string main_output_suppressed("Main thread said : "); 
             main_output_suppressed.append(FILTERED_TEXT);
-            LOG_TRACE(main_output_suppressed);                             // issue something that should be filtered
+            LOG_WARNING(main_output_suppressed);                             // issue something that should be filtered
 
             Expects(progress == 100);  // if not, program would deadlock at join
 

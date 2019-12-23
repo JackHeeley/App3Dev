@@ -25,6 +25,7 @@
 
 #include "device.hpp"
 #include "cd_rom_device.hpp"
+#include "use_logger.hpp"
 
 #include <limits>
 
@@ -32,6 +33,7 @@
 ///<remarks>can be used to force multiple smaller reads (which allows for progress tracking)</remarks>
 static void simulate_resource_limitation(void)
 {
+   LOG_WARNING("Simulating a resource limitation"); // TODO: refactor. This works, but its a dirty trick
    SetLastError(ERROR_NO_SYSTEM_RESOURCES);
    throw std::exception("simulated resource limitation");
 }
@@ -84,9 +86,9 @@ public:
          {
             unlock();
          }
-         catch (std::exception&)
+         catch (std::exception&) // Dtor mustn't throw
          {
-            // mustn't throw. TODO: could log here
+            LOG_WARNING("~impl failed to unlock");
          }
       }
    }

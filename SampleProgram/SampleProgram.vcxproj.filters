@@ -27,9 +27,6 @@
     <ClInclude Include="ripper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="the_logger.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="thread_RAII.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
