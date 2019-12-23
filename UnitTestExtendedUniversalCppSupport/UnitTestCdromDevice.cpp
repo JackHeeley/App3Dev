@@ -84,6 +84,7 @@ namespace UnitTestExtendedUniversalCppSupport
                }
                catch (const std::exception& e)
                {
+                  USES(e);
                   LOG_WARNING(e.what());
                }
             }

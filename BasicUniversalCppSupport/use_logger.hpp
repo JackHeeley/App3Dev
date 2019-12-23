@@ -141,7 +141,8 @@ __pragma(warning(disable:26426))                                                
 std::shared_ptr<logger>the_logger = create_logger(logType, logFilePath, logFilter)  \
 __pragma(warning(pop))
 
- 
+#define USES(parm)
+
 #define LOG_NONE(text) log_it(LogLevel::None, LOG_TEXT(text))
 #define LOG_TRACE(text) log_it(LogLevel::Trace, LOG_TEXT(text))
 #define LOG_DEBUG(text) log_it(LogLevel::Debug, LOG_TEXT(text))
@@ -155,7 +156,9 @@ __pragma(warning(pop))
 
 // INACTIVE LOGGING (log lines are passive code comments)
 
-#define CREATE_LOG(logType, logFilePath, logFilter)
+#define USES(parm) parm
+
+#define CREATE_LOGGER(logType, logFilePath, logFilter)
 
 #define LOG_NONE(text)
 #define LOG_TRACE(text)
@@ -164,7 +167,7 @@ __pragma(warning(pop))
 #define LOG_WARNING(text)
 #define LOG_ERROR(text)
 
-#define TEST_LOG_LEVEL(level)
-#define TOGGLE_LOG_LEVEL(level)
+#define TEST_LOG_LEVEL(level) (false)
+#define TOGGLE_LOG_LEVEL(level) {}
 
 //*/
