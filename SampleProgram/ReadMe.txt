@@ -54,11 +54,30 @@ Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/Jac
     You should have received a copy of the GNU General Public License
     along with this program.If not, see < http://www.gnu.org/licenses/>.
 
+THIS PROJECT IS BUILT WITH ISO C++17 /std:c++17 compiler option
 
-StdAfx.h is modified to target windows 7 and higher
+StdAfx.h, targtver.h modified to target windows 7 and higher
 
+main,cpp
+    This file contains the entrypoint and main program. It manages the
+    rip operation, logging, progress reporting, exception handling,
+    and program interruption.
 
+ripper.hpp, ripper.cpp
+    These files assemble the various components and provide a functor to 
+    rip the contents of an optical disk into a system file.
 
+tray_door_lock.hpp, tray_door_lock.hpp
+    These files provide an RAII object that prevents the user from 
+    interrupting the rip by opening the optical drive when busy. The design 
+    attempts to unlock the door on all return paths, BUT FAILS because there
+    are ways to stop a program abruptly without unrolling the stack (signals). 
+    main.cpp steps in and provides a signal handler.
+
+thread_RAII.hpp
+    This file uses RAII to (successfully) ensure proper thread synchronization 
+    as the program ends. 
+       
 History & todo list
 ===================
 
@@ -134,6 +153,7 @@ DONE:
         LOGGER #defines revised to a modern c++17 style (with lambdas).
 61. Fixed compile time disabling of logging (so that it too builds without errors or warnings).
 62. Reworked BasicUniversalCppSupport (header cleanup).
+63. Reviewed ExtendedUniversalCppSupport SampleProgram. Made minor changes (comments, text strings etc.).
 
 TODO:
 
@@ -141,6 +161,5 @@ TODO:
     - how to disable logging for specific facilities/dlls under program control
     - how to allow threads and facilities/dll's to manage log filters independently 
 
-2. Rework ExtendedUniversalCppSupport SampleProgram & Unit Tests (header cleanup).
 
 3. Stop assuming that the need to disable warnings around gsl.h & spimpl.h is necessarily caused by issues in the headers themselves. Review own code (it could be the trigger).

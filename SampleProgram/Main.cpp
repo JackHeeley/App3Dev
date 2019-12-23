@@ -41,7 +41,7 @@ using namespace std::chrono_literals;
 
 ///<summary>signal handler for ctrl-c and ctrl+break. Necessary because RAII techniques are bypassed by signals.</summary> 
 ///<remarks>This handler tries to ensures that user initiated program aborts (during rip, when drive door is locked) won't
-/// leave the optical drive door permanently locked. It is best effort and won't work in all circumstances.</remarks>
+/// leave the optical drive door permanently locked.</remarks>
 void signalHandler(int signum) 
 {
    try
@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
 #ifdef UNICODE
    // on Windows, switch platform console support to use the utf8 codepage. (E.g. std::cout << u8"Γειά σου Κόσμε!" << std::endl;)
    SetConsoleOutputCP(CP_UTF8);
- #endif
+#endif
 
    try
    {
@@ -176,6 +176,7 @@ int main(int argc, char* argv[])
 
       std::cout << "Ripping completed successfully. You may now remove the optical disk." << std::endl;
       LOG_INFO("Ripping completed successfully.");
+      std::system("pause");
       exit(0);
    }
    catch (const error::context& f)
@@ -183,6 +184,7 @@ int main(int argc, char* argv[])
       std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.full_what()); // fancy what
       //std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.what());    // or simple what if you prefer
       std::cout << std::endl << error_text << std::endl;
+      std::system("pause");
       LOG_ERROR(error_text);
       exit(-1);
    }
@@ -191,6 +193,7 @@ int main(int argc, char* argv[])
       LOG_WARNING("A std::exception was thrown. (design intent is to always use error::context).");
       std::string error_text = "Unhandled Std Exception: "; error_text.append(e.what());   // simple what
       std::cout << std::endl << error_text << std::endl;
+      std::system("pause");
       LOG_ERROR(error_text);
       exit(-1);
    }
@@ -199,6 +202,7 @@ int main(int argc, char* argv[])
       LOG_WARNING("Something odd was thrown. (design intent is to always use error::context).");
       std::string error_text = "Unhandled exception, "; error_text.append(SystemError().get_error_text()); // best effort
       std::cout << std::endl << error_text << std::endl;
+      std::system("pause");
       LOG_ERROR(error_text);
       exit(-1);
    }

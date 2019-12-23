@@ -51,11 +51,16 @@ device_discoverer.hpp, device_discoverer.cpp
     discovered in real-time by their system device type identifier 
     (interface class guid), and zero based ordinal index.
 
+device_type_directory.hpp, device_type_directory.hpp
+    These files provide a catalog of system device types. The catalog
+    provides a generic (system agnostic) way to reference an arbitrary set 
+    of "supported" system device types (including cdrom).
+
 memory_mapped_file.hpp, memory_mapped_file.cpp
     These files wrap the windows memory mapping functions with enough 
     functionality to supply a shared memory buffer backed by a file system
     (eg disk) file.
 
-cd_rom_device.cpp, cd_rom_device.hpp
+cd_rom_device.hpp, cd_rom_device.cpp
     These files represent a CDROM device with enough functionality to
     acquire (read) raw content, and perform some basic ioctls.

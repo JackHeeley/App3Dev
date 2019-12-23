@@ -31,10 +31,14 @@ namespace utf8
    // 
    //  https://docs.microsoft.com/en-us/archive/msdn-magazine/2016/september/c-unicode-encoding-conversions-with-stl-strings-and-win32-apis
    //
-   //  Here we adopt this recommendation...
+   //  Here we adopt this recommendation (and use the published source with minor changes)...
    //
 
-   // Represents an error during UTF-8 encoding conversions
+   // In this source file (and only here) 'throw error_context("reason");' is NOT a viable strategy - due to mutual recursion.
+   // We just pull in an alternative from the blog... (and don't even bother to dereference it when catching). These exceptions
+   // are handled locally, so this does not impact the SEH design as employed everywhere else.
+
+   // Represents an error during UTF-8 encoding conversions 
    class Utf8ConversionException : public std::runtime_error
    {
       // Error code from GetLastError()
@@ -53,6 +57,9 @@ namespace utf8
       }
    }; 
 
+   // Exceptions that may arise in the safe conversion, are handled here (we retry using unsafe conversion).
+   // Since conversion is part of error reporting, we need to arrange that system errors are not disturbed
+   // (in the exception path).
    class RAII_preserve_last_error
    {
       const DWORD _error;
@@ -175,7 +182,7 @@ namespace utf8
       }
       utf8.resize(utf8Length);
 
-      // Convert from UTF-8 to UTF-16
+      // Convert from UTF-16 to UTF-8
       const int result = WideCharToMultiByte(
          CP_UTF8,             // TODO: FURTHER CLARIFICATION NEEDED 
          kFlags,              // Conversion flags
