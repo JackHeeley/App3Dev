@@ -154,6 +154,7 @@ DONE:
 61. Fixed compile time disabling of logging (so that it too builds without errors or warnings).
 62. Reworked BasicUniversalCppSupport (header cleanup).
 63. Reviewed ExtendedUniversalCppSupport SampleProgram. Made minor changes (comments, text strings etc.).
+64. Reviewed memory_mapped_file. Now has explicit unmapview, and sets last modified time on file.
 
 TODO:
 

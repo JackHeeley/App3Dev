@@ -260,7 +260,7 @@ public:
 
    ///<summary> map view of file into memory.</summary>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
-   void impl::mapViewOfFile() 
+   void impl::mapViewOfFile()
    {
       buffer_ptr = MapViewOfFile(hFileMap,
          FILE_MAP_READ | FILE_MAP_WRITE,
@@ -269,10 +269,27 @@ public:
          0  // entire file
       );
 
-      if (buffer_ptr == nullptr) 
+      if (buffer_ptr == nullptr)
       {
          throw error_context("MapViewOfFile failed");
       }
+   }
+
+   ///<summary> update the file time (not automatically done with memory mapped files).</summary>
+   BOOL SetFileToCurrentTime(HANDLE hFile) noexcept
+   {
+      FILETIME ft;
+      SYSTEMTIME st;
+      BOOL f;
+
+      GetSystemTime(&st);              // Gets the current system time
+      SystemTimeToFileTime(&st, &ft);  // Converts the current system time to file time format
+      f = SetFileTime(hFile,           // Sets last-write time of the file 
+         (LPFILETIME)nullptr,          // to the converted current system time 
+         (LPFILETIME)nullptr,
+         &ft);
+
+      return f;
    }
 
    ///<summary> commit buffer to disk and release memory.</summary>
@@ -280,12 +297,22 @@ public:
    {
       if (hFileMap != nullptr) 
       {
+         if (!UnmapViewOfFile(buffer_ptr))
+         {
+            throw error_context("UnmapViewOfFile failed");
+         }
+
          CloseHandle(hFileMap);
          hFileMap = nullptr;
       }
 
       if (hFile != INVALID_HANDLE_VALUE) 
       {
+         if (!SetFileToCurrentTime(hFile))
+         {
+            throw error_context("SetFileToCurrentTime failed");
+         }
+         
          CloseHandle(hFile);
          hFile = INVALID_HANDLE_VALUE;
       }
