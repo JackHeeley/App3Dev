@@ -24,11 +24,17 @@ using namespace utf8;
 
 namespace UnitTestSampleProgram
 {
-   CREATE_LOGGER(logger_factory::type::file_logger, "MyUnitTestSampleProgram.log", LogFilter::Full);
+   static CREATE_LOGGER(logger_factory::type::file_logger, "UnitTest_SampleProgram.log", LogFilter::Full);
 
    TEST_CLASS(UnitTestRipper)
    {
    public:
+
+#pragma warning(disable: 26477)
+      BEGIN_TEST_METHOD_ATTRIBUTE(TestFunctor)
+         TEST_IGNORE()        // TestFunctor takes too long to run every time...
+      END_TEST_METHOD_ATTRIBUTE()
+#pragma warning(default: 26477)
 
       TEST_METHOD(TestFunctor)
       {

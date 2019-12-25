@@ -27,7 +27,7 @@ extern file_logger Logger;
 
 ///<summary> lock tray door at construction time.</summary>
 ///<param name='cdr'> a reference to the cdrom to lock.</param>
-TrayDoorLock::TrayDoorLock(CdromDevice& cdr) : m_cdr(cdr)
+TrayDoorLock::TrayDoorLock(CdromDevice& cdr) noexcept : m_cdr(cdr)
 {
    m_cdr.lock();
 }
@@ -35,20 +35,6 @@ TrayDoorLock::TrayDoorLock(CdromDevice& cdr) : m_cdr(cdr)
 ///<summary>unlock tray door in all return paths</summary>
 TrayDoorLock::~TrayDoorLock() noexcept
 {
-   try
-   {
-      LOG_INFO("~TrayDoorLock invoked");
-      m_cdr.unlock();
-   }
-   catch (...)
-   {
-      try
-      {
-         LOG_ERROR("Exception in ~TrayDoorLock.");
-      }
-      catch (...)
-      {
-         // dismiss is still least bad option here
-      }
-   }
+   LOG_INFO("~TrayDoorLock invoked");
+   m_cdr.unlock();
 }

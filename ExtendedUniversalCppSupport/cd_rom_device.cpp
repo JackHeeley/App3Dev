@@ -82,14 +82,7 @@ public:
    {
       if (locked)
       {
-         try
-         {
-            unlock();
-         }
-         catch (std::exception&) // Dtor mustn't throw
-         {
-            LOG_WARNING("~impl failed to unlock");
-         }
+         unlock();
       }
    }
  
@@ -199,17 +192,29 @@ public:
    }
 
    ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>
-   ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   void impl::lock(void)
+   void impl::lock(void) noexcept
    {
-      locked = lock_control(true);
+      try
+      {
+         locked = lock_control(true);
+      }
+      catch (const error::context & e)
+      {
+         LOG_WARNING(e.full_what());
+      }
    }
 
-   ///<summary> allows media removal. If the toaster is already in the unlocked state, then this method does nothing.</summary>
-   ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   void impl::unlock(void)
+   ///<summary> allows media removal. If the cdrom is already in the unlocked state, then this method does nothing.</summary>
+   void impl::unlock(void) noexcept
    {
-      locked = lock_control(false);
+      try
+      {
+         locked = lock_control(false);
+      }
+      catch (const error::context& e)
+      {
+         LOG_WARNING(e.full_what());
+      }
    }
 
    ///<summary>query the locked state of the cdrom.</summary>
@@ -340,13 +345,13 @@ void CdromDevice::get_image(gsl::span<unsigned char>span) const
 }
 
 ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>
-void CdromDevice::lock(void)
+void CdromDevice::lock(void) noexcept
 {
    pimpl->lock();
 }
 
 ///<summary> allows media removal. If the toaster is already in the unlocked state, then this method does nothing.</summary>
-void CdromDevice::unlock(void)
+void CdromDevice::unlock(void) noexcept
 {
    pimpl->unlock();
 }

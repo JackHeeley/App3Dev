@@ -1,5 +1,5 @@
 //
-// use_logger.hpp : exposes logging support to client code.
+// logger.hpp : exposes logging support to client code.
 //
 // Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
@@ -43,7 +43,7 @@
 ///<param name='logFilePath'>if file logger this parameter is the path to the log file (it will be created if necessary).</param>
 ///<param name='logFilter'>a bit mapped filter used to select which types of log events should be recorded in this log.</param>
 ///<remarks>Don't use directly, favour using macros instead. E.g. CREATE_LOG(logger_factory::type::file_logger, "ripper.log", LogFilter::Full)</remarks>
-auto create_logger = [](logger_factory::type logType = logger_factory::type::default_logger, std::string logFilePath = std::string(), LogFilter logFilter = LogFilter::None)
+auto create_logger = [](logger_factory::type logType = logger_factory::type::default_logger, const std::string logFilePath = std::string(), LogFilter logFilter = LogFilter::None)
 {
    return logger_factory::getInstance(logType, logFilePath, logFilter);
 };
@@ -78,6 +78,29 @@ auto test_log_level = [](LogLevel level)
 auto toggle_log_level = [](LogLevel level)
 {
    logger_factory::getInstance()->toggle_log_level(level);
+};
+
+///<summary>lambda to fetch log content</summary>
+///<remarks>Don't use directly, favour using macros instead. I.e. LOG_FILE_CONTENTS()</remarks>
+auto read_all = []()
+{
+   std::string log_content;
+   try
+   {
+      log_content = logger_factory::getInstance()->read_all();
+   }
+   catch (...)
+   {
+      std::cerr << "reading log file failed." << std::endl;
+   }
+   return log_content;
+};
+
+///<summary>lambda to strip away filePath part from filePathName</summary>
+///<remarks>Don't use directly, favour using macros instead. E.g. LOG_INFO()</remarks>
+auto split_file_name = [](std::string pathName)
+{
+   return (std::string(pathName).substr(std::string(pathName).find_last_of("/\\") + 1));
 };
 
 #pragma warning(default: 26486)
@@ -135,39 +158,42 @@ __pragma(warning(pop))
 
 //ACTIVE LOGGING
 
-#define CREATE_LOGGER(logType, logFilePath, logFilter)                              \
-__pragma(warning(push))                                                             \
-__pragma(warning(disable:26426))                                                    \
+#define CREATE_LOGGER(logType, logFilePath, logFilter)                                       \
+__pragma(warning(push))                                                                      \
+__pragma(warning(disable:26426))                                                             \
 std::shared_ptr<abstract_logger>the_logger = create_logger(logType, logFilePath, logFilter)  \
 __pragma(warning(pop))
 
-#define USES(parm)
-
-#define LOG_NONE(text) log_it(LogLevel::None, LOG_TEXT(text))
-#define LOG_TRACE(text) log_it(LogLevel::Trace, LOG_TEXT(text))
-#define LOG_DEBUG(text) log_it(LogLevel::Debug, LOG_TEXT(text))
-#define LOG_INFO(text) log_it(LogLevel::Info, LOG_TEXT(text))
-#define LOG_WARNING(text) log_it(LogLevel::Warning, LOG_TEXT(text))
-#define LOG_ERROR(text) log_it(LogLevel::Error, LOG_TEXT(text))
+#define LOG_NONE(text) try { log_it(LogLevel::None, LOG_TEXT(text)); } catch (...) { }
+#define LOG_TRACE(text) try { log_it(LogLevel::Trace, LOG_TEXT(text)); } catch (...) { }
+#define LOG_DEBUG(text) try { log_it(LogLevel::Debug, LOG_TEXT(text)); } catch (...) { }
+#define LOG_INFO(text) try { log_it(LogLevel::Info, LOG_TEXT(text)); } catch (...) { }
+#define LOG_WARNING(text) try { log_it(LogLevel::Warning, LOG_TEXT(text)); } catch (...) { }
+#define LOG_ERROR(text) try { log_it(LogLevel::Error, LOG_TEXT(text)); } catch (...) { }
 
 #define TEST_LOG_LEVEL(level) test_log_level(level)
 #define TOGGLE_LOG_LEVEL(level) toggle_log_level(level)
+#define LOG_FILE_CONTENTS read_all()
 /*/
 
 // INACTIVE LOGGING (log lines are passive code comments)
 
-#define USES(parm) parm
+#ifdef UNREFERENCED_PARAMETER
+#undef UNREFERENCED_PARAMETER
+#endif
+#define UNREFERENCED_PARAMETER(p) try { (void)(p); } catch (...) { }
 
 #define CREATE_LOGGER(logType, logFilePath, logFilter)
 
-#define LOG_NONE(text)
-#define LOG_TRACE(text)
-#define LOG_DEBUG(text)
-#define LOG_INFO(text)
-#define LOG_WARNING(text)
-#define LOG_ERROR(text)
+#define LOG_NONE(text) UNREFERENCED_PARAMETER(text)
+#define LOG_TRACE(text) UNREFERENCED_PARAMETER(text)
+#define LOG_DEBUG(text) UNREFERENCED_PARAMETER(text)
+#define LOG_INFO(text) UNREFERENCED_PARAMETER(text)
+#define LOG_WARNING(text) UNREFERENCED_PARAMETER(text)
+#define LOG_ERROR(text) UNREFERENCED_PARAMETER(text)
 
 #define TEST_LOG_LEVEL(level) (false)
 #define TOGGLE_LOG_LEVEL(level) {}
+#define LOG_FILE_CONTENTS std::string()
 
 //*/

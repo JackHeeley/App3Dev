@@ -43,3 +43,15 @@
 #include <thread>
 
 #include "utf8_assert.hpp"
+
+// TODO: We can't control the  test sequence, so there is a race to name the (single) logfile (as used by default logger macros).
+// The Current logger_factory implementation doesn't even indicate who won, so unit tests can fail simply because they hard code 
+// a wrong log_file_name assumption. The *temporary* fix is just to use/replicate the same log_file_name in ALL unit tests (over 
+// ALL namespaces). But this can be improved!
+
+namespace UnitTestSampleProgram
+{
+#pragma warning(disable: 26426)
+   const std::string log_file_name("UnitTest.log");
+#pragma warning(default: 26426)
+};

@@ -19,6 +19,7 @@
 #include "stdafx.h"
 
 #include <fstream>
+#include <mutex>
 
 #define FILE_LOGGER_WARNINGS_SUPRESSED 26447 26486
 #pragma warning (disable: FILE_LOGGER_WARNINGS_SUPRESSED)
@@ -37,19 +38,22 @@ private:
    LogFilter filter;
    std::string fileName;
    std::ofstream stream;
+   std::mutex the_mutex;
 
 public:
    impl() noexcept :
       fileName("LogFile.log"),
       filter(LogFilter::None),
-      stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
+      stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app)),
+      the_mutex()
    {
    };
 
    impl(const std::string fileName, LogFilter filter) noexcept :
       fileName(fileName),
       filter(filter),
-      stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
+      stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app)),
+      the_mutex()
    {
    };
 
@@ -57,7 +61,8 @@ public:
    impl(const impl& other) noexcept :
       fileName(other.fileName),
       filter(other.filter),
-      stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
+      stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app)),
+      the_mutex()
    {
    }
 
@@ -65,7 +70,8 @@ public:
    impl(impl&& other) noexcept :
       fileName(other.fileName),
       filter(other.filter),
-      stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app))
+      stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app)),
+      the_mutex()
    {
    }
 
@@ -79,7 +85,6 @@ public:
       }
       catch (const std::exception& e)
       {
-         USES(e);
          LOG_WARNING(e.what());
       }
    }
@@ -137,6 +142,7 @@ public:
       if (!(static_cast<int>(filter) /*bitwise*/& static_cast<int>(level)))
          return;
 
+      std::lock_guard<std::mutex> lock(the_mutex);
       stream << log_level(level) << ": " << utc_timestamp() << " " << line;
    }
 
@@ -145,6 +151,7 @@ public:
       if (!(static_cast<int>(filter) /*bitwise*/& static_cast<int>(level)))
          return;
 
+      std::lock_guard<std::mutex> lock(the_mutex);
       stream << log_level(level) << ": " << utc_timestamp() << " " << line << std::endl;
    }
 

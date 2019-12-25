@@ -36,9 +36,8 @@
 
 ///<summary> CdromDevice offers a limited feature set specific to CD ROM Devices</summary>
 ///<remarks> raw device access (without CDFS) allows us to build a one time rip feature 
-/// based on low level serial reads. We don't consider seek and read position which 
-/// likely means limitations and exceptions if extending the current scope. We don't 
-/// attempt write support, and this would pose some big challenges.</remarks> 
+/// based on low level serial reads. We don't attempt write support, and this would pose
+/// some big challenges.</remarks> 
 class CdromDevice
 {
 public:
@@ -54,16 +53,19 @@ public:
    EXTENDEDUNIVERSALCPPSUPPORT_API const uint64_t get_image_size(void) const;
 
    ///<summary>get image of media into span.</summary>
-   ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
+   ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).
+   /// The progress indicator is maintained (as a percentage) during this operation.</remarks>
    ///<param name ='span'> a gsl::span representing a memory location to receive the image.</param>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
    EXTENDEDUNIVERSALCPPSUPPORT_API void CdromDevice::get_image(gsl::span<unsigned char> span) const;
 
    ///<summary> prevents media removal.</summary>
-   EXTENDEDUNIVERSALCPPSUPPORT_API void lock(void);
+   ///<remarks> by locking the door of the optical drive. This feature is not supported by all optical drives.
+   /// Use get_locked to query the lock state.</remarks>
+   EXTENDEDUNIVERSALCPPSUPPORT_API void lock(void) noexcept;
 
    ///<summary> allows media removal after lock.</summary>
-   EXTENDEDUNIVERSALCPPSUPPORT_API void unlock(void);
+   EXTENDEDUNIVERSALCPPSUPPORT_API void unlock(void) noexcept;
 
    ///<summary>query the locked state of the cdrom.</summary>
    ///<returns>true if the cdrom is locked.</returns>

@@ -18,7 +18,7 @@ private:
 public:
    ///<summary> lock tray door at construction time.</summary>
    ///<param name='cdr'> a reference to the cdrom to lock.</param>
-   TrayDoorLock(CdromDevice& cdr);
+   TrayDoorLock(CdromDevice& cdr) noexcept;
 
    ///<summary> deleted copy constructor.</summary>
    ///<remarks> avoids premature unlocks via inactive object.</remarks>

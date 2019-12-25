@@ -57,3 +57,4 @@ void Ripper::operator()()
    TrayDoorLock lock(m_cdr);
    m_cdr.get_image(m_mmf.get_span());
 }
+

@@ -155,6 +155,10 @@ DONE:
 62. Reworked BasicUniversalCppSupport (header cleanup).
 63. Reviewed ExtendedUniversalCppSupport SampleProgram. Made minor changes (comments, text strings etc.).
 64. Reviewed memory_mapped_file. Now has explicit unmapview, and sets last modified time on file.
+65. Improved logging (revised 61) to avoid spurious warnings (e.g. unreferenced parameters when logging is disabled at compile time).
+66. Changed cdrom lock/unlock feature not to throw (noexcept). Now any problems are logged and ignored.
+67. Addressed unit tests (logger tests broken)
+68. Fixed a residual thread issue in the file_logger
 
 TODO:
 
@@ -162,5 +166,4 @@ TODO:
     - how to disable logging for specific facilities/dlls under program control
     - how to allow threads and facilities/dll's to manage log filters independently 
 
-
-3. Stop assuming that the need to disable warnings around gsl.h & spimpl.h is necessarily caused by issues in the headers themselves. Review own code (it could be the trigger).
+2. Stop assuming that the need to disable warnings around gsl.h & spimpl.h is necessarily caused by issues in the headers themselves. Review own code (it could be the trigger).

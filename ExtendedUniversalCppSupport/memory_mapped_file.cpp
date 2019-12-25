@@ -146,7 +146,6 @@ public:
          }
          catch (const std::exception& e)
          {
-            USES(e);
             LOG_WARNING(e.what());
          }
 
@@ -170,7 +169,6 @@ public:
       }
       catch (const std::exception& e)
       {
-         USES(e);
          LOG_WARNING(e.what());
       }
    }
