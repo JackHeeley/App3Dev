@@ -115,13 +115,13 @@ auto split_file_name = [](std::string pathName)
 
 #define DECORATED_LOG_TEXT(y)                            \
 __pragma(warning(push))                                  \
-__pragma(warning(disable:26447))                         \
+__pragma(warning(disable:26444 26447))                   \
 std::string(__FILE__ " : " S2(__LINE__) " ").append(y)   \
 __pragma(warning(pop))
 
 #define PLAIN_LOG_TEXT(y)                                \
 __pragma(warning(push))                                  \
-__pragma(warning(disable:26447))                         \
+__pragma(warning(disable:26444 26447))                   \
 y                                                        \
 __pragma(warning(pop))
 

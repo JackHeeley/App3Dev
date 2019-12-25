@@ -159,6 +159,7 @@ DONE:
 66. Changed cdrom lock/unlock feature not to throw (noexcept). Now any problems are logged and ignored.
 67. Addressed unit tests (logger tests broken)
 68. Fixed a residual thread issue in the file_logger
+69. Fixed logger #define glitch that was raising a compiler warning with some parameters
 
 TODO:
 
