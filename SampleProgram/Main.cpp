@@ -165,6 +165,7 @@ int main(int argc, char* argv[])
          LOG_INFO("Launch the progress bar in a separate thread.");
          thread_RAII separate_thread(std::thread(show_progress), thread_RAII::DtorAction::detach);
 
+         ///<summary>Ripper used to acquire the data</summary>
          Ripper rip(deviceName);
 
          LOG_INFO("Do the ripping from the main thread.");
