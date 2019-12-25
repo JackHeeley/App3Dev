@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UnitTestExtendedUniversalCppSupport.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -186,6 +187,7 @@
     <ClCompile Include="UnitTestCdromDevice.cpp" />
     <ClCompile Include="UnitTestDevice.cpp" />
     <ClCompile Include="UnitTestDeviceDiscoverer.cpp" />
+    <ClCompile Include="UnitTestDeviceTypeDirectory.cpp" />
     <ClCompile Include="UnitTestMemoryMappedFile.cpp" />
   </ItemGroup>
   <ItemGroup>

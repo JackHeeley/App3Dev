@@ -193,6 +193,7 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UnitTestSampleProgram.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTestRipper.cpp" />

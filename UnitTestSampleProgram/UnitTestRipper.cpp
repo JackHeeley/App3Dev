@@ -24,11 +24,56 @@ using namespace utf8;
 
 namespace UnitTestSampleProgram
 {
-   static CREATE_LOGGER(logger_factory::type::file_logger, "UnitTest_SampleProgram.log", LogFilter::Full);
 
    TEST_CLASS(UnitTestRipper)
    {
    public:
+
+#pragma warning(disable: 26440 26477)
+      TEST_CLASS_INITIALIZE(InitializeUnitTestRipper) noexcept
+#pragma warning(default: 26440 26477)
+      {
+         try
+         {
+            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
+         }
+         catch (...)
+         {
+            LOG_ERROR("Couldn't create logger.");     // should fallback and emit on std::cerr
+         }
+      }
+
+#pragma warning(disable: 26477)
+      BEGIN_TEST_METHOD_ATTRIBUTE(TestRipperMove)
+         TEST_IGNORE()        // TestFunctor takes too long to run every time...
+      END_TEST_METHOD_ATTRIBUTE()
+#pragma warning(default: 26477)
+      TEST_METHOD(TestRipperMove)
+      {
+         try
+         {
+            // check test preconditions (at least one physical cdrom needed)
+            DeviceDiscoverer cdromDevices(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
+            utf8::Assert::IsFalse(cdromDevices.device_path_map.get().empty(), "no system cdrom devices were discovered");
+            
+            //prepare test 
+            auto deviceName = cdromDevices.device_path_map.get()[0];
+
+            //perform operation under test
+            Ripper rip = std::move(Ripper(deviceName));
+
+            // check results (use the moved ripper)
+            std::atomic<int> progress;
+            const static std::string fileName("cdrom_image.iso");
+            rip(fileName, progress);
+
+            // Test succeeds if it doesn't throw
+         }
+         catch (const std::exception & e)
+         {
+            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+         }
+      }
 
 #pragma warning(disable: 26477)
       BEGIN_TEST_METHOD_ATTRIBUTE(TestFunctor)
@@ -46,11 +91,11 @@ namespace UnitTestSampleProgram
 
             //prepare test 
             auto deviceName = cdromDevices.device_path_map.get()[0];
-            const static std::string fileName("cdrom_image.iso");
+            Ripper rip(deviceName);
             std::atomic<int> progress;
+            const static std::string fileName("cdrom_image.iso");
 
             //perform operation under test
-            Ripper rip(deviceName);
             rip(fileName, progress);
          }
          catch (const std::exception& e)

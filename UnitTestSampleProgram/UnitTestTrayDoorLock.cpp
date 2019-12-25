@@ -28,24 +28,44 @@ namespace UnitTestSampleProgram
    {
    public:
 
-      TEST_METHOD(TestTrayDoorLock)
+#pragma warning(disable: 26440 26477)
+      TEST_CLASS_INITIALIZE(InitializeUnitTestTrayDoorLock) noexcept
+#pragma warning(default: 26440 26477)
       {
          try
          {
-            // check test preconditions (at least one physical cdrom needed)
-            DeviceDiscoverer cdrom_interface(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
-            utf8::Assert::IsFalse(cdrom_interface.device_path_map.get().empty(), "no system cdrom devices were discovered");
+            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
+         }
+         catch (...)
+         {
+            LOG_ERROR("Couldn't create logger.");     // should fallback and emit on std::cerr
+         }
+      }
 
-            //prepare test 
-            CdromDevice m_cdr(cdrom_interface.device_path_map.get()[0]);
+      TEST_METHOD(TestTrayDoorLock)
+      {
+         // check test preconditions (at least one physical cdrom needed)
+         DeviceDiscoverer cdrom_interface(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
+         utf8::Assert::IsFalse(cdrom_interface.device_path_map.get().empty(), "no system cdrom devices were discovered");
 
+         //prepare test 
+         CdromDevice m_cdr(cdrom_interface.device_path_map.get()[0]);
+
+         try
+         {
             //perform operation under test
             TrayDoorLock lock(m_cdr);
+            
+            //check results phase I ...
+            utf8::Assert::IsTrue(m_cdr.get_locked(), "drive door should still be locked locked"); // something went wrong
          }
-         catch (const std::exception& e)
+         catch (const std::exception & e)
          {
             utf8::Assert::IsTrue(false, e.what()); // something went wrong
          }
+
+         //check results phase II ...
+         utf8::Assert::IsTrue(!m_cdr.get_locked(), "drive door should now be unlocked"); // something went wrong
       }
    };
 }

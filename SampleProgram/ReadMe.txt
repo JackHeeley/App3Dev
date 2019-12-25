@@ -157,10 +157,13 @@ DONE:
 64. Reviewed memory_mapped_file. Now has explicit unmapview, and sets last modified time on file.
 65. Improved logging (revised 61) to avoid spurious warnings (e.g. unreferenced parameters when logging is disabled at compile time).
 66. Changed cdrom lock/unlock feature not to throw (noexcept). Now any problems are logged and ignored.
-67. Addressed unit tests (logger tests broken)
-68. Fixed a residual thread issue in the file_logger
-69. Fixed logger #define glitch that was raising a compiler warning with some parameters
-70. Rationalized the progress parameter passing (reworked Ripper)
+67. Addressed unit tests (logger tests broken).
+68. Fixed a residual thread issue in the file_logger.
+69. Fixed logger #define glitch that was raising a compiler warning with some parameters.
+70. Rationalized the progress parameter passing (reworked Ripper).
+71. Extending tests, and attending to unit test issues. Made one correction to dll exports in devicetypedirectory.hpp a static member
+    was invisible to unit test dlls. Intent is to confirm basic logging initialization supports use of logging in unit tests (reliably)
+    so that we have a start point for test-driven logging improvements.
 
 TODO:
 
@@ -169,3 +172,5 @@ TODO:
     - how to allow threads and facilities/dll's to manage log filters independently 
 
 2. Stop assuming that the need to disable warnings around gsl.h & spimpl.h is necessarily caused by issues in the headers themselves. Review own code (it could be the trigger).
+
+3. Microsoft recommend Any_CPU as build for UnitTests (makes sense, and having less configurations would reduce build time quite a lot)

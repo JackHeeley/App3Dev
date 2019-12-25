@@ -35,6 +35,21 @@ namespace UnitTestBasicUniversalCppSupport
    {
 
    public:
+
+#pragma warning(disable: 26440 26477)
+      TEST_CLASS_INITIALIZE(InitializeUnitTestFileLogger) noexcept
+#pragma warning(default: 26440 26477)
+      {
+         try
+         {
+            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
+         }
+         catch (...)
+         {
+            LOG_ERROR("Couldn't create logger.");     // should fallback and emit on std::cerr
+         }
+      }
+
       TEST_METHOD(TestErrorContext)
       {
          // Building 'line' (instead of hard coding) stops this test from breaking every time the source line numbers change
@@ -61,10 +76,9 @@ namespace UnitTestBasicUniversalCppSupport
          try
          {
             // prepare for test...
-            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
+            std::string log_text = "this is a log entry "; log_text.append(utc_timestamp()); // unique every run
 
             // perform the operation under test...
-            std::string log_text = "this is a log entry "; log_text.append(utc_timestamp()); // unique every run
             LOG_TRACE(log_text);
 
             // test succeeds if log_text with this unique timestamp attached, is found in the log...

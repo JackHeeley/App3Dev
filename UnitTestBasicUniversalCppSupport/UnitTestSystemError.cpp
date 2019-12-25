@@ -27,6 +27,20 @@ namespace UnitTestBasicUniversalCppSupport
    {
    public:
 
+#pragma warning(disable: 26440 26477)
+      TEST_CLASS_INITIALIZE(InitializeUnitTestSystemError) noexcept
+#pragma warning(default: 26440 26477)
+      {
+         try
+         {
+            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
+         }
+         catch (...)
+         {
+            LOG_ERROR("Couldn't create logger.");     // should fallback and emit on std::cerr
+         }
+      }
+
       TEST_METHOD(TestSystemErrorDefaultConstructor)
       {
          try

@@ -32,12 +32,12 @@
 #include <spimpl.hpp>
 
 ///<summary> wraps the system device interface.</summary>
-class DeviceTypeDirectory {
+class EXTENDEDUNIVERSALCPPSUPPORT_API DeviceTypeDirectory {
 
 public:
    ///<summary> an enumeration providing platform agnostic names for all the device types recognized by this implementation.</summary>
    ///<remarks> this is just an arbitrary sample, chosen from a wider set available to windows platforms (winioctl.h)</remarks>
-   enum class EXTENDEDUNIVERSALCPPSUPPORT_API DeviceType : int
+   enum class DeviceType : int
    {
       DISK_DEVICES = 0x00,
       CDROM_DEVICES = 0x01,
