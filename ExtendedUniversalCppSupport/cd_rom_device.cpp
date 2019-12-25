@@ -53,15 +53,11 @@ private:
    ///<summary> physical locked state of drive door</summary>
    bool locked;
 
-   ///<summary> reference to the external location where get_image() %progress is maintained</summary>
-   std::atomic<int>& m_progress;
-
 public:
    ///<summary> construct a cdrom device.</summary> 
    ///<param name='device_path'>the path selecting the physical device instance</param>
-   impl(std::string device_path, std::atomic<int>& a_progress) :
-      Device(device_path),
-      m_progress(a_progress)
+   impl(std::string device_path) :
+      Device(device_path)
    {
       locked = false;
    };
@@ -113,23 +109,23 @@ public:
    ///<summary>get image of media into span, while maintaining a progress indication as we go.</summary>
    ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
    ///<param name ='span'> a gsl::span repesenting a memory location to receive the image.</param>
+   ///<param name ='a_progress'> reference to the external location where get_image() %progress is maintained</param>
    ///<exception cref='std::exception'>if the operation could not be completed with m_progress==100.</exception>
-   void impl::get_image(gsl::span<unsigned char> span) const
+   void impl::get_image(gsl::span<unsigned char> span, std::atomic<int>& a_progress) const
    {
-
       // initialize the low and high water marks (used in read, and resource limited exception handling)
       LPBYTE lpabyBufferMemoryBase = span.data();
       LPBYTE lpabyBufferMemoryAddress = lpabyBufferMemoryBase;
 
       try
       {
-         m_progress = 0;
+         a_progress = 0;
 
          // force multiple smaller reads (where a granular progress tracker can be maintained)
          simulate_resource_limitation();
 
          // reading full image in one go is most probable scenario (at least for CD's)
-         read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, 1, span.size_bytes());
+         read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, 1, span.size_bytes(), a_progress);
       }
       catch (std::exception&)
       {
@@ -154,7 +150,7 @@ public:
             {
                // read remainder of the image in cylinder sized chunks 
                // (not necessarily physical cylinders but guaranteed to be an exact multiple of physical block size)
-               read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, diskGeometry.Cylinders.LowPart, cbyCylinderSize);
+               read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, diskGeometry.Cylinders.LowPart, cbyCylinderSize, a_progress);
             }
             catch (std::exception&)
             {
@@ -167,7 +163,7 @@ public:
                   {
                      // read remainder of the image in track sized sized chunks 
                      // (not necessarily physical tracks but guaranteed to be an exact multiple of physical block size)
-                     read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, cTracksStillToRead, cbyTrackSize);
+                     read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, cTracksStillToRead, cbyTrackSize, a_progress);
                   }
                   catch (std::exception&)
                   {
@@ -177,7 +173,7 @@ public:
                      {
                         // read remainder of the image in sector sized sized chunks 
                         // (not necessarily physical sectors but guaranteed to be an exact multiple of physical block size)
-                        read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, cSectorsStillToRead, diskGeometry.BytesPerSector);
+                        read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, cSectorsStillToRead, diskGeometry.BytesPerSector, a_progress);
                      }
                      else throw;
                   }
@@ -188,7 +184,7 @@ public:
          else throw;
       }
 
-      Ensures(m_progress == 100);   // if not, program will deadlock
+      Ensures(a_progress == 100);   // if not, program will deadlock
    }
 
    ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>
@@ -293,8 +289,9 @@ private:
    ///<param name='lpabyBufferMemoryAddress'>the address where the data will be stored after reading</param>
    ///<param name='cBlocks'>the number of blocks to read</param>
    ///<param name='cbyBlockSize'>the size in bytes of the blocks to read</param>
+   ///<param name ='a_progress'> reference to the external location where get_image() %progress is maintained</param>
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   void impl::read_blocks(LPBYTE& lpabyBufferMemoryBase, LPBYTE& lpabyBufferMemoryAddress, uint64_t cBlocks, uint64_t cbyBlockSize) const
+   void impl::read_blocks(LPBYTE& lpabyBufferMemoryBase, LPBYTE& lpabyBufferMemoryAddress, uint64_t cBlocks, uint64_t cbyBlockSize, std::atomic<int>& a_progress) const
    {
       for (uint64_t nBlock = 0; nBlock < cBlocks; nBlock++)
       {
@@ -305,9 +302,9 @@ private:
          lpabyBufferMemoryAddress += cbyBlockSize;
 #pragma warning (default:26486 26487)
 
-         m_progress = gsl::narrow<int>((100 * nBlock) / cBlocks);
+         a_progress = gsl::narrow<int>((100 * nBlock) / cBlocks);
       }
-      m_progress = 100; // handle possible rounding error
+      a_progress = 100; // handle possible rounding error
    }
 };
 
@@ -320,10 +317,9 @@ private:
 
 ///<summary> constructs a user mode Device that can be used to access a particular system cdrom instance.</summary>
 ///<param name='device_path'> the system name of the cdrom device to use.</param>
-///<param name='a_progress'> reference to percentage progress used in get_image.</param>
 ///<exception cref='std::exception'>if construction fails.</exception>
-CdromDevice::CdromDevice(std::string device_path, std::atomic<int>& a_progress) :
-   pimpl(spimpl::make_unique_impl<impl>(device_path, a_progress))
+CdromDevice::CdromDevice(std::string device_path) :
+   pimpl(spimpl::make_unique_impl<impl>(device_path))
 {
 }
 
@@ -338,10 +334,11 @@ const uint64_t CdromDevice::get_image_size(void) const
 ///<summary>get image of media into span.</summary>
 ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
 ///<param name ='span'> a gsl::span representing a memory location to receive the image.</param>
+///<param name='a_progress'> reference to percentage progress used in get_image.</param>
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-void CdromDevice::get_image(gsl::span<unsigned char>span) const
+void CdromDevice::get_image(gsl::span<unsigned char>span, std::atomic<int>& a_progress) const
 {
-   pimpl->get_image(span);
+   pimpl->get_image(span, a_progress);
 }
 
 ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>

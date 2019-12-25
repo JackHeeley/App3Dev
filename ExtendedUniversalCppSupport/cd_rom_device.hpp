@@ -43,9 +43,8 @@ class CdromDevice
 public:
    ///<summary> constructs a user mode Device that can be used to access a particular system cdrom instance.</summary>
    ///<param name='device_path'> the system name of the cdrom device to use.</param>
-   ///<param name='a_progress'> reference to percentage progress used in get_image.</param>
    ///<exception cref='std::exception'>if construction fails.</exception>
-   EXTENDEDUNIVERSALCPPSUPPORT_API CdromDevice::CdromDevice(std::string device_path, std::atomic<int>& a_progress);
+   EXTENDEDUNIVERSALCPPSUPPORT_API CdromDevice::CdromDevice(std::string device_path);
 
    ///<summary> get size of media image.</summary>
    ///<returns> size in bytes of image data.</returns>
@@ -56,8 +55,9 @@ public:
    ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).
    /// The progress indicator is maintained (as a percentage) during this operation.</remarks>
    ///<param name ='span'> a gsl::span representing a memory location to receive the image.</param>
+   ///<param name='a_progress'> reference to percentage progress used in get_image.</param>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   EXTENDEDUNIVERSALCPPSUPPORT_API void CdromDevice::get_image(gsl::span<unsigned char> span) const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API void CdromDevice::get_image(gsl::span<unsigned char> span, std::atomic<int>& a_progress) const;
 
    ///<summary> prevents media removal.</summary>
    ///<remarks> by locking the door of the optical drive. This feature is not supported by all optical drives.
@@ -84,10 +84,9 @@ public:
    ///<returns>true if a compatible compact disk is recognized as being present in the drive, otherwise false</returns> 
    static EXTENDEDUNIVERSALCPPSUPPORT_API bool check_for_media(std::string device_path)
    {
-      std::atomic<int> progress;
       try
       {
-         if (CdromDevice(device_path, progress).get_image_size()) return true;
+         if (CdromDevice(device_path).get_image_size()) return true;
       }
       catch (...) {}
 

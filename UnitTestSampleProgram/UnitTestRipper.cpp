@@ -50,7 +50,8 @@ namespace UnitTestSampleProgram
             std::atomic<int> progress;
 
             //perform operation under test
-            Ripper(deviceName, fileName, progress)();
+            Ripper rip(deviceName);
+            rip(fileName, progress);
          }
          catch (const std::exception& e)
          {

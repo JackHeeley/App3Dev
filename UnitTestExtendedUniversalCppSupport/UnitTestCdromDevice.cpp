@@ -38,10 +38,8 @@ namespace UnitTestExtendedUniversalCppSupport
             DeviceDiscoverer cdrom_interface(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
             utf8::Assert::IsFalse(cdrom_interface.device_path_map.get()[0] == "", "no system cdrom devices were discovered");
 
-            std::atomic<int> progress;
-
             // perform the operation under test (construct a device for the system's first enumerated cdrom)...
-            CdromDevice cdrom(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0], progress);
+            CdromDevice cdrom(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]);
 
             // test succeeds if construction doesn't throw
             cdrom.unlock();
@@ -85,9 +83,8 @@ namespace UnitTestExtendedUniversalCppSupport
          // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
          try
          {
-            std::atomic<int> progress;
             std::string device_path = DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0];
-            CdromDevice cdrom0(device_path, progress);
+            CdromDevice cdrom0(device_path);
 
             int retries = 10;
 
@@ -158,10 +155,8 @@ namespace UnitTestExtendedUniversalCppSupport
 
          try
          {
-            std::atomic<int> progress;
-
             // prepare for test (construct a device for the system's first enumerated cdrom)...
-            CdromDevice cdrom(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0], progress);
+            CdromDevice cdrom(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]);
                        
             int retries = 10;                          // cdrom drive may not be in ready state
             while (--retries > 0)
@@ -242,9 +237,7 @@ namespace UnitTestExtendedUniversalCppSupport
          try
          {
             // prepare for test (construct a device for the system's first enumerated cdrom)...
-            std::atomic<int> progress;
-
-            CdromDevice cdrom(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0], progress);
+            CdromDevice cdrom(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]);
 
             // ...create buffer. On x32 resize will throw std::exception("vector<T> too long) if CDROM/DVD image is too large for a byte vector
             std::vector<unsigned char> buffer;
@@ -259,7 +252,8 @@ namespace UnitTestExtendedUniversalCppSupport
                try
                {
                   // perform the operation under test (read full device content)...
-                  cdrom.get_image(buffer);    // doesn't require an explicit gsl::as_span<unsigned char>(buffer)
+                  std::atomic<int> progress;
+                  cdrom.get_image(buffer, progress);    // doesn't require an explicit gsl::as_span<unsigned char>(buffer)
                   test_done = true;
                }
                catch (const std::exception& e)

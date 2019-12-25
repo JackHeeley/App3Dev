@@ -47,7 +47,7 @@ void signalHandler(int signum)
    try
    {
       LOG_INFO("signalHandler invoked!");
-      CdromDevice(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0], std::atomic<int>(0)).unlock();
+      CdromDevice(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]).unlock();
    }
    catch (...)
    {
@@ -165,8 +165,10 @@ int main(int argc, char* argv[])
          LOG_INFO("Launch the progress bar in a separate thread.");
          thread_RAII separate_thread(std::thread(show_progress), thread_RAII::DtorAction::detach);
 
+         Ripper rip(deviceName);
+
          LOG_INFO("Do the ripping from the main thread.");
-         Ripper(deviceName, fileName, progress)();
+         rip(fileName, progress);
 
          Expects(progress == 100);   // if not, program would deadlock at join
 
