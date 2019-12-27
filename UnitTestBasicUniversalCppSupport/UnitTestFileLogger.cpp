@@ -256,26 +256,27 @@ namespace UnitTestBasicUniversalCppSupport
          // check preconditions & prepare
          std::string file = (__SHORT_FILE__);
 
-         utf8::Assert::AreEqual("UnitTestFileLogger.cpp", file.c_str(), "Unexpected filename.");
-         std::string line("");          // resilience to test source line numbers changing
+         utf8::Assert::AreEqual("UnitTestFileLogger.cpp", file.c_str(), "Unexpected filename."); // also confirms __SHORT_FILE__
+         std::string expected_throw_line_number("");   // built (not hard coded) to provide resilience (source line numbers change frequently)
                  
          try
          {
             // perform the operation under test...
-            LOG_INFO("This is the real test");                 // check the log content
-            LOG_INFO("more this is the real test");            // check the log content
-            LOG_INFO("more more this is the real test");       // check the log content
-            LOG_INFO("more more more this is the real test");  // check the log content
+            LOG_TRACE("This is a LOG_TRACE test");       // check the log content
+            LOG_DEBUG("This is a LOG_DEBUG test");       // check the log content
+            LOG_INFO("This is a LOG_INFO test");         // check the log content
+            LOG_WARNING("This is a LOG_WARNING test");   // check the log content
+            LOG_ERROR("This is a LOG_ERROR test");       // check the log content
 
-            // see if adopted...
-            line.insert(0, "(" TO_STRING_LITERAL(__LINE__) ")"); throw error_context("we blew it"); // build line number to look for
+            // also test if error context is filled properly...
+            expected_throw_line_number.insert(0, "(" TO_STRING_LITERAL(__LINE__) ")"); /* and throw on same line */ throw error_context("simulated test error");
          }
          catch (const error::context & e)
          {
 #pragma warning(disable:26489) // warning C26489: Don't dereference a pointer that may be invalid
             const std::string what_string(e.full_what());
             utf8::Assert::IsTrue(what_string.find(__SHORT_FILE__) != std::string::npos, "Didn't find __FILE__ in exception what().");
-            utf8::Assert::IsTrue(what_string.find(line) != std::string::npos, "Didn't find (throw) __LINE__ in exception what().");
+            utf8::Assert::IsTrue(what_string.find(expected_throw_line_number) != std::string::npos, "Didn't find (throw) __LINE__ in exception what().");
             utf8::Assert::IsTrue(what_string.find(__FUNCTION__) != std::string::npos, "Didn't find __FUNCTION__ in exception what().");
 #pragma warning(default:26489)
          }
