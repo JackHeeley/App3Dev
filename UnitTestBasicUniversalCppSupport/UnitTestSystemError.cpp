@@ -27,9 +27,9 @@ namespace UnitTestBasicUniversalCppSupport
    {
    public:
 
-#pragma warning(disable: 26440 26477)
+#pragma warning(disable: 26440 26477 26497)
       TEST_CLASS_INITIALIZE(InitializeUnitTestSystemError) noexcept
-#pragma warning(default: 26440 26477)
+#pragma warning(default: 26440 26477 26497)
       {
          try
          {

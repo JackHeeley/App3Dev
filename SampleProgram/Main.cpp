@@ -46,7 +46,7 @@ void signalHandler(int signum)
 {
    try
    {
-      LOG_INFO("signalHandler invoked!");
+      LOG_WARNING("signalHandler invoked!");
       CdromDevice(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]).unlock();
    }
    catch (...)

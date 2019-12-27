@@ -21,11 +21,6 @@
 #include "..\SampleProgram\thread_RAII.hpp"  // TODO: could be moved from program to basic support dll
 #include <atomic>
 #include <chrono>
-
-#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
-#include <experimental/filesystem> // C++-standard header file name
-#include <filesystem> // Microsoft-specific implementation header file name
-
 #include <iomanip>
 #include <thread>
 #include <sstream>
@@ -43,9 +38,9 @@ namespace UnitTestBasicUniversalCppSupport
 
    public:
 
-#pragma warning(disable: 26440 26477)
+#pragma warning(disable: 26440 26477 26497)
       TEST_CLASS_INITIALIZE(InitializeUnitTestFileLogger) noexcept
-#pragma warning(default: 26440 26477)
+#pragma warning(default: 26440 26477 26497)
       {
          try
          {
