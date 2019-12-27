@@ -18,111 +18,27 @@
 //
 #pragma once
 
-#ifdef BASICUNIVERSALCPPSUPPORT_EXPORTS
-#define BASICUNIVERSALCPPSUPPORT_API __declspec(dllexport)
-#else
-#define BASICUNIVERSALCPPSUPPORT_API __declspec(dllimport)
-#endif
+#include "log_helpers.hpp"
 
-#include <functional>
-#include <iostream>
-#include <string>
-
-#include "gsl.hpp"
-#include "logger_factory.hpp"
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// HELPER LAMBDAS FOR LOGGING
-//
-
-// accept lifetime warning on invoking the logger via a shared pointer. Its a static singleton, and that gives best service we can hope to expect.
-#pragma warning(disable: 26486) 
-
-///<summary>lambda to create a log. Only main should do this.</summary>
-///<param name='logType'>the type of logger to use (E.g. file_logger).</param>
-///<param name='logFilePath'>if file logger this parameter is the path to the log file (it will be created if necessary).</param>
-///<param name='logFilter'>a bit mapped filter used to select which types of log events should be recorded in this log.</param>
-///<remarks>Don't use directly, favour using macros instead. E.g. CREATE_LOG(logger_factory::type::file_logger, "ripper.log", LogFilter::Full)</remarks>
-auto create_logger = [](logger_factory::type logType = logger_factory::type::default_logger, const std::string logFilePath = std::string(), LogFilter logFilter = LogFilter::None)
-{
-   return logger_factory::getInstance(logType, logFilePath, logFilter);
-};
-
-///<summary>lambda to emit logging messages</summary>
-///<remarks>Don't use directly, favour using macros instead. E.g. LOG_ERROR("there was an error")</remarks>
-auto log_it = [](LogLevel level, std::string text)
-{
-   try
-   {
-      logger_factory::getInstance()->writeln(level, text);
-   }
-   catch (...)
-   {
-      std::cerr << "logging failed (at level'" << gsl::narrow_cast<int>(level) << "') with log text: '" << text << "'"<< std::endl;
-   }
-};
-
-///<summary>lambda to query the active logging level(s)</summary>
-///<param name='level'>a log level to test.</param>
-///<remarks>Don't use directly, favour using macros instead. E.g. LOG_LEVEL(LogLevel::Debug)</remarks>
-///<returns>true if the level is currently set otherwise false.</returns>
-auto test_log_level = [](LogLevel level)
-{
-   return logger_factory::getInstance()->test_log_level(level);
-};
-
-///<summary>lambda to toggle an active logging level(s)</summary>
-///<param name='level'>a log level to test.</param>
-///<remarks>Don't use directly, favour using macros instead. E.g. TOGGLE_LOG_LEVEL(LogLevel::Debug)
-///On return, if the level was previously set it will now be clear. If it was clear, it will now be reset.</remarks>
-auto toggle_log_level = [](LogLevel level)
-{
-   logger_factory::getInstance()->toggle_log_level(level);
-};
-
-///<summary>lambda to fetch log content</summary>
-///<remarks>Don't use directly, favour using macros instead. I.e. LOG_FILE_CONTENTS()</remarks>
-auto read_all = []()
-{
-   std::string log_content;
-   try
-   {
-      log_content = logger_factory::getInstance()->read_all();
-   }
-   catch (...)
-   {
-      std::cerr << "reading log file failed." << std::endl;
-   }
-   return log_content;
-};
-
-///<summary>lambda to strip away filePath part from filePathName</summary>
-///<remarks>Don't use directly, favour using macros instead. E.g. LOG_INFO()</remarks>
-auto split_file_name = [](std::string pathName)
-{
-   return (std::string(pathName).substr(std::string(pathName).find_last_of("/\\") + 1));
-};
-
-#pragma warning(default: 26486)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // HELPER ANSI 'C' CONSTRUCTS TO PROVIDE LOCATION OF A LOG ENTRY LINE IN THE SOURCE CODE 
 // This can be super useful in some situations, E.g. if you need better feedback from the field.
-
-#define S1(x) #x
-#define S2(x) S1(x)
-
-#define DECORATED_LOG_TEXT(y)                            \
-__pragma(warning(push))                                  \
-__pragma(warning(disable:26444 26447))                   \
-std::string(__FILE__ " : " S2(__LINE__) " ").append(y)   \
+//
+// __SHORT_FILE__ is selected because code is compiled with explicit /ZI /FC options (which influence __FILE__ to be full path
+//   if you choose __FILE__ you will also need to widen the log file column (see "log_helpers.hpp" FILE_DETAIL_WIDTH )
+//
+#define DECORATED_LOG_TEXT(text)                                        \
+__pragma(warning(push))                                                 \
+__pragma(warning(disable:26444 26447))                                  \
+std::string(logging::decorate_log_text(__SHORT_FILE__, __LINE__, text)) \
 __pragma(warning(pop))
 
-#define PLAIN_LOG_TEXT(y)                                \
-__pragma(warning(push))                                  \
-__pragma(warning(disable:26444 26447))                   \
-y                                                        \
+#define PLAIN_LOG_TEXT(text)           \
+__pragma(warning(push))                \
+__pragma(warning(disable:26444 26447)) \
+text                                   \
 __pragma(warning(pop))
 
 
@@ -158,22 +74,22 @@ __pragma(warning(pop))
 
 //ACTIVE LOGGING
 
-#define CREATE_LOGGER(logType, logFilePath, logFilter)                                       \
-__pragma(warning(push))                                                                      \
-__pragma(warning(disable:26426))                                                             \
-std::shared_ptr<abstract_logger>the_logger = create_logger(logType, logFilePath, logFilter)  \
+#define CREATE_LOGGER(logType, logFilePath, logFilter)                                                \
+__pragma(warning(push))                                                                               \
+__pragma(warning(disable:26426))                                                                      \
+std::shared_ptr<abstract_logger>the_logger = logging::create_logger(logType, logFilePath, logFilter)  \
 __pragma(warning(pop))
 
-#define LOG_NONE(text) try { log_it(LogLevel::None, LOG_TEXT(text)); } catch (...) { }
-#define LOG_TRACE(text) try { log_it(LogLevel::Trace, LOG_TEXT(text)); } catch (...) { }
-#define LOG_DEBUG(text) try { log_it(LogLevel::Debug, LOG_TEXT(text)); } catch (...) { }
-#define LOG_INFO(text) try { log_it(LogLevel::Info, LOG_TEXT(text)); } catch (...) { }
-#define LOG_WARNING(text) try { log_it(LogLevel::Warning, LOG_TEXT(text)); } catch (...) { }
-#define LOG_ERROR(text) try { log_it(LogLevel::Error, LOG_TEXT(text)); } catch (...) { }
+#define LOG_NONE(text) try { logging::log_it(LogLevel::None, LOG_TEXT(text)); } catch (...) { }
+#define LOG_TRACE(text) try { logging::log_it(LogLevel::Trace, LOG_TEXT(text)); } catch (...) { }
+#define LOG_DEBUG(text) try { logging::log_it(LogLevel::Debug, LOG_TEXT(text)); } catch (...) { }
+#define LOG_INFO(text) try { logging::log_it(LogLevel::Info, LOG_TEXT(text)); } catch (...) { }
+#define LOG_WARNING(text) try { logging::log_it(LogLevel::Warning, LOG_TEXT(text)); } catch (...) { }
+#define LOG_ERROR(text) try { logging::log_it(LogLevel::Error, LOG_TEXT(text)); } catch (...) { }
 
-#define TEST_LOG_LEVEL(level) test_log_level(level)
-#define TOGGLE_LOG_LEVEL(level) toggle_log_level(level)
-#define LOG_FILE_CONTENTS read_all()
+#define TEST_LOG_LEVEL(level) logging::test_log_level(level)
+#define TOGGLE_LOG_LEVEL(level) logging::toggle_log_level(level)
+#define LOG_FILE_CONTENTS logging::read_all()
 /*/
 
 // INACTIVE LOGGING (log lines are passive code comments)

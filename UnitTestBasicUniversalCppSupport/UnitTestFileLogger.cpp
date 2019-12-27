@@ -21,8 +21,14 @@
 #include "..\SampleProgram\thread_RAII.hpp"  // TODO: could be moved from program to basic support dll
 #include <atomic>
 #include <chrono>
+
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#include <experimental/filesystem> // C++-standard header file name
+#include <filesystem> // Microsoft-specific implementation header file name
+
 #include <iomanip>
 #include <thread>
+#include <sstream>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace utf8;
@@ -31,6 +37,7 @@ using namespace std::chrono_literals;
 
 namespace UnitTestBasicUniversalCppSupport
 {
+
    TEST_CLASS(UnitTestFileLogger)
    {
 
@@ -49,25 +56,24 @@ namespace UnitTestBasicUniversalCppSupport
             LOG_ERROR("Couldn't create logger.");     // should fallback and emit on std::cerr
          }
       }
-
       TEST_METHOD(TestErrorContext)
       {
-         // Building 'line' (instead of hard coding) stops this test from breaking every time the source line numbers change
-         std::string line("L");
+         // Building 'line' prevents this test from breaking every time unit test changes affect the line number tested here
+         std::string line = "";
 
          try
          {
             // perform the operation under test...
-            line.append(S2(__LINE__)); throw error_context("we blew it"); //  // we look for line number e.g. "L46" in the exception full_what.
+            line.insert(0,"(" TO_STRING_LITERAL(__LINE__) ")"); throw error_context("we blew it"); // prepare line number and throw (on same line)
          }
-         catch (const error::context & e)
+         catch (const error::context& e)
          {
-#pragma warning(disable:26489)
+#pragma warning(disable:26489) // warning C26489: Don't dereference a pointer that may be invalid
             const std::string what_string(e.full_what());
-#pragma warning(default:26489)
             utf8::Assert::IsTrue(what_string.find("UnitTestFileLogger.cpp") != std::string::npos, "Didn't find __FILE__ in exception what().");
-            utf8::Assert::IsTrue(what_string.find(line) != std::string::npos, "Didn't find __LINE__ in exception what().");
-            utf8::Assert::IsTrue(what_string.find("TestErrorContext") != std::string::npos, "Didn't find __func__ in exception what().");
+            utf8::Assert::IsTrue(what_string.find(line) != std::string::npos, "Didn't find (throw) __LINE__ in exception what().");
+            utf8::Assert::IsTrue(what_string.find(__FUNCTION__) != std::string::npos, "Didn't find __FUNCTION__ in exception what().");
+#pragma warning(default:26489)
          }
       }
 
@@ -95,7 +101,6 @@ namespace UnitTestBasicUniversalCppSupport
          try
          {
             // prepare for test...
-            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
             std::string log_text_0 = "this is copy test log entry log_text_0 "; log_text_0.append(utc_timestamp()); // unique every run
             LOG_TRACE(log_text_0);
 
@@ -138,7 +143,6 @@ namespace UnitTestBasicUniversalCppSupport
       {
          try
          {
-            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
             // prepare for test...
             std::string log_text_0 = "this is move test log entry log_text_0 "; log_text_0.append(utc_timestamp()); // unique every run
             LOG_TRACE(log_text_0);
@@ -183,7 +187,6 @@ namespace UnitTestBasicUniversalCppSupport
          try
          {
             // prepare for test...
-            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
             const std::string FILTERED_TEXT = "DON'T show this in the log!";
 
             std::atomic<int> progress = 0;
@@ -250,6 +253,36 @@ namespace UnitTestBasicUniversalCppSupport
          catch (const error::context & e)
          {
             utf8::Assert::IsTrue(false, e.full_what()); // something went wrong
+         }
+      }
+
+      TEST_METHOD(TestLogAndExceptionDecoration)
+      {
+         // check preconditions & prepare
+         std::string file = (__SHORT_FILE__);
+
+         utf8::Assert::AreEqual("UnitTestFileLogger.cpp", file.c_str(), "Unexpected filename.");
+         std::string line("");          // resilience to test source line numbers changing
+                 
+         try
+         {
+            // perform the operation under test...
+            LOG_INFO("This is the real test");                 // check the log content
+            LOG_INFO("more this is the real test");            // check the log content
+            LOG_INFO("more more this is the real test");       // check the log content
+            LOG_INFO("more more more this is the real test");  // check the log content
+
+            // see if adopted...
+            line.insert(0, "(" TO_STRING_LITERAL(__LINE__) ")"); throw error_context("we blew it"); // build line number to look for
+         }
+         catch (const error::context & e)
+         {
+#pragma warning(disable:26489) // warning C26489: Don't dereference a pointer that may be invalid
+            const std::string what_string(e.full_what());
+            utf8::Assert::IsTrue(what_string.find(__SHORT_FILE__) != std::string::npos, "Didn't find __FILE__ in exception what().");
+            utf8::Assert::IsTrue(what_string.find(line) != std::string::npos, "Didn't find (throw) __LINE__ in exception what().");
+            utf8::Assert::IsTrue(what_string.find(__FUNCTION__) != std::string::npos, "Didn't find __FUNCTION__ in exception what().");
+#pragma warning(default:26489)
          }
       }
    };

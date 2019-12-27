@@ -66,8 +66,11 @@ void signalHandler(int signum)
 int main(int argc, char* argv[])
 {
    ///<summary> create a file logger for use by the full stack.</summary>
+#ifdef DEBUG
    CREATE_LOGGER(logger_factory::type::file_logger, "ripper.log", LogFilter::Full);
-
+#else
+   CREATE_LOGGER(logger_factory::type::file_logger, "ripper.log", LogFilter::Normal);
+#endif
    ///<summary> filename for ripped image</summary>
    const static std::string fileName("cdrom_image.iso");
 

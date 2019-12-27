@@ -37,7 +37,7 @@ enum class BASICUNIVERSALCPPSUPPORT_API LogFilter : int
    Warning = 0x08,
    Error = 0x10,
 
-   Normal = Info | Warning | Error,
+   Normal = Warning | Error,
    Full = Trace | Debug | Info | Warning | Error
 };
 

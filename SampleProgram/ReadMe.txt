@@ -164,6 +164,7 @@ DONE:
 71. Extending tests, and attending to unit test issues. Made one correction to dll exports in devicetypedirectory.hpp a static member
     was invisible to unit test dlls. Intent is to confirm basic logging initialization supports use of logging in unit tests (reliably)
     so that we have a start point for test-driven logging improvements.
+72. Reworked logging  and log testing, in readiness for known todo's. Marked slow unit tests with TEST_IGNORE() attribute. 
 
 TODO:
 
@@ -172,5 +173,3 @@ TODO:
     - how to allow threads and facilities/dll's to manage log filters independently 
 
 2. Stop assuming that the need to disable warnings around gsl.h & spimpl.h is necessarily caused by issues in the headers themselves. Review own code (it could be the trigger).
-
-3. Microsoft recommend Any_CPU as build for UnitTests (makes sense, and having less configurations would reduce build time quite a lot)

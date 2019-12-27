@@ -69,6 +69,9 @@
     <ClInclude Include="utf8_guid.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="log_helpers.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

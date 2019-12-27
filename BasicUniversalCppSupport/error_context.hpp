@@ -27,10 +27,11 @@
 #include <exception>
 #include <sstream>
 
+#include "log_helpers.hpp"
 #include "system_error.hpp"
 
 ///<summary>use the predefined ANSI/ISO C99 C preprocessor macros to inject locus and context details when constructing an error::context</summary>
-#define error_context(_text) error::context(__FILE__, __LINE__, __func__, (_text))
+#define error_context(_text) error::context(__FILE__, __LINE__, __FUNCTION__, (_text))
 
 namespace error
 {
@@ -43,7 +44,7 @@ namespace error
       ///<remarks> macro 'error_context(_text)' will construct one in line.</remarks>
       ///<param name='a_path'> use predefined ANSI/ISO C99 C preprocessor macro __SOURCE__ </param>
       ///<param name='a_line'> use predefined ANSI/ISO C99 C preprocessor macro __LINE__ </param>
-      ///<param name='a_func'> use predefined ANSI/ISO C99 C preprocessor macro __func__ </param>
+      ///<param name='a_func'> use predefined ANSI/ISO C99 C preprocessor macro __FUNCTION__ </param>
       ///<param name='a_what'> a short description of the exception.</param>
       BASICUNIVERSALCPPSUPPORT_API context(const char* a_path, int a_line, const char* a_func, const char* a_what) :
          _file((std::string(a_path).substr(std::string(a_path).find_last_of("/\\") + 1))),
@@ -52,7 +53,7 @@ namespace error
          _reason(SystemError().get_error_text()),
          std::exception(a_what)
       {
-         _full_what = decorate_what(::std::exception::what());
+         _full_what = logging::decorate_error_context(std::string(_file), _line, std::string(_func), std::exception::what(), _reason);
       };
 
       ///<summary> get full description of exception.</summary>
@@ -78,16 +79,5 @@ namespace error
 
       ///<summary> the full description of what went wrong.</summary>
       std::string _full_what;
-
-      ///<summary> collate details relating to the exception.</summary>
-      ///<param name='a_what'> the programmer's description of what went wrong.</param>
-      ///<returns> the full description of what went wrong.</returns>
-      std::string decorate_what(const char* a_what)
-      {
-         std::stringstream ss;
-         ss << _file << ", L" << _line << " " << _func << "() : " << a_what << ". " << _reason;
-         return ss.str();
-      };
-
    };
 }

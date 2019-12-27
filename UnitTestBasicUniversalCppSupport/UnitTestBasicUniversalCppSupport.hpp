@@ -32,3 +32,6 @@ namespace UnitTestBasicUniversalCppSupport
 #pragma warning(default: 26426)
 };
 
+// useful macro conversions for use in unit tests
+#define STRINGIZE(x) #x
+#define TO_STRING_LITERAL(x) STRINGIZE(x)
