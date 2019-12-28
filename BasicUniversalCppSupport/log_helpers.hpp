@@ -83,7 +83,7 @@ namespace logging
       }
       catch (...)
       {
-         std::cerr << "logging failed (at level'" << gsl::narrow_cast<int>(level) << "') with log text: '" << text << "'" << std::endl;
+         std::cerr << "logging failed(lvl'" << gsl::narrow_cast<int>(level) << "'): '" << text << "'" << std::endl;
       }
    };
 
@@ -106,7 +106,8 @@ namespace logging
    };
 
    ///<summary>Fetch log content (provided primarily as unit test support).</summary>
-   ///<remarks>Don't use directly, favour using macro instead: LOG_FILE_CONTENTS()</remarks>
+   ///<returns>Entire content of the log file as a string (or an empty string if an error occurred).</returns>
+   ///<remarks>Don't use directly, favour using macro instead: LOG_FILE_CONTENTS().</remarks>
    auto read_all = []()
    {
       std::string log_content;
@@ -116,7 +117,7 @@ namespace logging
       }
       catch (...)
       {
-         std::cerr << "reading log file failed." << std::endl;
+         log_it(LogLevel::Error, "reading log file failed.");
       }
       return log_content;
    };

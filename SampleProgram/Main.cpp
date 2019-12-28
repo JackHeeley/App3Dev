@@ -23,6 +23,7 @@
 #include "stdafx.h"
 
 #ifdef UNICODE 
+// don't #include <windows.h> when compiling with /std:c++17 
 constexpr auto CP_UTF8 = 65001;
 extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int wCodePageID) ;
 #endif
@@ -39,55 +40,46 @@ extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int w
 
 using namespace std::chrono_literals;
 
-///<summary>signal handler for ctrl-c and ctrl+break. Necessary because RAII techniques are bypassed by signals.</summary> 
-///<remarks>This handler tries to ensures that user initiated program aborts (during rip, when drive door is locked) won't
-/// leave the optical drive door permanently locked.</remarks>
-void signalHandler(int signum) 
-{
-   try
-   {
-      LOG_WARNING("signalHandler invoked!");
-      CdromDevice(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]).unlock();
-   }
-   catch (...)
-   {
-      std::string error_text = "Couldn't unlock the optical drive.";
-      std::cout << std::endl << error_text << "\nIf your drive supports locking you will need to reboot to retrieve the disk." << std::endl;
-      LOG_ERROR(error_text);
-   }
-   exit(signum);
-}
+///<summary>forward reference to signal handler.</summary> 
+void signal_handler(int signum);
 
-///<summary> program entrypoint.</summary>
+///<summary> *** PROGRAM ENTRYPOINT ***.</summary>
 ///<param name = "argc"> number of command line parameters (expected 1).</param>
 ///<param name = "argv"> array of supplied command line parameters (expect only argv[0] i.e. program path).</param>
 ///<returns> exit code 0 if no errors were encountered, or exit code -1 if an error occurred.</returns>
 ///<remarks> uses system pause and stdout to interact with user.</remarks>
 int main(int argc, char* argv[])
 {
-   ///<summary> create a file logger for use by the full stack.</summary>
-#ifdef DEBUG
+
+#ifdef _DEBUG
+   ///<summary> create a file logger available to all components. Configure for ALL log entry types.</summary>
    CREATE_LOGGER(logger_factory::type::file_logger, "ripper.log", LogFilter::Full);
 #else
+   ///<summary> create a file logger available to all components. Configure only for errors and warnings.</summary>
    CREATE_LOGGER(logger_factory::type::file_logger, "ripper.log", LogFilter::Normal);
 #endif
+
    ///<summary> filename for ripped image</summary>
    const static std::string fileName("cdrom_image.iso");
 
    ///<summary> number of times to test for an absent device.</summary>
    constexpr static int  MAX_RETRIES = 3;
 
-   // Register signal handlers (used to avoid a permanently locked optical drive)
-   signal(SIGINT, signalHandler);
-   signal(SIGBREAK, signalHandler);
+   ///<summary> a testable initialization value device name.</summary>
+   const std::string NO_DEVICE("device not found");
 
-#ifdef UNICODE
-   // on Windows, switch platform console support to use the utf8 codepage. (E.g. std::cout << u8"Γειά σου Κόσμε!" << std::endl;)
-   SetConsoleOutputCP(CP_UTF8);
-#endif
+   // Register handler for signals (avoid a permanently locked optical drive)
+   signal(SIGINT, signal_handler);     // CTRL-C
+   signal(SIGBREAK, signal_handler);   // CTRL-BREAK & TERMINATE
 
    try
    {
+#ifdef UNICODE
+      LOG_INFO(u8"Γειά σου Κόσμε! On Windows, switch platform console support to use the utf8 codepage");
+      SetConsoleOutputCP(CP_UTF8);
+      // std::cout << u8"Γειά σου Κόσμε!\n" << std::endl; // try it.
+#endif
+
       std::cout << "SampleProgram.exe Copyright(c) 2019 Jack Heeley.\n";
       std::cout << "This program comes with ABSOLUTELY NO WARRANTY; for details refer to GPL 3.0.\n";
       std::cout << "This is free software, and you are welcome to redistribute it\n";
@@ -98,8 +90,6 @@ int main(int argc, char* argv[])
 
       LOG_INFO("Sample test program starting.");
       
-      const std::string NO_DEVICE("device not found");
-
       ///<summary>name of the device containing the media to be copied.</summary>
       std::string deviceName = NO_DEVICE;
 
@@ -214,3 +204,23 @@ int main(int argc, char* argv[])
    }
 }
 
+///<summary>signal handler to manage the locked state of an optical drive.</summary> 
+///<remarks>User initiated program aborts (CTRL-C CTRL-BREAK and TERMINATE signals) risk
+/// the optical drive door being left in a permanently locked state.</remarks>
+void signal_handler(int signum)
+{
+   try
+   {
+      std::string reason("Program was interrupted (by user action)! Code ");
+      reason.append(std::to_string(signum));
+      LOG_WARNING(reason);
+      CdromDevice(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]).unlock();
+   }
+   catch (...)
+   {
+      std::string error_text = "Couldn't unlock the optical drive.";
+      std::cout << std::endl << error_text << "\nIf your drive supports locking you may need to reboot to retrieve the disk." << std::endl;
+      LOG_ERROR(error_text);
+   }
+   exit(signum);
+}

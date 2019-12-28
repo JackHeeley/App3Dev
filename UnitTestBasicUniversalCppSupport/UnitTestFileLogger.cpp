@@ -48,7 +48,7 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (...)
          {
-            LOG_ERROR("Couldn't create logger.");     // should fallback and emit on std::cerr
+            LOG_ERROR("Couldn't create logger.");     // No logger? This will emit on std::cerr
          }
       }
       TEST_METHOD(TestErrorContext)
@@ -180,24 +180,23 @@ namespace UnitTestBasicUniversalCppSupport
       TEST_METHOD(TestFileLoggerIsThreadsafe)
       {
          // ensure log filter is restored on all test paths
-#pragma warning (disable: 26447 26486)
          class RAII_Preserve_LogFilter
          {
          private:
-            std::shared_ptr<abstract_logger> m_plogger;
             LogFilter m_saved_filter;
 
          public:
-            RAII_Preserve_LogFilter() noexcept :
-               m_plogger(logger_factory::getInstance())
+            RAII_Preserve_LogFilter() noexcept
             {
                try
                {
-                  m_saved_filter = m_plogger->get_log_filter();
+#pragma warning (disable: 26486)
+                  m_saved_filter = logger_factory::getInstance()->get_log_filter();
+#pragma warning (default: 26486)
                }
                catch (...)
                {
-                  LOG_ERROR("RAII_Preserve_LogFilter constructor error!"); // should degenerate to use std::cerr
+                  LOG_ERROR("RAII_Preserve_LogFilter constructor error!");
                }
             }
 
@@ -206,12 +205,20 @@ namespace UnitTestBasicUniversalCppSupport
             RAII_Preserve_LogFilter& operator=(RAII_Preserve_LogFilter& other) = delete;
             RAII_Preserve_LogFilter& operator=(RAII_Preserve_LogFilter&& other) = delete;
 
-            ~RAII_Preserve_LogFilter()
+            ~RAII_Preserve_LogFilter() noexcept
             {
-               m_plogger->set_log_filter(m_saved_filter);
+               try
+               {
+#pragma warning (disable: 26486)
+                  logger_factory::getInstance()->set_log_filter(m_saved_filter);
+#pragma warning (default: 26486)
+               }
+               catch (...)
+               {
+                  LOG_ERROR("RAII_Preserve_LogFilter destructor error!");
+               }
             }
          };
-#pragma warning (default: 26447 26486)
 
          try
          {
@@ -220,6 +227,7 @@ namespace UnitTestBasicUniversalCppSupport
             const std::string FILTERED_TEXT = "DON'T show this in the log!";
             std::atomic<int> progress = 0;
             
+            // 'borrow' a well known code snippet from main program (and add some logging)...
             auto log_progress = [&progress, &FILTERED_TEXT]
             {
                std::function<std::string(int)> progress_bar = [](int percent)
@@ -236,37 +244,21 @@ namespace UnitTestBasicUniversalCppSupport
 
                while (progress < 100)
                {
-                  // test design is to use a different handle to same file and set a different filter value (just to challenge the coding)
-                  // if threads shared a single logger they would compete over the filter resource setting... and thats what happening now.
                   std::this_thread::sleep_for(1ms);
                   LOG_TRACE(progress_bar(progress));                 // log (A LOT) in the thread (uses TRACE level)
 
                   std::string thread_output_suppressed("separate thread said: ");
                   thread_output_suppressed.append(FILTERED_TEXT);
-                  LOG_WARNING(thread_output_suppressed);                // issue something that should be filtered
+                  LOG_WARNING(thread_output_suppressed);             // issue something that should be filtered out
                }
                std::cout << progress_bar(progress) << std::endl;
             };
 
-            // TODO: we already have a lot of the things needed to allow seperate log filtering for threads and facilities (DLL's)
-            // The BASIC idea is for the factory to create a primary singleton (say) a file logger. Threads and other facilities can then create 
-            // their own locally scoped 'loggers' (with their own filter, but handles to the same file). The write mutex must be static, and the 
-            // Factory must expose more detail (at least the file name) enough context to support construction of a coherent set of loggers. 
-            // Perhaps these locally scoped 'loggers' should be typed differently Eg a "log_writer" rather than a concrete "logger"...
-            // abstract_logger might usefully be renamed "logger_interface"?
-            //
-            // The tricky part is that the log macros aren't scoped. The best I've come up with so far is to envisage embedding some kind of 
-            // specialized 'bracketing' macros SELECT_LOGGER_INSTANCE(alternate_logger_n) RESTORE_DEFAULT_LOGGER() which can influence expansion 
-            // of write and filtering macros (LOG_ERROR etc. TEST_LOG_LEVEL TOGGLE_LOG_LEVEL). This is a truly HORRIBLE idea! - but we might need 
-            // to build it and study it to develop these ideas further. There's a possibility to progamatically do some registering and look-up 
-            // in the factory, but I can't yet picture how that could rescue the situation.
-            //
-            // There is also a question over how the main program can maintain control whilst still offering the logging service to facilities (DLL's).
-            // Does this development just become a "curates egg" (good in parts) when commercial libraries are available? 
-
-            // Filter is single instanced (so this currently affects both threads)
+            // Logger is currently single instanced, so next block affects logging in both threads (not optimal)
             if (TEST_LOG_LEVEL(LogLevel::Warning))
+            {
                TOGGLE_LOG_LEVEL(LogLevel::Warning);
+            }
 
             LOG_INFO("Launch the progress bar in a separate thread.");
             thread_RAII separate_thread(std::thread(log_progress), thread_RAII::DtorAction::detach);
@@ -280,7 +272,7 @@ namespace UnitTestBasicUniversalCppSupport
 
             std::string main_output_suppressed("Main thread said : ");
             main_output_suppressed.append(FILTERED_TEXT);
-            LOG_WARNING(main_output_suppressed);                             // issue something that should be filtered
+            LOG_WARNING(main_output_suppressed);                           // issue something that should be filtered
 
             Expects(progress == 100);  // if not, program would deadlock at join
 
@@ -309,27 +301,46 @@ namespace UnitTestBasicUniversalCppSupport
 
          utf8::Assert::AreEqual("UnitTestFileLogger.cpp", file.c_str(), "Unexpected filename."); // also confirms __SHORT_FILE__
          std::string expected_throw_line_number("");   // built (not hard coded) to provide resilience (source line numbers change frequently)
-                 
+
+         std::string log_text = "This is a LOG_WARNING test"; log_text.append(utc_timestamp()); // unique every run
+
+         // perform the operation under test (First invoke all logging forms)...
          try
          {
-            // perform the operation under test...
-            LOG_TRACE("This is a LOG_TRACE test");       // check the log content
-            LOG_DEBUG("This is a LOG_DEBUG test");       // check the log content
-            LOG_INFO("This is a LOG_INFO test");         // check the log content
-            LOG_WARNING("This is a LOG_WARNING test");   // check the log content
-            LOG_ERROR("This is a LOG_ERROR test");       // check the log content
+            LOG_TRACE("This is a LOG_TRACE test");       
+            LOG_DEBUG("This is a LOG_DEBUG test");       
+            LOG_INFO("This is a LOG_INFO test");         
+            LOG_WARNING(log_text);                       // special case (WARNINGS filtered by other tests) but should have been restored
+            LOG_ERROR("This is a LOG_ERROR test");       
+         }
+         catch (...)
+         {
+            // test fails if 'noexcept' code throws...
+            utf8::Assert::IsTrue(false, "Exception thrown by logging.");
+         }
 
-            // also test if error context is filled properly...
+         // test partially succeeds if log_text with this unique timestamp attached, is found in the log...
+         utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_text) == std::string::npos), "WARNING filtering is active (check other unit tests) ");
+
+         // test FULLY succeeds if log file now has entries that are correctly decorated (according to the build rules for decoration).
+
+         // We could automate a test here but we are satisfied to emit this reminder...
+         std::cout << "Please manually inspect the decoration of log entries in the log." << std::endl;
+
+         // perform the operation under test (also exercise error context)...
+         try
+         {
             expected_throw_line_number.insert(0, "(" TO_STRING_LITERAL(__LINE__) ")"); /* and throw on same line */ throw error_context("simulated test error");
          }
          catch (const error::context & e)
          {
-#pragma warning(disable:26489) // warning C26489: Don't dereference a pointer that may be invalid
+            // test succeeds if the error_context has all the anticipated details present (when caught).
+#pragma warning(disable:26489)
             const std::string what_string(e.full_what());
+#pragma warning(default:26489)
             utf8::Assert::IsTrue(what_string.find(__SHORT_FILE__) != std::string::npos, "Didn't find __FILE__ in exception what().");
             utf8::Assert::IsTrue(what_string.find(expected_throw_line_number) != std::string::npos, "Didn't find (throw) __LINE__ in exception what().");
             utf8::Assert::IsTrue(what_string.find(__FUNCTION__) != std::string::npos, "Didn't find __FUNCTION__ in exception what().");
-#pragma warning(default:26489)
          }
       }
    };

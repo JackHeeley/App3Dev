@@ -39,7 +39,7 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (...)
          {
-            LOG_ERROR("Couldn't create logger.");     // should fallback and emit on std::cerr
+            LOG_ERROR("Couldn't create logger.");     // No logger? This will emit on std::cerr
          }
       }
 
