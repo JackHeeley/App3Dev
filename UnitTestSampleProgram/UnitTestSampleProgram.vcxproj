@@ -116,7 +116,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)tray_door_lock.obj;$(SolutionDir)SampleProgram\$(IntDir)ripper.obj;$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -136,7 +136,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)tray_door_lock.obj;$(SolutionDir)SampleProgram\$(IntDir)ripper.obj;$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -160,7 +160,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)tray_door_lock.obj;$(SolutionDir)SampleProgram\$(IntDir)ripper.obj;$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -184,7 +184,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)tray_door_lock.obj;$(SolutionDir)SampleProgram\$(IntDir)ripper.obj;$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -197,8 +197,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTestRipper.cpp" />
-    <ClCompile Include="UnitTestThreadRAII.cpp" />
-    <ClCompile Include="UnitTestTrayDoorLock.cpp" />
+    <ClCompile Include="UnitTestRAII_thread.cpp" />
+    <ClCompile Include="UnitTestRAII_physical_lock.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

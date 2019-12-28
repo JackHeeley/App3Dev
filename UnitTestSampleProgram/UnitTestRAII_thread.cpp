@@ -1,5 +1,5 @@
 //
-// UnitTestThreaRAII.cpp : a utf8 everywhere component unit test 
+// UnitTestRAII_thread.cpp : a utf8 everywhere component unit test 
 //
 // Copyright (c) 2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
@@ -29,7 +29,7 @@ namespace UnitTestSampleProgram
    public:
 
 #pragma warning(disable: 26440 26477 26497)
-      TEST_CLASS_INITIALIZE(InitializeUnitTestThreadRAII) noexcept
+      TEST_CLASS_INITIALIZE(InitializeUnitTestRAII_thread) noexcept
 #pragma warning(default: 26440 26477 26497)
       {
          try
@@ -43,7 +43,7 @@ namespace UnitTestSampleProgram
       }
 
       ///<summary>confirms the design without stressing it</summary>
-      TEST_METHOD(TestThreadRAII)
+      TEST_METHOD(TestRAII_thread)
       {
          try
          {
@@ -66,7 +66,7 @@ namespace UnitTestSampleProgram
                   std::cout.flush();
                };
 
-               thread_RAII r(std::thread(show), thread_RAII::DtorAction::join);
+               RAII_thread r(std::thread(show), RAII_thread::DtorAction::join);
 
                while (progress < 100)
                {
@@ -78,7 +78,7 @@ namespace UnitTestSampleProgram
          }
          catch (const std::exception & e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
       }
     };

@@ -7,12 +7,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tray_door_lock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ripper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -21,13 +15,13 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tray_door_lock.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ripper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="thread_RAII.hpp">
+    <ClInclude Include="RAII_thread.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RAII_physical_lock.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

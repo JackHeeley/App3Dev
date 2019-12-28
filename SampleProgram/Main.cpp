@@ -22,7 +22,12 @@
 //
 #include "stdafx.h"
 
-#ifdef UNICODE 
+// _UNICODE may be a proxy indicator that we are compiling for Windows (WIN32 isn't any more)
+#ifdef _UNICODE 
+#define WINDOWS 
+#endif
+
+#ifdef WINDOWS
 // don't #include <windows.h> when compiling with /std:c++17 
 constexpr auto CP_UTF8 = 65001;
 extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int wCodePageID) ;
@@ -74,7 +79,7 @@ int main(int argc, char* argv[])
 
    try
    {
-#ifdef UNICODE
+#ifdef WINDOWS
       LOG_INFO(u8"Γειά σου Κόσμε! On Windows, switch platform console support to use the utf8 codepage");
       SetConsoleOutputCP(CP_UTF8);
       // std::cout << u8"Γειά σου Κόσμε!\n" << std::endl; // try it.
@@ -156,7 +161,7 @@ int main(int argc, char* argv[])
          };
 
          LOG_INFO("Launch the progress bar in a separate thread.");
-         thread_RAII separate_thread(std::thread(show_progress), thread_RAII::DtorAction::detach);
+         RAII_thread separate_thread(std::thread(show_progress), RAII_thread::DtorAction::detach);
 
          ///<summary>Ripper used to acquire the data</summary>
          Ripper rip(deviceName);

@@ -60,7 +60,7 @@ namespace UnitTestExtendedUniversalCppSupport
          }
          catch (const std::exception& e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
       }
 
@@ -102,7 +102,7 @@ namespace UnitTestExtendedUniversalCppSupport
             try
             {
                nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_BAD_IOCTL, nullptr, 0, nullptr, 0);
-               utf8::Assert::IsTrue(false,"ioctl didn't reject a foreign ctl_code");
+               utf8::Assert::Fail("ioctl didn't reject a foreign ctl_code");
             }
             catch (const std::exception& e)
             {
@@ -120,7 +120,7 @@ namespace UnitTestExtendedUniversalCppSupport
          }
          catch (const std::exception& e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
       }
 
@@ -175,13 +175,13 @@ namespace UnitTestExtendedUniversalCppSupport
             }
             else
             {
-               utf8::Assert::IsTrue(false, lastError.get_error_text().c_str());
+               utf8::Assert::Fail(lastError.get_error_text().c_str());
             }
             
          }
          catch (const std::exception & e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
       }
    };

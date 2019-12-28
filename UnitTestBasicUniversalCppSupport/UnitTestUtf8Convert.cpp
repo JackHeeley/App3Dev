@@ -58,7 +58,7 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (const std::exception& e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
       }
 
@@ -85,7 +85,7 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (const std::exception & e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
       }      
       
@@ -112,7 +112,7 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (const std::exception & e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
       }
    };

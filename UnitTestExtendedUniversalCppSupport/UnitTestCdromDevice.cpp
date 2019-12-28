@@ -60,35 +60,35 @@ namespace UnitTestExtendedUniversalCppSupport
          }
          catch (const std::exception & e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
       }
 
       TEST_METHOD(TestCdromTrayLocking)
       {
-         // RAII door lock helper
-         class TrayDoorLock
+         // RAII door lock helper. We could pull in header from SampleProgram (but thats a bit unstructured)
+         class RAII_physical_lock
          {
             CdromDevice& m_cdr;
 
          public:
-            TrayDoorLock(CdromDevice& cdrom) noexcept : m_cdr(cdrom)
+            RAII_physical_lock(CdromDevice& cdrom) noexcept : m_cdr(cdrom)
             {
                m_cdr.lock();
             }
             ///<summary> deleted copy constructor.</summary>
-            TrayDoorLock(TrayDoorLock& other) = delete;
+            RAII_physical_lock(RAII_physical_lock& other) = delete;
 
             ///<summary> deleted move constructor.</summary>
-            TrayDoorLock(TrayDoorLock&& other) = delete;
+            RAII_physical_lock(RAII_physical_lock&& other) = delete;
 
             ///<summary> deleted copy assignment.</summary>
-            TrayDoorLock& operator=(TrayDoorLock& other) = delete;
+            RAII_physical_lock& operator=(RAII_physical_lock& other) = delete;
 
             ///<summary> deleted move assignment.</summary>
-            TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
+            RAII_physical_lock& operator=(RAII_physical_lock&& other) = delete;
 
-            ~TrayDoorLock()
+            ~RAII_physical_lock()
             {
                m_cdr.unlock();
             }
@@ -107,7 +107,7 @@ namespace UnitTestExtendedUniversalCppSupport
                try
                {
                   // perpare for test (lock the tray door)...
-                  TrayDoorLock scoped_lock(cdrom0);
+                  RAII_physical_lock scoped_lock(cdrom0);
 
                   utf8::Assert::IsTrue(cdrom0.get_locked(), "cdrom0 reports unlocked when expected state is locked");
 
@@ -200,7 +200,7 @@ namespace UnitTestExtendedUniversalCppSupport
          }
          catch (const std::exception& e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
       }
 
@@ -287,7 +287,7 @@ namespace UnitTestExtendedUniversalCppSupport
          }
          catch (const std::exception& e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
       }
    };

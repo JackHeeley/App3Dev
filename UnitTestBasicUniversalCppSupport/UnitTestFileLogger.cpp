@@ -18,7 +18,7 @@
 //
 #include "stdafx.h"
 
-#include "..\SampleProgram\thread_RAII.hpp"  // TODO: could be moved from program to basic support dll
+#include "..\SampleProgram\RAII_thread.hpp"  // TODO: could be moved from program to basic support dll
 #include <atomic>
 #include <chrono>
 #include <iomanip>
@@ -87,7 +87,7 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (const error::context & e)
          {
-            utf8::Assert::IsTrue(false, e.full_what()); // something went wrong
+            utf8::Assert::Fail(e.full_what()); // something went wrong
          }
       }
 
@@ -130,7 +130,7 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (const error::context & e)
          {
-            utf8::Assert::IsTrue(false, e.full_what()); // something went wrong
+            utf8::Assert::Fail(e.full_what()); // something went wrong
          }
       }
 
@@ -261,7 +261,7 @@ namespace UnitTestBasicUniversalCppSupport
             }
 
             LOG_INFO("Launch the progress bar in a separate thread.");
-            thread_RAII separate_thread(std::thread(log_progress), thread_RAII::DtorAction::detach);
+            RAII_thread separate_thread(std::thread(log_progress), RAII_thread::DtorAction::detach);
 
             LOG_INFO("Do some simultaneous logging from the main thread.");
             for (progress = 0; progress < 100; progress++)

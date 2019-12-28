@@ -1,16 +1,30 @@
 //
-// thread_raii.hpp : implements helper class
+// RAII_thread.hpp : implements helper class
 //
-//    Allows an RAII thread to abnormally end, without a program abort arising from the ensuing improper thread state.
+//    Allows a RAII thread to abnormally end, without a program abort arising from the ensuing improper thread state.
 //
 // Copyright (c) 2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
+//    This program is free software : you can redistribute itand /or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//
 #pragma once
 #include <thread>
+#include "logger.hpp"
 
 ///<summary> RAII object used to make std::threads unjoinable on all paths.</summary>
 ///<remarks> based upon Meyers, Scott. Effective Modern C++: 42 Specific Ways to Improve Your Use of C++11 and C++14. O'Reilly Media. Kindle Edition.</remarks>
-class thread_RAII
+class RAII_thread
 {
 public:
    ///<summary> options available at destruct time</summary>
@@ -22,29 +36,29 @@ private:
 
 public:
 
-   ///<summary> Constructs an RAII object that allows threads to fail without impacting parent</summary>
+   ///<summary> Constructs a RAII object that allows threads to fail without impacting parent</summary>
    ///<param name='t'> the std::thread</param>
    ///<param name='a'> the action to take during the RAII object destructor execution</param>
-   thread_RAII(std::thread&& t, DtorAction a) noexcept :
+   RAII_thread(std::thread&& t, DtorAction a) noexcept :
       action(a),
       t(std::move(t))
    {
    }
 
    ///<summary> explicit delete of copy constuctor (rule of 5)</summary>
-   thread_RAII(const thread_RAII& other) = delete;
+   RAII_thread(const RAII_thread& other) = delete;
 
    ///<summary> explicit (default) move constuctor (rule of 5)</summary>
-   thread_RAII(thread_RAII&& other) = default;
+   RAII_thread(RAII_thread&& other) = default;
 
    ///<summary> explicit delete of copy assignment operator (rule of 5)</summary>
-   thread_RAII& thread_RAII::operator=(thread_RAII& other) = delete;
+   RAII_thread& RAII_thread::operator=(RAII_thread& other) = delete;
    
    ///<summary> explicit (default) move assignment operator (rule of 5)</summary>
-   thread_RAII& thread_RAII::operator=(thread_RAII&& other) = default;
+   RAII_thread& RAII_thread::operator=(RAII_thread&& other) = default;
 
    ///<summary> explicit Dtor</summary>
-   ~thread_RAII() noexcept
+   ~RAII_thread() noexcept
    {
       try
       {
@@ -62,12 +76,12 @@ public:
       }
       catch (...)
       {
-         LOG_WARNING("~thread_RAII had an issue!");
+         LOG_WARNING("~RAII_thread had an issue!");
       }
    }
 
    ///<summary> get the contained thread</summary>
-   ///<returns> the thread passed to thread_RAII at construction time</returns>
+   ///<returns> the thread passed to RAII_thread at construction time</returns>
    std::thread& get() noexcept
    {
       return t;

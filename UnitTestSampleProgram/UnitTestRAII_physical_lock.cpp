@@ -1,5 +1,5 @@
 //
-// UnitTestTrayDoorLock.cpp : a utf8 everywhere component unit test 
+// UnitTestRAII_physical_lock.cpp : a utf8 everywhere component unit test 
 //
 // Copyright (c) 2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
@@ -24,12 +24,12 @@ using namespace utf8;
 
 namespace UnitTestSampleProgram
 {
-   TEST_CLASS(UnitTestTrayDoorLock)
+   TEST_CLASS(UnitTestRAII_physical_lock)
    {
    public:
 
 #pragma warning(disable: 26440 26477 26497)
-      TEST_CLASS_INITIALIZE(InitializeUnitTestTrayDoorLock) noexcept
+      TEST_CLASS_INITIALIZE(InitializeUnitTestRAII_physical_lock) noexcept
 #pragma warning(default: 26440 26477 26497)
       {
          try
@@ -42,7 +42,7 @@ namespace UnitTestSampleProgram
          }
       }
 
-      TEST_METHOD(TestTrayDoorLock)
+      TEST_METHOD(TestRAII_physical_lock)
       {
          // check test preconditions (at least one physical cdrom needed)
          DeviceDiscoverer cdrom_interface(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
@@ -54,14 +54,26 @@ namespace UnitTestSampleProgram
          try
          {
             //perform operation under test
-            TrayDoorLock lock(m_cdr);
+            RAII_physical_lock lock(m_cdr);
             
             //check results phase I ...
-            utf8::Assert::IsTrue(m_cdr.get_locked(), "drive door should still be locked locked"); // something went wrong
+            utf8::Assert::IsTrue(m_cdr.get_locked(), "drive door should still be locked"); 
+
+            try
+            {
+               m_cdr.eject();
+               utf8::Assert::Fail("eject succeeded even though the door was locked"); 
+            }
+            catch (...)
+            {
+               utf8::Assert::IsTrue(m_cdr.get_locked(), "drive door should still be locked");
+            }
+
+            utf8::Assert::IsTrue(m_cdr.get_locked(), "drive door should still be locked"); 
          }
          catch (const std::exception & e)
          {
-            utf8::Assert::IsTrue(false, e.what()); // something went wrong
+            utf8::Assert::Fail(e.what()); // something went wrong
          }
 
          //check results phase II ...

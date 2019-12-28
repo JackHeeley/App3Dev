@@ -165,6 +165,7 @@ DONE:
     was invisible to unit test dlls. Intent is to confirm basic logging initialization supports use of logging in unit tests (reliably)
     so that we have a start point for test-driven logging improvements.
 72. Reworked logging  and log testing, in readiness for known todo's. Marked slow unit tests with TEST_IGNORE() attribute. 
+73. Significant review and clean-up (readability). No significant functional changes. Some unit test improvements.
 
 TODO:
 

@@ -30,9 +30,9 @@
 #include <memory_mapped_file.hpp>
 #include <cd_rom_device.hpp>
 
-#include <tray_door_lock.hpp>
+#include <RAII_physical_lock.hpp>
+#include <RAII_thread.hpp>
 #include <ripper.hpp>
-#include <thread_RAII.hpp>
 
 #include <vector>
 #include <string>

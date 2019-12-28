@@ -33,8 +33,8 @@
 
 #include "ripper.hpp"
 #include "the_logger.hpp"
-#include "tray_door_lock.hpp"
-#include "thread_RAII.hpp"
+#include "RAII_physical_lock.hpp"
+#include "RAII_thread.hpp"
 
 // TODO: We can't control the  test sequence, so there is a race to name the (single) logfile (as used by default logger macros).
 // The Current logger_factory implementation doesn't even indicate who won, so unit tests can fail simply because they hard code 

@@ -29,13 +29,13 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UnitTestTrayDoorLock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UnitTestRipper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UnitTestThreadRAII.cpp">
+    <ClCompile Include="UnitTestRAII_thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTestRAII_physical_lock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
