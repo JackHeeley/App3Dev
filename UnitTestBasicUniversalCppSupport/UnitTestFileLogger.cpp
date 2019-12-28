@@ -179,13 +179,47 @@ namespace UnitTestBasicUniversalCppSupport
 
       TEST_METHOD(TestFileLoggerIsThreadsafe)
       {
+         // ensure log filter is restored on all test paths
+#pragma warning (disable: 26447 26486)
+         class RAII_Preserve_LogFilter
+         {
+         private:
+            std::shared_ptr<abstract_logger> m_plogger;
+            LogFilter m_saved_filter;
+
+         public:
+            RAII_Preserve_LogFilter() noexcept :
+               m_plogger(logger_factory::getInstance())
+            {
+               try
+               {
+                  m_saved_filter = m_plogger->get_log_filter();
+               }
+               catch (...)
+               {
+                  LOG_ERROR("RAII_Preserve_LogFilter constructor error!"); // should degenerate to use std::cerr
+               }
+            }
+
+            RAII_Preserve_LogFilter(const RAII_Preserve_LogFilter& other) = delete;
+            RAII_Preserve_LogFilter(RAII_Preserve_LogFilter&& other) noexcept = delete;
+            RAII_Preserve_LogFilter& operator=(RAII_Preserve_LogFilter& other) = delete;
+            RAII_Preserve_LogFilter& operator=(RAII_Preserve_LogFilter&& other) = delete;
+
+            ~RAII_Preserve_LogFilter()
+            {
+               m_plogger->set_log_filter(m_saved_filter);
+            }
+         };
+#pragma warning (default: 26447 26486)
+
          try
          {
             // prepare for test...
+            RAII_Preserve_LogFilter saveFilter;  
             const std::string FILTERED_TEXT = "DON'T show this in the log!";
-
             std::atomic<int> progress = 0;
-
+            
             auto log_progress = [&progress, &FILTERED_TEXT]
             {
                std::function<std::string(int)> progress_bar = [](int percent)
@@ -214,6 +248,23 @@ namespace UnitTestBasicUniversalCppSupport
                std::cout << progress_bar(progress) << std::endl;
             };
 
+            // TODO: we already have a lot of the things needed to allow seperate log filtering for threads and facilities (DLL's)
+            // The BASIC idea is for the factory to create a primary singleton (say) a file logger. Threads and other facilities can then create 
+            // their own locally scoped 'loggers' (with their own filter, but handles to the same file). The write mutex must be static, and the 
+            // Factory must expose more detail (at least the file name) enough context to support construction of a coherent set of loggers. 
+            // Perhaps these locally scoped 'loggers' should be typed differently Eg a "log_writer" rather than a concrete "logger"...
+            // abstract_logger might usefully be renamed "logger_interface"?
+            //
+            // The tricky part is that the log macros aren't scoped. The best I've come up with so far is to envisage embedding some kind of 
+            // specialized 'bracketing' macros SELECT_LOGGER_INSTANCE(alternate_logger_n) RESTORE_DEFAULT_LOGGER() which can influence expansion 
+            // of write and filtering macros (LOG_ERROR etc. TEST_LOG_LEVEL TOGGLE_LOG_LEVEL). This is a truly HORRIBLE idea! - but we might need 
+            // to build it and study it to develop these ideas further. There's a possibility to progamatically do some registering and look-up 
+            // in the factory, but I can't yet picture how that could rescue the situation.
+            //
+            // There is also a question over how the main program can maintain control whilst still offering the logging service to facilities (DLL's).
+            // Does this development just become a "curates egg" (good in parts) when commercial libraries are available? 
+
+            // Filter is single instanced (so this currently affects both threads)
             if (TEST_LOG_LEVEL(LogLevel::Warning))
                TOGGLE_LOG_LEVEL(LogLevel::Warning);
 

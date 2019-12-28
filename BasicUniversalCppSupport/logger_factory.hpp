@@ -50,11 +50,13 @@ public:
    ///<param name='logFilter'> If this is the first call to getInstance, and type is file_logger, then this 
    /// value will be used to select which messages will be logged, (otherwise the parameter is ignored).</param>
    ///<returns> a shared pointer to the singleton logger instance.</returns>
+#pragma warning(disable: 26447)
    static std::shared_ptr<abstract_logger> getInstance(type logger_type=type::default_logger, std::string filePath="", LogFilter logFilter = LogFilter::None)
    {
       static std::shared_ptr<abstract_logger> singleton = createLogger(logger_type, filePath, logFilter);
       return singleton;
    }
+#pragma warning(default: 26447)
 
 private:
  
