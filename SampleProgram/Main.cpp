@@ -56,13 +56,8 @@ void signal_handler(int signum);
 int main(int argc, char* argv[])
 {
 
-#ifdef _DEBUG
-   ///<summary> create a file logger available to all components. Configure for ALL log entry types.</summary>
-   CREATE_LOGGER(logger_factory::type::file_logger, "ripper.log", LogFilter::Full);
-#else
-   ///<summary> create a file logger available to all components. Configure only for errors and warnings.</summary>
-   CREATE_LOGGER(logger_factory::type::file_logger, "ripper.log", LogFilter::Normal);
-#endif
+   ///<summary> create a file logger available to all components.</summary>
+   CREATE_LOGGER(logger_factory::type::file_logger, "ripper.log", DEFAULT_LOG_FILTER);
 
    ///<summary> filename for ripped image</summary>
    const static std::string fileName("cdrom_image.iso");

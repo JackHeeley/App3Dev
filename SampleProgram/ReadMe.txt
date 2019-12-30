@@ -166,6 +166,7 @@ DONE:
     so that we have a start point for test-driven logging improvements.
 72. Reworked logging  and log testing, in readiness for known todo's. Marked slow unit tests with TEST_IGNORE() attribute. 
 73. Significant review and clean-up (readability). No significant functional changes. Some unit test improvements.
+74. Logging optimizations (untidy but base functionality works & new and revised logging units test pass).
 
 TODO:
 

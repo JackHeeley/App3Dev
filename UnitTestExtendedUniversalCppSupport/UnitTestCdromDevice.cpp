@@ -36,7 +36,7 @@ namespace UnitTestExtendedUniversalCppSupport
       {
          try
          {
-            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
+            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, DEFAULT_LOG_FILTER);
          }
          catch (...)
          {
@@ -211,8 +211,6 @@ namespace UnitTestExtendedUniversalCppSupport
 #pragma warning(default: 26477)
       TEST_METHOD(TestCdromDeviceReadImage)
       {
-         CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
-
          // RAII door lock helper
          class TrayDoorLock
          {

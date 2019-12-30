@@ -80,12 +80,12 @@ __pragma(warning(disable:26426))                                                
 std::shared_ptr<abstract_logger>the_logger = logging::create_logger(logType, logFilePath, logFilter)  \
 __pragma(warning(pop))
 
-#define LOG_NONE(text) try { logging::log_it(LogLevel::None, LOG_TEXT(text)); } catch (...) { }
-#define LOG_TRACE(text) try { logging::log_it(LogLevel::Trace, LOG_TEXT(text)); } catch (...) { }
-#define LOG_DEBUG(text) try { logging::log_it(LogLevel::Debug, LOG_TEXT(text)); } catch (...) { }
-#define LOG_INFO(text) try { logging::log_it(LogLevel::Info, LOG_TEXT(text)); } catch (...) { }
-#define LOG_WARNING(text) try { logging::log_it(LogLevel::Warning, LOG_TEXT(text)); } catch (...) { }
-#define LOG_ERROR(text) try { logging::log_it(LogLevel::Error, LOG_TEXT(text)); } catch (...) { }
+#define LOG_NONE(text) if (IS_ACTIVE(LogLevel::None)) { logging::log_it(LogLevel::None, LOG_TEXT(text)); } 
+#define LOG_TRACE(text) if (IS_ACTIVE(LogLevel::Trace)) { logging::log_it(LogLevel::Trace, LOG_TEXT(text)); }
+#define LOG_DEBUG(text) if (IS_ACTIVE(LogLevel::Debug)) { logging::log_it(LogLevel::Debug, LOG_TEXT(text)); }
+#define LOG_INFO(text) if (IS_ACTIVE(LogLevel::Info)) { logging::log_it(LogLevel::Info, LOG_TEXT(text)); }
+#define LOG_WARNING(text) if (IS_ACTIVE(LogLevel::Warning)) { logging::log_it(LogLevel::Warning, LOG_TEXT(text)); }
+#define LOG_ERROR(text) if (IS_ACTIVE(LogLevel::Error)) { logging::log_it(LogLevel::Error, LOG_TEXT(text)); }
 
 #define TEST_LOG_LEVEL(level) logging::test_log_level(level)
 #define TOGGLE_LOG_LEVEL(level) logging::toggle_log_level(level)

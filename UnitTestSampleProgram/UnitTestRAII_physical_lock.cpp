@@ -34,7 +34,7 @@ namespace UnitTestSampleProgram
       {
          try
          {
-            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
+            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, DEFAULT_LOG_FILTER);
          }
          catch (...)
          {

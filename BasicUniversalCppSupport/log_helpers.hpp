@@ -39,7 +39,7 @@
 static constexpr const char* get_short_file(const char* const full_path)
 {
    const char* file_part = full_path;
-   const char options[] = { '\\', '/'};
+   const char options[] = { '\\', '/' };
    for (const char slash : options)
    {
       for (const char* pos = full_path; *pos != 0x0; ++pos)
@@ -50,9 +50,44 @@ static constexpr const char* get_short_file(const char* const full_path)
       if (file_part != full_path) break;
    }
    return file_part;
-}
+};
 
 #pragma warning(default: 26429 26489)
+
+//#define STATIC_LOG_FILTERING
+
+#ifdef STATIC_LOG_FILTERING
+#define STRINGIZE(x) #x
+#define TO_STRING_LITERAL(x) STRINGIZE(x)
+#pragma message("Log level filtering is FIXED at compile time. See: " __FILE__ " near L" TO_STRING_LITERAL(__LINE__) )
+#define IS_ACTIVE(a_level) is_static_level_selected(a_level)
+#else
+#define IS_ACTIVE(a_level) is_dynamic_filter_selected(a_level)
+#endif
+
+#ifdef _DEBUG
+///<summary> Configure for ALL log entry types.</summary>
+#define DEFAULT_LOG_FILTER LogFilter::Full
+#else
+///<summary> Configure only for errors and warnings.</summary>
+#define DEFAULT_LOG_FILTER LogFilter::Normal
+#endif
+
+static constexpr const bool is_static_level_selected(const LogLevel a_level)
+{
+   constexpr LogFilter static_log_filter = LogFilter::Normal;
+   return ((static_cast<int>(a_level) /*bitwise*/& static_cast<int>(DEFAULT_LOG_FILTER)) != 0);
+};
+
+static const bool is_dynamic_filter_selected(const LogLevel a_level)
+{
+#pragma warning(disable: 26486)
+   return ((static_cast<int>(a_level) /*bitwise*/& static_cast<int>(logger_factory::getInstance()->get_log_filter())) != 0);
+#pragma warning(default: 26486)
+
+};
+
+
 
 //
 // HELPER LAMBDAS FOR LOGGING AND EXCEPTION MESSAGE DECORATION 
@@ -67,7 +102,7 @@ namespace logging
    ///<param name='logFilePath'>if file logger this parameter is the path to the log file. The file will be created if necessary.</param>
    ///<param name='logFilter'>a bit mapped filter used to select which types of log events should be recorded in this log.</param>
    ///<remarks>Don't use directly, ENTRYPOINTS should use the macro: CREATE_LOG(logger_factory::type::file_logger, "ripper.log", LogFilter::Full)</remarks>
-   const auto create_logger = [](logger_factory::type logType = logger_factory::type::default_logger, const std::string logFilePath = std::string(), LogFilter logFilter = LogFilter::None)
+   const auto create_logger = [](logger_factory::type logType = logger_factory::type::default_logger, const std::string logFilePath = std::string(), LogFilter logFilter = DEFAULT_LOG_FILTER)
    {
       return logger_factory::getInstance(logType, logFilePath, logFilter);
    };
@@ -102,7 +137,11 @@ namespace logging
    ///On return, if the level was previously set it will now be clear. If it was clear, it will now be reset.</remarks>
    const auto toggle_log_level = [](LogLevel level)
    {
+#ifdef STATIC_LOG_FILTERING
+      throw std::runtime_error("Static log filtering cannot be changed at runtime");
+#else
       logger_factory::getInstance()->toggle_log_level(level);
+#endif
    };
 
    ///<summary>Fetch log content (provided primarily as unit test support).</summary>

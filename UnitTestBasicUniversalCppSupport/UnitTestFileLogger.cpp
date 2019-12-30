@@ -36,6 +36,48 @@ namespace UnitTestBasicUniversalCppSupport
    TEST_CLASS(UnitTestFileLogger)
    {
 
+   private:
+      // ensure log filter is restored on all test paths
+      class RAII_Preserve_LogFilter
+      {
+      private:
+         LogFilter m_saved_filter;
+
+      public:
+         RAII_Preserve_LogFilter() noexcept
+         {
+            try
+            {
+#pragma warning (disable: 26486)
+               m_saved_filter = logger_factory::getInstance()->get_log_filter();
+#pragma warning (default: 26486)
+            }
+            catch (...)
+            {
+               LOG_ERROR("RAII_Preserve_LogFilter constructor error!");
+            }
+         }
+
+         RAII_Preserve_LogFilter(const RAII_Preserve_LogFilter& other) = delete;
+         RAII_Preserve_LogFilter(RAII_Preserve_LogFilter&& other) noexcept = delete;
+         RAII_Preserve_LogFilter& operator=(RAII_Preserve_LogFilter& other) = delete;
+         RAII_Preserve_LogFilter& operator=(RAII_Preserve_LogFilter&& other) = delete;
+
+         ~RAII_Preserve_LogFilter() noexcept
+         {
+            try
+            {
+#pragma warning (disable: 26486)
+               logger_factory::getInstance()->set_log_filter(m_saved_filter);
+#pragma warning (default: 26486)
+            }
+            catch (...)
+            {
+               LOG_ERROR("RAII_Preserve_LogFilter destructor error!");
+            }
+         }
+      };
+
    public:
 
 #pragma warning(disable: 26440 26477 26497)
@@ -44,7 +86,7 @@ namespace UnitTestBasicUniversalCppSupport
       {
          try
          {
-            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
+            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, DEFAULT_LOG_FILTER);
          }
          catch (...)
          {
@@ -84,6 +126,196 @@ namespace UnitTestBasicUniversalCppSupport
 
             // test succeeds if log_text with this unique timestamp attached, is found in the log...
             utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_text) == std::string::npos), "logged text was not found in log");
+         }
+         catch (const error::context & e)
+         {
+            utf8::Assert::Fail(e.full_what()); // something went wrong
+         }
+      }
+
+
+      TEST_METHOD(TestFileLoggerFilteringBasic)
+      {
+         try
+         {
+            // prepare for test...
+            std::string stamp = utc_timestamp();
+            std::string log_none_text = "TestFileLoggerFilteringBasic none entry "; log_none_text.append(stamp); // unique every run
+            std::string log_trace_text = "TestFileLoggerFilteringBasic trace entry "; log_trace_text.append(stamp); // unique every run
+            std::string log_debug_text = "TestFileLoggerFilteringBasic debug entry "; log_debug_text.append(stamp); // unique every run
+            std::string log_info_text = "TestFileLoggerFilteringBasic info entry "; log_info_text.append(stamp); // unique every run
+            std::string log_warning_text = "TestFileLoggerFilteringBasic warning entry "; log_warning_text.append(stamp); // unique every run
+            std::string log_error_text = "TestFileLoggerFilteringBasic error entry "; log_error_text.append(stamp); // unique every run
+
+            // perform the operation under test...
+            LOG_NONE(log_none_text);
+            LOG_TRACE(log_trace_text);
+            LOG_DEBUG(log_debug_text);
+            LOG_INFO(log_info_text);
+            LOG_WARNING(log_warning_text);
+            LOG_ERROR(log_error_text);
+
+            // for ENABLED  LogLevels test succeeds if log_xxx_text with this unique timestamp attached, is found in the log...
+            // for DISABLED LogLevels test succeeds if log_xxx_text with this unique timestamp attached, is not found in the log...
+
+            if (TEST_LOG_LEVEL(LogLevel::None))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_none_text) == std::string::npos), "expected log_none_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_none_text) == std::string::npos), "unexpected log_none_text was found in log");
+            }
+
+            if (TEST_LOG_LEVEL(LogLevel::Trace))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_trace_text) == std::string::npos), "expected log_trace_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_trace_text) == std::string::npos), "unexpected log_trace_text was found in log");
+            }
+
+
+            if (TEST_LOG_LEVEL(LogLevel::Debug))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_debug_text) == std::string::npos), "expected log_debug_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_debug_text) == std::string::npos), "unexpected log_debug_text was found in log");
+            }
+
+            if (TEST_LOG_LEVEL(LogLevel::Info))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_info_text) == std::string::npos), "expected log_info_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_info_text) == std::string::npos), "unexpected log_info_text was found in log");
+            }
+
+            if (TEST_LOG_LEVEL(LogLevel::Warning))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_warning_text) == std::string::npos), "expected log_warning_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_warning_text) == std::string::npos), "unexpected log_warning_text was found in log");
+            }
+
+            if (TEST_LOG_LEVEL(LogLevel::Error))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_error_text) == std::string::npos), "expected log_error_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_error_text) == std::string::npos), "unexpected log_error_text was found in log");
+            }
+
+         }
+         catch (const error::context & e)
+         {
+            utf8::Assert::Fail(e.full_what()); // something went wrong
+         }
+      }
+
+
+#ifdef STATIC_LOG_FILTERING
+#pragma warning(disable: 26477)
+      BEGIN_TEST_METHOD_ATTRIBUTE(TestFileLoggerFilteringAdvanced)
+         TEST_IGNORE()        // TestFileLoggerFilteringAdvanced Static logging can't be changed at runtime (TOGGLE_LOG_LEVEL has no effect)
+         END_TEST_METHOD_ATTRIBUTE()
+#pragma warning(default: 26477)
+#endif
+      TEST_METHOD(TestFileLoggerFilteringAdvanced)
+      {
+         try
+         {
+            // prepare for test...
+            RAII_Preserve_LogFilter saveFilter;
+
+            std::string stamp = utc_timestamp();
+            std::string log_none_text = "TestFileLoggerFilteringAdvanced none entry "; log_none_text.append(stamp); // unique every run
+            std::string log_trace_text = "TestFileLoggerFilteringAdvanced trace entry "; log_trace_text.append(stamp); // unique every run
+            std::string log_debug_text = "TestFileLoggerFilteringAdvanced debug entry "; log_debug_text.append(stamp); // unique every run
+            std::string log_info_text = "TestFileLoggerFilteringAdvanced info entry "; log_info_text.append(stamp); // unique every run
+            std::string log_warning_text = "TestFileLoggerFilteringAdvanced warning entry "; log_warning_text.append(stamp); // unique every run
+            std::string log_error_text = "TestFileLoggerFilteringAdvanced error entry "; log_error_text.append(stamp); // unique every run
+
+            TOGGLE_LOG_LEVEL(LogLevel::None);
+            TOGGLE_LOG_LEVEL(LogLevel::Trace);
+            TOGGLE_LOG_LEVEL(LogLevel::Debug);
+            TOGGLE_LOG_LEVEL(LogLevel::Info);
+            TOGGLE_LOG_LEVEL(LogLevel::Warning);
+            TOGGLE_LOG_LEVEL(LogLevel::Error);
+
+            // perform the operation under test...
+            LOG_NONE(log_none_text);
+            LOG_TRACE(log_trace_text);
+            LOG_DEBUG(log_debug_text);
+            LOG_INFO(log_info_text);
+            LOG_WARNING(log_warning_text);
+            LOG_ERROR(log_error_text);
+
+            // for ENABLED  LogLevels test succeeds if log_xxx_text with this unique timestamp attached, is found in the log...
+            // for DISABLED LogLevels test succeeds if log_xxx_text with this unique timestamp attached, is not found in the log...
+
+            if (TEST_LOG_LEVEL(LogLevel::None))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_none_text) == std::string::npos), "expected log_none_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_none_text) == std::string::npos), "unexpected log_none_text was found in log");
+            }
+
+            if (TEST_LOG_LEVEL(LogLevel::Trace))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_trace_text) == std::string::npos), "expected log_trace_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_trace_text) == std::string::npos), "unexpected log_trace_text was found in log");
+            }
+
+
+            if (TEST_LOG_LEVEL(LogLevel::Debug))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_debug_text) == std::string::npos), "expected log_debug_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_debug_text) == std::string::npos), "unexpected log_debug_text was found in log");
+            }
+
+            if (TEST_LOG_LEVEL(LogLevel::Info))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_info_text) == std::string::npos), "expected log_info_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_info_text) == std::string::npos), "unexpected log_info_text was found in log");
+            }
+
+            if (TEST_LOG_LEVEL(LogLevel::Warning))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_warning_text) == std::string::npos), "expected log_warning_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_warning_text) == std::string::npos), "unexpected log_warning_text was found in log");
+            }
+
+            if (TEST_LOG_LEVEL(LogLevel::Error))
+            {
+               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_error_text) == std::string::npos), "expected log_error_text was not found in log");
+            }
+            else
+            {
+               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_error_text) == std::string::npos), "unexpected log_error_text was found in log");
+            }
+
          }
          catch (const error::context & e)
          {
@@ -179,52 +411,12 @@ namespace UnitTestBasicUniversalCppSupport
 
       TEST_METHOD(TestFileLoggerIsThreadsafe)
       {
-         // ensure log filter is restored on all test paths
-         class RAII_Preserve_LogFilter
-         {
-         private:
-            LogFilter m_saved_filter;
-
-         public:
-            RAII_Preserve_LogFilter() noexcept
-            {
-               try
-               {
-#pragma warning (disable: 26486)
-                  m_saved_filter = logger_factory::getInstance()->get_log_filter();
-#pragma warning (default: 26486)
-               }
-               catch (...)
-               {
-                  LOG_ERROR("RAII_Preserve_LogFilter constructor error!");
-               }
-            }
-
-            RAII_Preserve_LogFilter(const RAII_Preserve_LogFilter& other) = delete;
-            RAII_Preserve_LogFilter(RAII_Preserve_LogFilter&& other) noexcept = delete;
-            RAII_Preserve_LogFilter& operator=(RAII_Preserve_LogFilter& other) = delete;
-            RAII_Preserve_LogFilter& operator=(RAII_Preserve_LogFilter&& other) = delete;
-
-            ~RAII_Preserve_LogFilter() noexcept
-            {
-               try
-               {
-#pragma warning (disable: 26486)
-                  logger_factory::getInstance()->set_log_filter(m_saved_filter);
-#pragma warning (default: 26486)
-               }
-               catch (...)
-               {
-                  LOG_ERROR("RAII_Preserve_LogFilter destructor error!");
-               }
-            }
-         };
-
          try
          {
             // prepare for test...
             RAII_Preserve_LogFilter saveFilter;  
-            const std::string FILTERED_TEXT = "DON'T show this in the log!";
+            std::string FILTERED_TEXT = "DON'T show this in the log!";
+            FILTERED_TEXT.append(utc_timestamp()); 
             std::atomic<int> progress = 0;
             
             // 'borrow' a well known code snippet from main program (and add some logging)...
@@ -255,18 +447,21 @@ namespace UnitTestBasicUniversalCppSupport
             };
 
             // Logger is currently single instanced, so next block affects logging in both threads (not optimal)
+#ifndef STATIC_LOG_FILTERING
+            // Dynamic filtering test is inappropriate in this context
             if (TEST_LOG_LEVEL(LogLevel::Warning))
             {
                TOGGLE_LOG_LEVEL(LogLevel::Warning);
             }
+#endif // !STATIC_LOG_FILTERING
 
-            LOG_INFO("Launch the progress bar in a separate thread.");
+            LOG_TRACE("Launch the progress bar in a separate thread.");
             RAII_thread separate_thread(std::thread(log_progress), RAII_thread::DtorAction::detach);
 
-            LOG_INFO("Do some simultaneous logging from the main thread.");
+            LOG_TRACE("Do some simultaneous logging from the main thread.");
             for (progress = 0; progress < 100; progress++)
             {
-               LOG_INFO("Logging in the main thread.");                    // log (a little) in the main thread
+               LOG_TRACE("Logging in the main thread.");                    // log (a little) in the main thread
                std::this_thread::sleep_for(10ms);
             }
 
@@ -276,14 +471,17 @@ namespace UnitTestBasicUniversalCppSupport
 
             Expects(progress == 100);  // if not, program would deadlock at join
 
-            LOG_INFO("Block until progress bar is finished.");
+            LOG_TRACE("Block until progress bar is finished.");
             separate_thread.get().join();
 
             std::string log_text = "this is a log entry "; log_text.append(utc_timestamp()); // unique every run
-            LOG_INFO(log_text);
+            LOG_TRACE(log_text);
             utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_text) == std::string::npos), "logged text was not found in log");
 
+#ifndef STATIC_LOG_FILTERING
+            // Dynamic filtering test is inappropriate in this context
             utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(FILTERED_TEXT) == std::string::npos), "filtered text was found in log");
+#endif // !STATIC_LOG_FILTERING
 
             // full success assessment (currently) needs human intervention...
             std::cout << "Check '" << log_file_name << "' entries are interleaved (line by line) without any cross-talk/garbling." << std::endl;
@@ -309,7 +507,7 @@ namespace UnitTestBasicUniversalCppSupport
          {
             LOG_TRACE("This is a LOG_TRACE test");       
             LOG_DEBUG("This is a LOG_DEBUG test");       
-            LOG_INFO("This is a LOG_INFO test");         
+            LOG_INFO("This is a LOG_INFO test");
             LOG_WARNING(log_text);                       // special case (WARNINGS filtered by other tests) but should have been restored
             LOG_ERROR("This is a LOG_ERROR test");       
          }

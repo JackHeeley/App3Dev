@@ -37,7 +37,7 @@ enum class BASICUNIVERSALCPPSUPPORT_API LogFilter : int
    Warning = 0x08,
    Error = 0x10,
 
-   Normal = Warning | Error,
+   Normal = Warning | Error | Trace,
    Full = Trace | Debug | Info | Warning | Error
 };
 
@@ -49,7 +49,8 @@ enum class BASICUNIVERSALCPPSUPPORT_API LogLevel : int
    Debug = static_cast<int>(LogFilter::Debug),
    Info = static_cast<int>(LogFilter::Info),
    Warning = static_cast<int>(LogFilter::Warning),
-   Error = static_cast<int>(LogFilter::Error)
+   Error = static_cast<int>(LogFilter::Error),
+   Full = static_cast<int>(LogFilter::Full)     // also useful
 };
 
 ///<summary>abstract base class for loggers</summary>
