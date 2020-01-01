@@ -129,7 +129,9 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (const error::context & e)
          {
+#pragma warning(disable:26489) // warning C26489: Don't dereference a pointer that may be invalid
             utf8::Assert::Fail(e.full_what()); // something went wrong
+#pragma warning(default:26489)
          }
       }
 
@@ -261,65 +263,69 @@ namespace UnitTestBasicUniversalCppSupport
             // for ENABLED  LogLevels test succeeds if log_xxx_text with this unique timestamp attached, is found in the log...
             // for DISABLED LogLevels test succeeds if log_xxx_text with this unique timestamp attached, is not found in the log...
 
+            std::string log_file_contents = LOG_FILE_CONTENTS;
+
             if (TEST_LOG_LEVEL(LogLevel::None))
             {
-               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_none_text) == std::string::npos), "expected log_none_text was not found in log");
+               utf8::Assert::IsFalse((log_file_contents.find(log_none_text) == std::string::npos), "expected log_none_text was not found in log");
             }
             else
             {
-               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_none_text) == std::string::npos), "unexpected log_none_text was found in log");
+               utf8::Assert::IsTrue((log_file_contents.find(log_none_text) == std::string::npos), "unexpected log_none_text was found in log");
             }
 
             if (TEST_LOG_LEVEL(LogLevel::Trace))
             {
-               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_trace_text) == std::string::npos), "expected log_trace_text was not found in log");
+               utf8::Assert::IsFalse((log_file_contents.find(log_trace_text) == std::string::npos), "expected log_trace_text was not found in log");
             }
             else
             {
-               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_trace_text) == std::string::npos), "unexpected log_trace_text was found in log");
+               utf8::Assert::IsTrue((log_file_contents.find(log_trace_text) == std::string::npos), "unexpected log_trace_text was found in log");
             }
 
 
             if (TEST_LOG_LEVEL(LogLevel::Debug))
             {
-               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_debug_text) == std::string::npos), "expected log_debug_text was not found in log");
+               utf8::Assert::IsFalse((log_file_contents.find(log_debug_text) == std::string::npos), "expected log_debug_text was not found in log");
             }
             else
             {
-               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_debug_text) == std::string::npos), "unexpected log_debug_text was found in log");
+               utf8::Assert::IsTrue((log_file_contents.find(log_debug_text) == std::string::npos), "unexpected log_debug_text was found in log");
             }
 
             if (TEST_LOG_LEVEL(LogLevel::Info))
             {
-               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_info_text) == std::string::npos), "expected log_info_text was not found in log");
+               utf8::Assert::IsFalse((log_file_contents.find(log_info_text) == std::string::npos), "expected log_info_text was not found in log");
             }
             else
             {
-               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_info_text) == std::string::npos), "unexpected log_info_text was found in log");
+               utf8::Assert::IsTrue((log_file_contents.find(log_info_text) == std::string::npos), "unexpected log_info_text was found in log");
             }
 
             if (TEST_LOG_LEVEL(LogLevel::Warning))
             {
-               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_warning_text) == std::string::npos), "expected log_warning_text was not found in log");
+               utf8::Assert::IsFalse((log_file_contents.find(log_warning_text) == std::string::npos), "expected log_warning_text was not found in log");
             }
             else
             {
-               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_warning_text) == std::string::npos), "unexpected log_warning_text was found in log");
+               utf8::Assert::IsTrue((log_file_contents.find(log_warning_text) == std::string::npos), "unexpected log_warning_text was found in log");
             }
 
             if (TEST_LOG_LEVEL(LogLevel::Error))
             {
-               utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_error_text) == std::string::npos), "expected log_error_text was not found in log");
+               utf8::Assert::IsFalse((log_file_contents.find(log_error_text) == std::string::npos), "expected log_error_text was not found in log");
             }
             else
             {
-               utf8::Assert::IsTrue((LOG_FILE_CONTENTS.find(log_error_text) == std::string::npos), "unexpected log_error_text was found in log");
+               utf8::Assert::IsTrue((log_file_contents.find(log_error_text) == std::string::npos), "unexpected log_error_text was found in log");
             }
 
          }
          catch (const error::context & e)
          {
+#pragma warning(disable:26489)
             utf8::Assert::Fail(e.full_what()); // something went wrong
+#pragma warning(default:26489)
          }
       }
 

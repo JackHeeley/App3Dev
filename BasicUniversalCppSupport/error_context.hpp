@@ -27,7 +27,7 @@
 #include <exception>
 #include <sstream>
 
-#include "log_helpers.hpp"
+#include "logger.hpp"
 #include "system_error.hpp"
 
 ///<summary>use the predefined ANSI/ISO C99 C preprocessor macros to inject locus and context details when constructing an error::context</summary>

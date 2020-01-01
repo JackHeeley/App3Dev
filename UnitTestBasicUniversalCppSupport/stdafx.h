@@ -14,25 +14,24 @@
 #define NOMINMAX
 #include <windows.h>
 
-#include "abstract_logger.hpp"
-#include "default_logger.hpp"
-#include "file_logger.hpp"
-#include "logger_factory.hpp"
-#include "logger.hpp"
-
-#include "error_context.hpp"
-#include "gsl.hpp"
-
-#include "spimpl.hpp"
-#include "system_error.hpp"
-#include "utf8_convert.hpp"
-#include "utc_timestamp.hpp"
-
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <sstream>
 #include <vector>
 
+#include "abstract_logger.hpp"
+#include "default_logger.hpp"
+#include "error_context.hpp" 
+#include "file_logger.hpp"
+#include "gsl.hpp"
+#include "logger.hpp"           
+#include "logger_factory.hpp"
+#include "spimpl.hpp"
+#include "system_error.hpp"
 #include "utf8_assert.hpp"
+#include "utf8_convert.hpp"
+#include "utc_timestamp.hpp"
+
 #include "UnitTestBasicUniversalCppSupport.hpp"
+

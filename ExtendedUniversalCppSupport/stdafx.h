@@ -16,12 +16,13 @@
 #include <sstream>
 
 // Additional headers this dll requires are here...
-#include <error_context.hpp>
+
+#include <abstract_logger.hpp>
+#include <error_context.hpp> 
 #include <file_logger.hpp>
 #include <gsl.hpp>
-#include <abstract_logger.hpp>
+#include <logger.hpp>
 #include <spimpl.hpp>
 #include <system_error.hpp>
-#include <logger.hpp>
-#include <utf8_convert.hpp>
 #include <utc_timestamp.hpp>
+#include <utf8_convert.hpp>

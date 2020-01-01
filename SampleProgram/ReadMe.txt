@@ -167,6 +167,7 @@ DONE:
 72. Reworked logging  and log testing, in readiness for known todo's. Marked slow unit tests with TEST_IGNORE() attribute. 
 73. Significant review and clean-up (readability). No significant functional changes. Some unit test improvements.
 74. Logging optimizations (untidy but base functionality works & new and revised logging units test pass).
+75. Logging optimizations now acceptably tidy. Unit test device ioctl has been reworked to retry device not ready (occurs in some paths).
 
 TODO:
 

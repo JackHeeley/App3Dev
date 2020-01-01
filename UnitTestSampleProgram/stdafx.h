@@ -14,13 +14,21 @@
 #define NOMINMAX
 #include <windows.h>
 
-#include <error_context.hpp>
-#include <file_logger.hpp>
+#include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <chrono>
+#include <thread>
+
 #include <gsl.hpp>
-#include <abstract_logger.hpp>
+#include <spimpl.hpp>
 #include <logger.hpp>
 
-#include <spimpl.hpp>
+#include <abstract_logger.hpp>
+#include <error_context.hpp>
+#include <file_logger.hpp>
 #include <system_error.hpp>
 #include <utf8_convert.hpp>
 #include <utc_timestamp.hpp>
@@ -34,14 +42,7 @@
 #include <RAII_thread.hpp>
 #include <ripper.hpp>
 
-#include <vector>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <chrono>
-#include <thread>
+#include <utf8_assert.hpp>
 
-#include "utf8_assert.hpp"
 #include "UnitTestSampleProgram.hpp"
 

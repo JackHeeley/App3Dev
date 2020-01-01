@@ -66,19 +66,36 @@ namespace UnitTestExtendedUniversalCppSupport
 
       TEST_METHOD(TestDeviceIoCtl)
       {
-         //utf8::Assert::Fail("Test deprecated (takes too long). Use <testapp> (tbs) instead, or comment out this fail.");
-
          try
          {
             // prepare for test (construct a device for the system's first enumerated cdrom)...
             Device cdrom(DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0]);
 
-            // perform the operation under test (issue valid ioctl to the device)...
-            auto nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_EJECT_MEDIA, nullptr, 0, nullptr, 0);
+            constexpr int MAX_RETRIES = 3;
+            DWORD nBytesReturned = 0;
 
-            // check results (the cdrom tray should open) and programatically...
-            utf8::Assert::IsTrue(nBytesReturned == 0, "ioctl returned an out-of-spec byte count");
-            
+            for (int i=0; i < MAX_RETRIES; i++ )
+            {
+               try
+               {
+                  // perform the operation under test (issue valid ioctl to the device)...
+                  nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_EJECT_MEDIA, nullptr, 0, nullptr, 0);
+
+                  // check results (the cdrom tray should open) and programatically...
+                  utf8::Assert::IsTrue(nBytesReturned == 0, "ioctl returned an out-of-spec byte count");
+                  break;
+               }
+               catch (const error::context&)
+               {
+                  switch (SystemError().get_error_code())
+                  {
+                  case ERROR_NOT_READY:                  // this happens sometimes
+                     std::this_thread::sleep_for(1s);
+                     continue;
+                  }
+               }
+            }
+
             // restore the system state (close the tray)...
             try
             {
@@ -118,9 +135,13 @@ namespace UnitTestExtendedUniversalCppSupport
                }
             }
          }
-         catch (const std::exception& e)
+         catch (const error::context & e)
          {
-            utf8::Assert::Fail(e.what()); // something went wrong
+            utf8::Assert::Fail(e.full_what()); // something went wrong
+         }
+         catch (const std::exception & f)
+         {
+            utf8::Assert::Fail(f.what()); // something went wrong
          }
       }
 

@@ -1,5 +1,9 @@
 //
-// logger.hpp : exposes logging support to client code.
+// logger.hpp : exposes logging support to client code. 
+//
+// ************************************************************************************************
+// THIS FILE IS THE SINGLE EXCLUSIVE PLACE WHERE PROGRAMMERS CAN/SHOULD MAKE LOGGING OPTION CHOICES
+// ************************************************************************************************
 //
 // Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
@@ -18,16 +22,58 @@
 //
 #pragma once
 
-#include "log_helpers.hpp"
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// LOGGING CONFIGURATION CONSISTS OF THE FOLLOWING FIVE OPTIONS 
+//
+// STATIC_LOG_FILTERING    - Default option assumes a single logger, with a LogFilter that is immutable. LogLevel tests
+//                           in the macros LOG_WARNING etc. filter logging at compile time. 
+//
+// FILE_DETAIL_WIDTH       - Log file layout by default assumes that the file part of the source file name plus line number
+//                           used to decorate log entries will not exceed 32 characters. If tou xhoose ful path form of the
+//                           file name or for other reasons have very long file names you might want to adjust this to
+//                           maintain cosmetic appearance in logs
+// 
+// DEFAULT_LOG_FILTER      - The default (immutable) log filter enabling log levels (ERROR, WARNING, TRACE etc) 
+//                           This can be set differently per build configuration.
+//
+// LOG_TEXT                - Use decorated or non-decorated text in the log entries. You can also vary this per build 
+//                           configuration.
+//
+// LOGGING_INACTIVE        - Switch logging globally ON or OFF.
+//
 
+#define STATIC_LOG_FILTERING  // Comment out this line if you need the ability to change log filtering at runtime
+
+#ifndef STATIC_LOG_FILTERING
+#define STRINGIZE(x) #x
+#define TO_STRING_LITERAL(x) STRINGIZE(x)
+#pragma message("LogLevel filtering being is applied at runtime time. This has a performance cost. (See: " __FILE__ " near L" TO_STRING_LITERAL(__LINE__) ")" )
+#endif
+
+// width of the log file file detail column. In some situations you might want to change this value.
+#define FILE_DETAIL_WIDTH 32
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// HELPER ANSI 'C' CONSTRUCTS TO PROVIDE LOCATION OF A LOG ENTRY LINE IN THE SOURCE CODE 
+// COMPILE-TIME SELECTION OF LOG FILTERING (YOU CAN VARY THIS PER BUILD CONFIGURATION)
+//
+
+#ifdef _DEBUG
+// Configure for ALL log entry types.
+#define DEFAULT_LOG_FILTER LogFilter::Full
+#else
+// Configure only for errors and warnings.
+#define DEFAULT_LOG_FILTER LogFilter::Normal
+#endif
+
+#include "log_helpers.hpp"
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// HELPER ANSI 'C' MACRO CONSTRUCTS TO PROVIDE LOCATION OF A LOG ENTRY LINE IN THE SOURCE CODE 
 // This can be super useful in some situations, E.g. if you need better feedback from the field.
 //
 // __SHORT_FILE__ is selected because code is compiled with explicit /ZI /FC options (which influence __FILE__ to be full path
-//   if you choose __FILE__ you will also need to widen the log file column (see "log_helpers.hpp" FILE_DETAIL_WIDTH )
+//   if you choose __FILE__ you will also need to widen the log file column (see FILE_DETAIL_WIDTH above)
 //
 #define DECORATED_LOG_TEXT(text)                                        \
 __pragma(warning(push))                                                 \
@@ -70,29 +116,34 @@ __pragma(warning(pop))
 // COMPILE TIME SELECTION - DO LOGGING YES/NO:  
 // by default here we ENABLE logging in BOTH the debug build, and the release build
 
-//* <<< add or delete a second leading '/' on this line to enable or disable logging at compile time
+//#define LOGGING_INACTIVE     // uncomment this line if you want to disable logging globally
 
-//ACTIVE LOGGING
-
+#ifndef LOGGING_INACTIVE
 #define CREATE_LOGGER(logType, logFilePath, logFilter)                                                \
 __pragma(warning(push))                                                                               \
 __pragma(warning(disable:26426))                                                                      \
 std::shared_ptr<abstract_logger>the_logger = logging::create_logger(logType, logFilePath, logFilter)  \
 __pragma(warning(pop))
 
-#define LOG_NONE(text) if (IS_ACTIVE(LogLevel::None)) { logging::log_it(LogLevel::None, LOG_TEXT(text)); } 
-#define LOG_TRACE(text) if (IS_ACTIVE(LogLevel::Trace)) { logging::log_it(LogLevel::Trace, LOG_TEXT(text)); }
-#define LOG_DEBUG(text) if (IS_ACTIVE(LogLevel::Debug)) { logging::log_it(LogLevel::Debug, LOG_TEXT(text)); }
-#define LOG_INFO(text) if (IS_ACTIVE(LogLevel::Info)) { logging::log_it(LogLevel::Info, LOG_TEXT(text)); }
-#define LOG_WARNING(text) if (IS_ACTIVE(LogLevel::Warning)) { logging::log_it(LogLevel::Warning, LOG_TEXT(text)); }
-#define LOG_ERROR(text) if (IS_ACTIVE(LogLevel::Error)) { logging::log_it(LogLevel::Error, LOG_TEXT(text)); }
-
 #define TEST_LOG_LEVEL(level) logging::test_log_level(level)
-#define TOGGLE_LOG_LEVEL(level) logging::toggle_log_level(level)
 #define LOG_FILE_CONTENTS logging::read_all()
-/*/
 
-// INACTIVE LOGGING (log lines are passive code comments)
+#ifdef STATIC_LOG_FILTERING
+#define IS_ENABLED(a_level) logging::is_enabled_constexpr(a_level)
+#define TOGGLE_LOG_LEVEL(level) throw std::runtime_error("Static log filters cannot be changed at runtime");
+#else
+#define IS_ENABLED(a_level) logging::is_enabled_runtime(a_level)
+#define TOGGLE_LOG_LEVEL(level) logging::toggle_log_level(level)
+#endif
+
+#define LOG_NONE(text) if (IS_ENABLED(LogLevel::None)) { logging::log_it(LogLevel::None, LOG_TEXT(text)); } 
+#define LOG_TRACE(text) if (IS_ENABLED(LogLevel::Trace)) { logging::log_it(LogLevel::Trace, LOG_TEXT(text)); }
+#define LOG_DEBUG(text) if (IS_ENABLED(LogLevel::Debug)) { logging::log_it(LogLevel::Debug, LOG_TEXT(text)); }
+#define LOG_INFO(text) if (IS_ENABLED(LogLevel::Info)) { logging::log_it(LogLevel::Info, LOG_TEXT(text)); }
+#define LOG_WARNING(text) if (IS_ENABLED(LogLevel::Warning)) { logging::log_it(LogLevel::Warning, LOG_TEXT(text)); }
+#define LOG_ERROR(text) if (IS_ENABLED(LogLevel::Error)) { logging::log_it(LogLevel::Error, LOG_TEXT(text)); }
+#else
+// INACTIVE LOGGING (all log lines are just passive code comments)
 
 #ifdef UNREFERENCED_PARAMETER
 #undef UNREFERENCED_PARAMETER
@@ -100,6 +151,9 @@ __pragma(warning(pop))
 #define UNREFERENCED_PARAMETER(p) try { (void)(p); } catch (...) { }
 
 #define CREATE_LOGGER(logType, logFilePath, logFilter)
+#define TEST_LOG_LEVEL(level) (false)
+#define LOG_FILE_CONTENTS std::string()
+#define TOGGLE_LOG_LEVEL(level) {}
 
 #define LOG_NONE(text) UNREFERENCED_PARAMETER(text)
 #define LOG_TRACE(text) UNREFERENCED_PARAMETER(text)
@@ -107,9 +161,4 @@ __pragma(warning(pop))
 #define LOG_INFO(text) UNREFERENCED_PARAMETER(text)
 #define LOG_WARNING(text) UNREFERENCED_PARAMETER(text)
 #define LOG_ERROR(text) UNREFERENCED_PARAMETER(text)
-
-#define TEST_LOG_LEVEL(level) (false)
-#define TOGGLE_LOG_LEVEL(level) {}
-#define LOG_FILE_CONTENTS std::string()
-
-//*/
+#endif

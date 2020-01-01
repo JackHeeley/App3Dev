@@ -14,27 +14,25 @@
 
 // Additional headers program requires are here...
 
-#include "abstract_logger.hpp"
-#include "default_logger.hpp"
-#include "file_logger.hpp"
-#include "logger_factory.hpp"
-#include "logger.hpp"
-
+#include <abstract_logger.hpp>
+#include <default_logger.hpp>
 #include <error_context.hpp>
+#include <file_logger.hpp>
 #include <gsl.hpp>
+#include <logger_factory.hpp>
+#include <logger.hpp>
 #include <spimpl.hpp>
 #include <system_error.hpp>
-#include <utf8_convert.hpp>
 #include <utc_timestamp.hpp>
+#include <utf8_convert.hpp>
 
 #include <cd_rom_device.hpp>
 #include <device_discoverer.hpp>
 #include <memory_mapped_file.hpp>
 
-#include "ripper.hpp"
-#include "the_logger.hpp"
 #include "RAII_physical_lock.hpp"
 #include "RAII_thread.hpp"
+#include "ripper.hpp"
 
 // TODO: We can't control the  test sequence, so there is a race to name the (single) logfile (as used by default logger macros).
 // The Current logger_factory implementation doesn't even indicate who won, so unit tests can fail simply because they hard code 

@@ -14,23 +14,6 @@
 #define NOMINMAX
 #include <windows.h>
 
-#include <error_context.hpp>
-#include <file_logger.hpp>
-#include <gsl.hpp>
-#include <abstract_logger.hpp>
-#include <spimpl.hpp>
-#include <system_error.hpp>
-#include <utf8_convert.hpp>
-#include <utf8_guid.hpp>
-#include <utc_timestamp.hpp>
-#include <logger.hpp>
-
-#include <cd_rom_device.hpp>
-#include <device.hpp>
-#include <device_discoverer.hpp>
-#include <device_type_directory.hpp>
-#include <memory_mapped_file.hpp>
-
 #include <chrono>
 #include <iostream>
 #include <sstream>
@@ -38,5 +21,23 @@
 #include <thread>
 #include <vector>
 
-#include "utf8_assert.hpp"
+
+#include <abstract_logger.hpp>
+#include <error_context.hpp>
+#include <file_logger.hpp>
+#include <gsl.hpp>
+#include <logger.hpp>
+#include <spimpl.hpp>
+#include <system_error.hpp>
+#include <utf8_assert.hpp>
+#include <utf8_convert.hpp>
+#include <utf8_guid.hpp>
+#include <utc_timestamp.hpp>
+
+#include <cd_rom_device.hpp>
+#include <device.hpp>
+#include <device_discoverer.hpp>
+#include <device_type_directory.hpp>
+#include <memory_mapped_file.hpp>
+
 #include "UnitTestExtendedUniversalCppSupport.hpp"

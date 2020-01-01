@@ -1,5 +1,8 @@
 //
-// log_helpers.hpp : lambdas invoked by log macros, and error_context
+// log_helpers.hpp : static helper functions to support log macros, and error_context.
+//
+// The main purpose for this header is to promote readability in "logger.hpp" where a
+// programmer can make compile time logging choices (based upon what he/she reads there).
 //
 // Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
@@ -54,63 +57,59 @@ static constexpr const char* get_short_file(const char* const full_path)
 
 #pragma warning(default: 26429 26489)
 
-//#define STATIC_LOG_FILTERING
-
-#ifdef STATIC_LOG_FILTERING
-#define STRINGIZE(x) #x
-#define TO_STRING_LITERAL(x) STRINGIZE(x)
-#pragma message("Log level filtering is FIXED at compile time. See: " __FILE__ " near L" TO_STRING_LITERAL(__LINE__) )
-#define IS_ACTIVE(a_level) is_static_level_selected(a_level)
-#else
-#define IS_ACTIVE(a_level) is_dynamic_filter_selected(a_level)
-#endif
-
-#ifdef _DEBUG
-///<summary> Configure for ALL log entry types.</summary>
-#define DEFAULT_LOG_FILTER LogFilter::Full
-#else
-///<summary> Configure only for errors and warnings.</summary>
-#define DEFAULT_LOG_FILTER LogFilter::Normal
-#endif
-
-static constexpr const bool is_static_level_selected(const LogLevel a_level)
-{
-   constexpr LogFilter static_log_filter = LogFilter::Normal;
-   return ((static_cast<int>(a_level) /*bitwise*/& static_cast<int>(DEFAULT_LOG_FILTER)) != 0);
-};
-
-static const bool is_dynamic_filter_selected(const LogLevel a_level)
-{
-#pragma warning(disable: 26486)
-   return ((static_cast<int>(a_level) /*bitwise*/& static_cast<int>(logger_factory::getInstance()->get_log_filter())) != 0);
-#pragma warning(default: 26486)
-
-};
-
-
 
 //
-// HELPER LAMBDAS FOR LOGGING AND EXCEPTION MESSAGE DECORATION 
+// HELPERS FOR LOGGING AND EXCEPTION MESSAGE DECORATION 
 //
 
 namespace logging
 {
-#pragma warning(disable: 26486) // accept lifetime warning on invoking the logger via a shared pointer. Its a static singleton (best service we can hope for).
+#define SUPPRESS_LOGGING_WARNINGS 26486 26444
+#pragma warning(disable: SUPPRESS_LOGGING_WARNINGS)
+
+
+
+   ///<summary>a compile time check to see if a logging level has been enabled.</summary>
+   ///<remarks>this check allows the compiler to optimize away inactive logging entirely.
+   /// The optimizing comes at the (small) cost of requiring log levels to be pre-determined and immutable.</remarks>
+   ///<param name='a_level'>the LogLevel to be tested.</param>
+   ///<returns>true if the loglevel is enabled in the logger, otherwise false.</returns>
+   static constexpr const bool is_enabled_constexpr(const LogLevel a_level)
+   {
+      return ((static_cast<int>(a_level) /*bitwise*/& static_cast<int>(DEFAULT_LOG_FILTER)) != 0);
+   };
+
+
+
+   ///<summary>a runtime time check to see if a logging level has been enabled.</summary>
+   ///<remarks>this check requires a (small) runtime overhead (check) with all logging.
+   /// The benefit is that log levels can be changed at runtime (should that be needed).</remarks>
+   ///<param name='a_level'>the LogLevel to be tested.</param>
+   ///<returns>true if the loglevel is enabled in the logger, otherwise false.</returns>
+   static const bool is_enabled_runtime(const LogLevel a_level)
+   {
+      return ((static_cast<int>(a_level) /*bitwise*/& static_cast<int>(logger_factory::getInstance()->get_log_filter())) != 0);
+   };
+
+
 
    ///<summary>Create the singleton logger (FOR ENTRYPOINTS ONLY).</summary>
    ///<param name='logType'>the type of logger to use (E.g. file_logger).</param>
    ///<param name='logFilePath'>if file logger this parameter is the path to the log file. The file will be created if necessary.</param>
    ///<param name='logFilter'>a bit mapped filter used to select which types of log events should be recorded in this log.</param>
+   ///<returns> a shared pointer to the abstract_logger instance representing the singleton logger (just created, or created earlier).</returns>
    ///<remarks>Don't use directly, ENTRYPOINTS should use the macro: CREATE_LOG(logger_factory::type::file_logger, "ripper.log", LogFilter::Full)</remarks>
-   const auto create_logger = [](logger_factory::type logType = logger_factory::type::default_logger, const std::string logFilePath = std::string(), LogFilter logFilter = DEFAULT_LOG_FILTER)
+   static const std::shared_ptr<abstract_logger> create_logger(logger_factory::type logType = logger_factory::type::default_logger, const std::string logFilePath = std::string(), LogFilter logFilter = DEFAULT_LOG_FILTER)
    {
       return logger_factory::getInstance(logType, logFilePath, logFilter);
    };
 
+
+
    ///<summary>Emit log message</summary>
    ///<param name='level'>value used to filter log entry recording.</param>
    ///<remarks>Don't use directly, favour using macros instead. E.g. LOG_ERROR("there was an error")</remarks>
-   auto log_it = [](LogLevel level, std::string text)
+   static void log_it(LogLevel level, std::string text)
    {
       try
       {
@@ -126,7 +125,7 @@ namespace logging
    ///<param name='level'>a log level to test.</param>
    ///<remarks>Don't use directly, favour using macro instead: TEST_LOG_LEVEL(LogLevel::Debug)</remarks>
    ///<returns>true if the level parameter is currently set in the log filter (meaning this level will be recorded), otherwise false.</returns>
-   auto test_log_level = [](LogLevel level)
+   static bool test_log_level(LogLevel level)
    {
       return logger_factory::getInstance()->test_log_level(level);
    };
@@ -135,19 +134,15 @@ namespace logging
    ///<param name='level'>a log level to test.</param>
    ///<remarks>Don't use directly, favour using macros instead: TOGGLE_LOG_LEVEL(LogLevel::Debug)
    ///On return, if the level was previously set it will now be clear. If it was clear, it will now be reset.</remarks>
-   const auto toggle_log_level = [](LogLevel level)
+   static void toggle_log_level(LogLevel level)
    {
-#ifdef STATIC_LOG_FILTERING
-      throw std::runtime_error("Static log filtering cannot be changed at runtime");
-#else
       logger_factory::getInstance()->toggle_log_level(level);
-#endif
    };
 
    ///<summary>Fetch log content (provided primarily as unit test support).</summary>
    ///<returns>Entire content of the log file as a string (or an empty string if an error occurred).</returns>
    ///<remarks>Don't use directly, favour using macro instead: LOG_FILE_CONTENTS().</remarks>
-   auto read_all = []()
+   static const std::string read_all()
    {
       std::string log_content;
       try
@@ -161,32 +156,31 @@ namespace logging
       return log_content;
    };
 
-   ///<summary>width of the log file file detail column (you might want to configure this differently)</summary>
-   enum { FILE_DETAIL_WIDTH = 32 };
-
-   const auto build_file_detail = [](std::string file, const int lineNo)
+   ///<summary>build file detail use to 'decorate' log and exception text</summary>
+   ///<remarks>Don't use directly, favour using macros instead. E.g. LOG_INFO() etc.</remarks>
+   static const std::string build_file_detail(std::string file, const int lineNo)
    {
       std::string detail = file.append("()");
       return detail.insert(detail.find_last_of(")"), std::to_string(lineNo));
    };
 
-   ///<summary>lambda to 'decorate' log and exception text</summary>
+   ///<summary>'decorate' log and exception text</summary>
    ///<remarks>Don't use directly, favour using macros instead. E.g. LOG_INFO() etc.</remarks>
-   const auto decorate_log_text = [](std::string file, int lineNo, std::string text)
+   static const std::string decorate_log_text(std::string file, int lineNo, std::string text)
    {
       std::stringstream stream;
       stream << std::left << std::setw(FILE_DETAIL_WIDTH) << build_file_detail(file, lineNo) << ": " << text;
       return stream.str();
    };
 
-   ///<summary>lambda to 'decorate' error context</summary>
+   ///<summary>'decorate' error context</summary>
    ///<remarks>Don't use directly, favour using macro instead: throw error_context("some description of cause")</remarks>
-   auto decorate_error_context = [](std::string pathName, int lineNo, std::string function, std::string text, std::string reason)
+   static const std::string decorate_error_context(std::string pathName, int lineNo, std::string function, std::string text, std::string reason)
    {
       std::stringstream stream;
       stream << build_file_detail(pathName, lineNo) << " " << function << ": " << text << " - " << reason ;
       return stream.str();
    };
 
-#pragma warning(default: 26486)
+#pragma warning(default: SUPPRESS_LOGGING_WARNINGS)
 };
