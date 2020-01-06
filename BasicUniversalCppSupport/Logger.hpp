@@ -30,7 +30,7 @@
 //                           in the macros LOG_WARNING etc. filter logging at compile time. 
 //
 // FILE_DETAIL_WIDTH       - Log file layout by default assumes that the file part of the source file name plus line number
-//                           used to decorate log entries will not exceed 32 characters. If tou xhoose ful path form of the
+//                           used to decorate log entries will not exceed 32 characters. If you choose full path form of the
 //                           file name or for other reasons have very long file names you might want to adjust this to
 //                           maintain cosmetic appearance in logs
 // 

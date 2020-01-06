@@ -70,8 +70,8 @@ namespace logging
 
 
    ///<summary>a compile time check to see if a logging level has been enabled.</summary>
-   ///<remarks>this check allows the compiler to optimize away inactive logging entirely.
-   /// The optimizing comes at the (small) cost of requiring log levels to be pre-determined and immutable.</remarks>
+   ///<remarks>constexpr allows (but doesn't force) the compiler to optimize away inactive logging code.
+   /// This optimizing opportunity comes at the (small) cost of requiring log levels to be pre-determined and immutable.</remarks>
    ///<param name='a_level'>the LogLevel to be tested.</param>
    ///<returns>true if the loglevel is enabled in the logger, otherwise false.</returns>
    static constexpr const bool is_enabled_constexpr(const LogLevel a_level)

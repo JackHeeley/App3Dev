@@ -22,13 +22,17 @@
 //
 #include "stdafx.h"
 
-// _UNICODE may be a proxy indicator that we are compiling for Windows (WIN32 isn't any more)
+// Visual Studio Properties/General/Advanced/Character Set "Use Unicode Character Set" is defined. 
+// This is a consequence of project properties chosen in accordance with the utf8 everywhere manifesto guidance.
+// The setting does NOT indicate that the project is using unicode character encoding (because it isn't) but rather 
+// to force the compiler to raise errors if utf8 characters are presented to Windows API's designed for UNICODE (E.g. WIN32). 
+// _UNICODE is a good indicator that we are compiling this code to run on Windows. We'll make this explicit...
 #ifdef _UNICODE 
 #define WINDOWS 
 #endif
 
 #ifdef WINDOWS
-// don't #include <windows.h> when compiling with /std:c++17 
+// When compiling with /std:c++17 we don't want to #include <windows.h> 
 constexpr auto CP_UTF8 = 65001;
 extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int wCodePageID) ;
 #endif
@@ -68,16 +72,16 @@ int main(int argc, char* argv[])
    ///<summary> a testable initialization value device name.</summary>
    const std::string NO_DEVICE("device not found");
 
-   // Register handler for signals (avoid a permanently locked optical drive)
+   // Register handler for signals
    signal(SIGINT, signal_handler);     // CTRL-C
    signal(SIGBREAK, signal_handler);   // CTRL-BREAK & TERMINATE
 
    try
    {
 #ifdef WINDOWS
-      LOG_INFO(u8"Γειά σου Κόσμε! On Windows, switch platform console support to use the utf8 codepage");
+      LOG_INFO(u8"Γειά σας Κόσμε! On Windows, switch platform console support to use the utf8 codepage");
       SetConsoleOutputCP(CP_UTF8);
-      // std::cout << u8"Γειά σου Κόσμε!\n" << std::endl; // try it.
+      // std::cout << u8"Γειά σας Κόσμε!\n" << std::endl; // try it.
 #endif
 
       std::cout << "SampleProgram.exe Copyright(c) 2019 Jack Heeley.\n";
