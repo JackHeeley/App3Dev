@@ -51,7 +51,7 @@ public:
       open();
    }
 
-   ///<summary> copy constructor deleted for unique ptr.</summary>
+   ///<summary> copy constructor deleted for unique impl.</summary>
    impl(const impl& other) = delete;
 
    ///<summary> move constructor deleted.</summary>
@@ -237,22 +237,22 @@ Device::Device(std::string a_device_path) :
 {
 }
 
-const std::uint32_t Device::ioctl(std::uint32_t dwIoControlCode, void* lpInBuffer, std::uint32_t nInBufferSize, void* lpOutBuffer, std::uint32_t nOutBufferSize) const throw()
+const std::uint32_t Device::ioctl(std::uint32_t dwIoControlCode, void* lpInBuffer, std::uint32_t nInBufferSize, void* lpOutBuffer, std::uint32_t nOutBufferSize) const
 {
    return pimpl->ioctl(dwIoControlCode, lpInBuffer, nInBufferSize, lpOutBuffer, nOutBufferSize);
 }
 
-const void Device::seek(std::uint64_t cByOffsetFromStart) const throw()
+const void Device::seek(std::uint64_t cByOffsetFromStart) const
 {
    pimpl->seek(cByOffsetFromStart);
 }
 
-const std::uint32_t Device::read(void* lpBuffer, std::uint32_t nBytesToRead) const throw()
+const std::uint32_t Device::read(void* lpBuffer, std::uint32_t nBytesToRead) const
 {
    return pimpl->read(lpBuffer, nBytesToRead);
 }
 
-const std::uint32_t Device::write(void* lpBuffer, std::uint32_t nBytesToWrite) const throw()
+const std::uint32_t Device::write(void* lpBuffer, std::uint32_t nBytesToWrite) const
 {
    return pimpl->write(lpBuffer, nBytesToWrite);
 }
