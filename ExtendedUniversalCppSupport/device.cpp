@@ -55,7 +55,7 @@ public:
    impl(const impl& other) = delete;
 
    ///<summary> move constructor deleted.</summary>
-  impl(impl&& other) noexcept = delete;
+   impl(impl&& other) noexcept = delete;
 
    ///<summary> no copy assignment operator (class has unique ptr and const member)</summary>
    impl& impl::operator=(impl& other) = delete;
