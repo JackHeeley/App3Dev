@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
       // std::cout << u8"Γειά σας Κόσμε!\n" << std::endl; // try it.
 #endif
 
-      std::cout << "SampleProgram.exe Copyright(c) 2019 Jack Heeley.\n";
+      std::cout << "SampleProgram.exe Copyright(c) 2019-2020 Jack Heeley.\n";
       std::cout << "This program comes with ABSOLUTELY NO WARRANTY; for details refer to GPL 3.0.\n";
       std::cout << "This is free software, and you are welcome to redistribute it\n";
       std::cout << "under certain conditions; refer to GPL 3.0 for details.\n\n";

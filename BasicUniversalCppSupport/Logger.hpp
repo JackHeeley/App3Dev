@@ -43,12 +43,12 @@
 // LOGGING_INACTIVE        - Switch logging globally ON or OFF.
 //
 
-#define STATIC_LOG_FILTERING  // Comment out this line if you need the ability to change log filtering at runtime
+#define STATIC_LOG_FILTERING  // Comment out this line if you need the ability to change log filtering at run-time
 
 #ifndef STATIC_LOG_FILTERING
 #define STRINGIZE(x) #x
 #define TO_STRING_LITERAL(x) STRINGIZE(x)
-#pragma message("Message: LogLevel filtering being is applied at runtime. This has a performance cost. (See: " __FILE__ " near L" TO_STRING_LITERAL(__LINE__) ")" )
+#pragma message(__FILE__"(" TO_STRING_LITERAL(__LINE__) "): message : LogLevel filtering is being evaluated at run-time (this has a performance cost).")
 #endif
 
 // width of the log file file detail column. In some situations you might want to change this value.
