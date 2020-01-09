@@ -22,14 +22,14 @@
 #include <stdint.h>
 
 // Additional headers dll requires are here...
-#include "abstract_logger.hpp"
 #include "CppUnitTest.hpp"       
-#include "default_logger.hpp"
 #include "error_context.hpp"
 #include "file_logger.hpp"
 #include "gsl.hpp"
 #include "logger.hpp"
 #include "logger_factory.hpp"
+#include "logger_interface.hpp"
+#include "null_logger.hpp"
 #include "spimpl.hpp"
 #include "system_error.hpp"
 #include "utc_timestamp.hpp"

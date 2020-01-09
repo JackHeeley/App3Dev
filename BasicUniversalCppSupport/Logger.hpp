@@ -5,20 +5,20 @@
 // THIS FILE IS THE SINGLE EXCLUSIVE PLACE WHERE PROGRAMMERS CAN/SHOULD MAKE LOGGING OPTION CHOICES
 // ************************************************************************************************
 //
-// Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2017-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #pragma once
 
@@ -48,7 +48,7 @@
 #ifndef STATIC_LOG_FILTERING
 #define STRINGIZE(x) #x
 #define TO_STRING_LITERAL(x) STRINGIZE(x)
-#pragma message("LogLevel filtering being is applied at runtime time. This has a performance cost. (See: " __FILE__ " near L" TO_STRING_LITERAL(__LINE__) ")" )
+#pragma message("Message: LogLevel filtering being is applied at runtime. This has a performance cost. (See: " __FILE__ " near L" TO_STRING_LITERAL(__LINE__) ")" )
 #endif
 
 // width of the log file file detail column. In some situations you might want to change this value.
@@ -122,7 +122,7 @@ __pragma(warning(pop))
 #define CREATE_LOGGER(logType, logFilePath, logFilter)                                                \
 __pragma(warning(push))                                                                               \
 __pragma(warning(disable:26426))                                                                      \
-std::shared_ptr<abstract_logger>the_logger = logging::create_logger(logType, logFilePath, logFilter)  \
+std::shared_ptr<logger_interface>the_logger = logging::create_logger(logType, logFilePath, logFilter) \
 __pragma(warning(pop))
 
 #define TEST_LOG_LEVEL(level) logging::test_log_level(level)

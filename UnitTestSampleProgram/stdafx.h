@@ -26,9 +26,9 @@
 #include <spimpl.hpp>
 #include <logger.hpp>
 
-#include <abstract_logger.hpp>
 #include <error_context.hpp>
 #include <file_logger.hpp>
+#include <logger_interface.hpp>
 #include <system_error.hpp>
 #include <utf8_convert.hpp>
 #include <utc_timestamp.hpp>

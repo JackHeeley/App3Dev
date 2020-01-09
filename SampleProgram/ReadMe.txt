@@ -168,11 +168,5 @@ DONE:
 73. Significant review and clean-up (readability). No significant functional changes. Some unit test improvements.
 74. Logging optimizations (untidy but base functionality works & new and revised logging units test pass).
 75. Logging optimizations now acceptably tidy. Unit test device ioctl has been reworked to retry device not ready (occurs in some paths).
+76. Refactored logging to a good level of readability. Reworked some comments and warnings.
 
-TODO:
-
-1. Consider logging design issues: 
-    - how to disable logging for specific facilities/dlls under program control
-    - how to allow threads and facilities/dll's to manage log filters independently 
-
-2. Stop assuming that the need to disable warnings around gsl.h & spimpl.h is necessarily caused by issues in the headers themselves. Review own code (it could be the trigger).

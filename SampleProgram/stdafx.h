@@ -14,13 +14,13 @@
 
 // Additional headers program requires are here...
 
-#include <abstract_logger.hpp>
-#include <default_logger.hpp>
 #include <error_context.hpp>
 #include <file_logger.hpp>
 #include <gsl.hpp>
 #include <logger_factory.hpp>
+#include <logger_interface.hpp>
 #include <logger.hpp>
+#include <null_logger.hpp>
 #include <spimpl.hpp>
 #include <system_error.hpp>
 #include <utc_timestamp.hpp>

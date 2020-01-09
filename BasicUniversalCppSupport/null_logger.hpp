@@ -1,20 +1,20 @@
 //
-// default_logger.hpp : implements null logging
+// null_logger.hpp : implements null logging
 //
-// Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2017-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #pragma once
 
@@ -24,27 +24,27 @@
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllimport)
 #endif
 
-#include "abstract_logger.hpp"
+#include "logger_interface.hpp"
 
-///<summary>file logger for ansi c++11/utf8 code clients</summary>
-class default_logger : public abstract_logger
+///<summary>file logger for ansi c++17/utf8 code clients</summary>
+class null_logger : public logger_interface
 {
 public:
    ///<summary> construct a default file_logger.</summary>
-   BASICUNIVERSALCPPSUPPORT_API default_logger() noexcept {}
+   BASICUNIVERSALCPPSUPPORT_API null_logger() noexcept {}
 
    ///<summary>construct logger</summary>
    ///<param name='fileName'>path and name of the log file.</param>
    ///<param name='filter'>bitmask used to filter log write events.</param>
-   BASICUNIVERSALCPPSUPPORT_API default_logger(const std::string fileName, LogFilter filter) noexcept {}
+   BASICUNIVERSALCPPSUPPORT_API null_logger(const std::string fileName, LogFilter filter) noexcept {}
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean identical member content.</remarks>
-   BASICUNIVERSALCPPSUPPORT_API bool operator==(const default_logger& other) const noexcept = default;
+   BASICUNIVERSALCPPSUPPORT_API bool operator==(const null_logger& other) const noexcept = default;
 
    ///<summary> not equals comparison operator.</summary>
    ///<remarks> defines not equals to mean differing member content.</remarks>
-   BASICUNIVERSALCPPSUPPORT_API bool operator!=(const default_logger& other) const noexcept = default;
+   BASICUNIVERSALCPPSUPPORT_API bool operator!=(const null_logger& other) const noexcept = default;
 
    ///<summary> used to determine which messages get logged. loggers compare the filter bitmask supplied
    /// here (or at construction time) with the single bit level supplied as parameter to write operations.</summary>

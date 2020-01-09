@@ -4,20 +4,20 @@
 // Here we implement methods which wrap the Win32 calls. This offloads the
 // parameterization of these functions from clients, for ease of use.
 //
-// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2003-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #include "stdafx.h"
 #include "device.hpp"
@@ -104,7 +104,7 @@ public:
    ///<param name='nInBufferSize'> Specifies the length in bytes of the input buffer. If InputBuffer is nullptr, this value must be zero.</param>
    ///<param name='lpOutBuffer'> Points to an output buffer in which the driver is to return data or NULL if the request does not require driver to return data.</param>
    ///<param name='nOutBufferSize'> Specifies the length in bytes of the output buffer. If OutputBuffer is NULL, this value must be zero.</param>
-   ///<returns> actual number of bytes transferred in the operation.</returns>
+   ///<returns> actual number of output buffer bytes transferred in the operation.</returns>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
    const DWORD ioctl(DWORD dwIoControlCode, LPVOID lpInBuffer, DWORD nInBufferSize, LPVOID lpOutBuffer, DWORD nOutBufferSize) const
    {

@@ -21,12 +21,11 @@
 #include <thread>
 #include <vector>
 
-
-#include <abstract_logger.hpp>
 #include <error_context.hpp>
 #include <file_logger.hpp>
 #include <gsl.hpp>
 #include <logger.hpp>
+#include <logger_interface.hpp>
 #include <spimpl.hpp>
 #include <system_error.hpp>
 #include <utf8_assert.hpp>

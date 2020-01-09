@@ -1,20 +1,23 @@
 //
-// abstract_logger.hpp : abstract base class for logging
+// logger_interface.hpp : an abstract base class for logging
 //
-// Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// This file provides an interface specification for loggers, together with
+// strong types for the paramters used in log filtering.
 //
-//    This program is free software : you can redistribute itand /or modify
+// Copyright (c) 2017-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+//
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #pragma once
 
@@ -50,11 +53,10 @@ enum class BASICUNIVERSALCPPSUPPORT_API LogLevel : int
    Info = static_cast<int>(LogFilter::Info),
    Warning = static_cast<int>(LogFilter::Warning),
    Error = static_cast<int>(LogFilter::Error),
-   Full = static_cast<int>(LogFilter::Full)     // also useful
 };
 
 ///<summary>abstract base class for loggers</summary>
-class abstract_logger
+class logger_interface
 {
 public:
 
@@ -62,7 +64,7 @@ public:
    ///<returns> text identifying the LogLevel (extended with whitespace to help log alignment).</returns>
    ///<exception cref='std::invalid_argument'> if LogLevel::none is supplied. Puropse is to comment log entries, and in this context LogLevel::None is never valid.</exception>
    ///<exception cref='std::logic_error'> if (after implementation change) an unexpected LogLevel value is supplied that is not (yet) supported here.</exception>
-   BASICUNIVERSALCPPSUPPORT_API const std::string log_level(LogLevel level) const
+   static const std::string log_level(LogLevel level)
    {
       std::string result;
 
@@ -99,22 +101,22 @@ public:
    }
 
    ///<summary> default constructor.</summary>
-   BASICUNIVERSALCPPSUPPORT_API abstract_logger() = default;
+   BASICUNIVERSALCPPSUPPORT_API logger_interface() = default;
 
    ///<summary> copy constructor.</summary>
-   BASICUNIVERSALCPPSUPPORT_API abstract_logger(const abstract_logger& other) = default;
+   BASICUNIVERSALCPPSUPPORT_API logger_interface(const logger_interface& other) = default;
 
    ///<summary> move constructor.</summary>
-   BASICUNIVERSALCPPSUPPORT_API abstract_logger(abstract_logger&& other) = default;
+   BASICUNIVERSALCPPSUPPORT_API logger_interface(logger_interface&& other) = default;
 
    ///<summary> virtualize copy assignment operator.</summary>
-   BASICUNIVERSALCPPSUPPORT_API virtual abstract_logger& operator=(abstract_logger& other) = default;
+   BASICUNIVERSALCPPSUPPORT_API virtual logger_interface& operator=(logger_interface& other) = default;
 
    ///<summary> virtualize move assignment operator.</summary>
-   BASICUNIVERSALCPPSUPPORT_API virtual abstract_logger& operator=(abstract_logger&& other) = default;
+   BASICUNIVERSALCPPSUPPORT_API virtual logger_interface& operator=(logger_interface&& other) = default;
 
    ///<summary> virtual destructor.</summary>
-   BASICUNIVERSALCPPSUPPORT_API virtual ~abstract_logger() = default;
+   BASICUNIVERSALCPPSUPPORT_API virtual ~logger_interface() = default;
 
    ///<summary> used to determine which messages get logged
    /// logger implementors compare the bitmask parameter constructed or supplied here 

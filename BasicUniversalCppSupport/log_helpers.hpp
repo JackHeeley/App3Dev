@@ -4,20 +4,20 @@
 // The main purpose for this header is to promote readability in "logger.hpp" where a
 // programmer can make compile time logging choices (based upon what he/she reads there).
 //
-// Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2017-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #pragma once
 
@@ -99,7 +99,7 @@ namespace logging
    ///<param name='logFilter'>a bit mapped filter used to select which types of log events should be recorded in this log.</param>
    ///<returns> a shared pointer to the abstract_logger instance representing the singleton logger (just created, or created earlier).</returns>
    ///<remarks>Don't use directly, ENTRYPOINTS should use the macro: CREATE_LOG(logger_factory::type::file_logger, "ripper.log", LogFilter::Full)</remarks>
-   static const std::shared_ptr<abstract_logger> create_logger(logger_factory::type logType = logger_factory::type::default_logger, const std::string logFilePath = std::string(), LogFilter logFilter = DEFAULT_LOG_FILTER)
+   static const std::shared_ptr<logger_interface> create_logger(logger_factory::logger_type logType = logger_factory::logger_type::null_logger, const std::string logFilePath = std::string(), LogFilter logFilter = DEFAULT_LOG_FILTER)
    {
       return logger_factory::getInstance(logType, logFilePath, logFilter);
    };

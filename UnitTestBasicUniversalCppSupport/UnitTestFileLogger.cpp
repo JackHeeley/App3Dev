@@ -1,20 +1,20 @@
 ﻿//
 // UnitTestFileLogger.cpp : a utf8 everywhere component unit test 
 //
-// Copyright (c) 2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2019-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #include "stdafx.h"
 
@@ -86,7 +86,7 @@ namespace UnitTestBasicUniversalCppSupport
       {
          try
          {
-            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, DEFAULT_LOG_FILTER);
+            CREATE_LOGGER(logger_factory::logger_type::file_logger, log_file_name, DEFAULT_LOG_FILTER);
          }
          catch (...)
          {
@@ -421,8 +421,13 @@ namespace UnitTestBasicUniversalCppSupport
          {
             // prepare for test...
             RAII_Preserve_LogFilter saveFilter;  
-            std::string FILTERED_TEXT = "DON'T show this in the log!";
-            FILTERED_TEXT.append(utc_timestamp()); 
+
+#ifdef _DEBUG
+            std::string FILTERED_TEXT = "EXPECT to see this in the log!"; // if using debug build static default log filtering 
+#else
+            std::string FILTERED_TEXT = "DON'T show this in the log!"; // if using release build static default log filtering 
+#endif
+            FILTERED_TEXT.append(utc_timestamp());
             std::atomic<int> progress = 0;
             
             // 'borrow' a well known code snippet from main program (and add some logging)...
@@ -447,7 +452,7 @@ namespace UnitTestBasicUniversalCppSupport
 
                   std::string thread_output_suppressed("separate thread said: ");
                   thread_output_suppressed.append(FILTERED_TEXT);
-                  LOG_WARNING(thread_output_suppressed);             // issue something that should be filtered out
+                  LOG_WARNING(thread_output_suppressed);             // issue something that should be filtered out (if using release build static default log filter)
                }
                std::cout << progress_bar(progress) << std::endl;
             };

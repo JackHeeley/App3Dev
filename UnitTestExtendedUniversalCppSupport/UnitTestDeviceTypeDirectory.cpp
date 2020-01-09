@@ -33,7 +33,7 @@ namespace UnitTestExtendedUniversalCppSupport
       {
          try
          {
-            CREATE_LOGGER(logger_factory::type::file_logger, log_file_name, LogFilter::Full);
+            CREATE_LOGGER(logger_factory::logger_type::file_logger, log_file_name, LogFilter::Full);
          }
          catch (...)
          {

@@ -54,13 +54,7 @@
     <ClInclude Include="utf8_convert.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="default_logger.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="logger_factory.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="abstract_logger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="logger.hpp">
@@ -70,6 +64,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="log_helpers.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="logger_interface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="null_logger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
