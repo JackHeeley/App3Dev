@@ -1,20 +1,20 @@
 ﻿========================================================================
-    CONSOLE APPLICATION : AbstractDevice Project Overview
+    CONSOLE APPLICATION : SampleProgram Project Overview
 ========================================================================
 
-AppWizard has created this AbstractDevice application for you.
+AppWizard has created this SampleProgram application for you.
 
 This file contains a summary of what you will find in each of the files that
 make up your CheckDevice application.
 
 
-AbstractDevice.vcxproj
+SampleProgram.vcxproj
     This is the main project file for VC++ projects generated using an Application Wizard.
     It contains information about the version of Visual C++ that generated the file, and
     information about the platforms, configurations, and project features selected with the
     Application Wizard.
 
-AbstractDevice.vcxproj.filters
+SampleProgram.vcxproj.filters
     This is the filters file for VC++ projects generated using an Application Wizard. 
     It contains information about the association between the files in your project 
     and the filters. This association is used in the IDE to show grouping of files with
@@ -39,20 +39,20 @@ should add to or customize.
 
 /////////////////////////////////////////////////////////////////////////////
 Programmers notes:
-Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+Copyright (c) 2003-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 
-    This program is free software : you can redistribute itand /or modify
+    This program is free software : you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program.If not, see < http://www.gnu.org/licenses/>.
+    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 
 THIS PROJECT IS BUILT WITH ISO C++17 /std:c++17 compiler option
 
@@ -63,20 +63,20 @@ main,cpp
     rip operation, logging, progress reporting, exception handling,
     and program interruption.
 
-ripper.hpp, ripper.cpp
-    These files assemble the various components and provide a functor to 
+RAII_physical_lock.hpp
+    Provides an RAII object that prevents the user from interrupting the rip 
+    by opening the optical drive when busy. The design attempts to unlock the 
+    door on all return paths, BUT FAILS because there are ways to stop a 
+    program abruptly without unrolling the stack (signals). main.cpp steps 
+    in and provides a signal handler.
+
+RAII_thread.hpp
+    Uses RAII to ensure proper thread synchronization as the program ends
+    (in all paths).
+
+ripper.hpp
+    Assembles the various components and provides a functor to 
     rip the contents of an optical disk into a system file.
-
-tray_door_lock.hpp, tray_door_lock.hpp
-    These files provide an RAII object that prevents the user from 
-    interrupting the rip by opening the optical drive when busy. The design 
-    attempts to unlock the door on all return paths, BUT FAILS because there
-    are ways to stop a program abruptly without unrolling the stack (signals). 
-    main.cpp steps in and provides a signal handler.
-
-thread_RAII.hpp
-    This file uses RAII to (successfully) ensure proper thread synchronization 
-    as the program ends. 
        
 History & todo list
 ===================
@@ -169,4 +169,5 @@ DONE:
 74. Logging optimizations (untidy but base functionality works & new and revised logging units test pass).
 75. Logging optimizations now acceptably tidy. Unit test device ioctl has been reworked to retry device not ready (occurs in some paths).
 76. Refactored logging to a good level of readability. Reworked some comments and warnings.
+77. Comprehensive review of comments.
 

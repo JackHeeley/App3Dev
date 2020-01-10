@@ -38,7 +38,7 @@
 ///<summary>implements the __SHORT_FILE__ macro support.</summary>
 ///<param name='fullPath'> normally the __FILE__ macro.</param>
 ///<returns> a constexpr referencing the filename part of the filepath parameter</returns>
-///<remarks>Don't use directly, favour using macros instead. E.g. __SHORT_PATH__</remarks>
+///<remarks>Don't use directly. Use macro __SHORT_FILE__ instead.</remarks>
 static constexpr const char* get_short_file(const char* const full_path)
 {
    const char* file_part = full_path;
@@ -67,8 +67,6 @@ namespace logging
 #define SUPPRESS_LOGGING_WARNINGS 26486 26444
 #pragma warning(disable: SUPPRESS_LOGGING_WARNINGS)
 
-
-
    ///<summary>a compile time check to see if a logging level has been enabled.</summary>
    ///<remarks>constexpr allows (but doesn't force) the compiler to optimize away inactive logging code.
    /// This optimizing opportunity comes at the (small) cost of requiring log levels to be pre-determined and immutable.</remarks>
@@ -78,8 +76,6 @@ namespace logging
    {
       return ((static_cast<int>(a_level) /*bitwise*/& static_cast<int>(DEFAULT_LOG_FILTER)) != 0);
    };
-
-
 
    ///<summary>a runtime time check to see if a logging level has been enabled.</summary>
    ///<remarks>this check requires a (small) runtime overhead (check) with all logging.
@@ -91,8 +87,6 @@ namespace logging
       return ((static_cast<int>(a_level) /*bitwise*/& static_cast<int>(logger_factory::getInstance()->get_log_filter())) != 0);
    };
 
-
-
    ///<summary>Create the singleton logger (FOR ENTRYPOINTS ONLY).</summary>
    ///<param name='logType'>the type of logger to use (E.g. file_logger).</param>
    ///<param name='logFilePath'>if file logger this parameter is the path to the log file. The file will be created if necessary.</param>
@@ -103,8 +97,6 @@ namespace logging
    {
       return logger_factory::getInstance(logType, logFilePath, logFilter);
    };
-
-
 
    ///<summary>Emit log message</summary>
    ///<param name='level'>value used to filter log entry recording.</param>
@@ -125,6 +117,7 @@ namespace logging
    ///<param name='level'>a log level to test.</param>
    ///<remarks>Don't use directly, favour using macro instead: TEST_LOG_LEVEL(LogLevel::Debug)</remarks>
    ///<returns>true if the level parameter is currently set in the log filter (meaning this level will be recorded), otherwise false.</returns>
+   ///<remarks>#ifdef STATIC_LOG_FILTERING (see Logger.hpp) then this (the logger's internal filter) is ignored.</remarks>
    static bool test_log_level(LogLevel level)
    {
       return logger_factory::getInstance()->test_log_level(level);
@@ -134,6 +127,7 @@ namespace logging
    ///<param name='level'>a log level to test.</param>
    ///<remarks>Don't use directly, favour using macros instead: TOGGLE_LOG_LEVEL(LogLevel::Debug)
    ///On return, if the level was previously set it will now be clear. If it was clear, it will now be reset.</remarks>
+   ///<remarks>#ifdef STATIC_LOG_FILTERING (see Logger.hpp) then this (the logger's internal filter) is ignored.</remarks>
    static void toggle_log_level(LogLevel level)
    {
       logger_factory::getInstance()->toggle_log_level(level);
@@ -174,7 +168,7 @@ namespace logging
    };
 
    ///<summary>'decorate' error context</summary>
-   ///<remarks>Don't use directly, favour using macro instead: throw error_context("some description of cause")</remarks>
+   ///<remarks>Don't use directly, favour using macro instead.E.g. throw error_context("some description of cause");</remarks>
    static const std::string decorate_error_context(std::string pathName, int lineNo, std::string function, std::string text, std::string reason)
    {
       std::stringstream stream;

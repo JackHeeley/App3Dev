@@ -4,20 +4,20 @@
 // Here we implement methods wrapping system calls. This offloads the
 // parameterization of these functions from clients, for ease of use.
 //
-// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2003-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #pragma once
 
@@ -31,7 +31,7 @@
 
 #include <spimpl.hpp>
 
-///<summary> represents a moveable abstract physical system device.</summary>  
+///<summary> represents a movable abstract physical system device.</summary>  
 ///<remarks> we explicitly disallow copy, and compare of devices as these operations have no great value.</remarks>
 class Device {
 
@@ -73,9 +73,10 @@ public:
    EXTENDEDUNIVERSALCPPSUPPORT_API const std::uint32_t write(void* lpBuffer, std::uint32_t nBytesToWrite) const;
 
    ///<summary> reset the device.</summary>
-   ///<remarks> this is equivalent to close/open sequence and is predicated on the system 
-   /// device implementing a "reset on open" semantics. This condition is not guaranteed.
-   /// Devices that do not support this semantics may provide an ioctl to perform reset (see ioctl)</remarks>
+   ///<remarks> this is implemented as a close then open sequence and relies on the system device
+   /// performing a "reset on open" semantics. This condition is not guaranteed for all devices, although a
+   /// close and open will be an effective way to discard context anyway for most purposes.
+   /// Devices that do not support a full reset on open may provide an ioctl to perform reset (see ioctl)</remarks>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
    EXTENDEDUNIVERSALCPPSUPPORT_API void reset();
 

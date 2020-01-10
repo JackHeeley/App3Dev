@@ -3,20 +3,20 @@
 //
 // *** WARNING: this header is specifically for windows platforms ***
 //
-// Copyright (c) 2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2019-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #pragma once
 
@@ -63,7 +63,7 @@ namespace utf8
       ///<summary>convert utf8 std::string to GUID</summary>
       ///<param name='aGuidString'>a utf8 encoded string representation of aGuid in the form
       /// "0xhhhhhhhhL, 0xhhhh, 0xhhhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh"
-      /// where h is any hex digit (lowercase)
+      /// where h is any hex digit (lowercase)</param>
       ///<returns>const GUID (e.g. as supplied in winioctl.h)</returns>
       static inline GUID to_guid(const std::string aGuidString)
       {
@@ -75,9 +75,9 @@ namespace utf8
          {
             for (unsigned int i = 0; i < strlen(charsToRemove); ++i)
             {
-#pragma warning (disable: 26486)
+#pragma warning(disable: 26486)
                str.erase(remove(str.begin(), str.end(), charsToRemove[i]), str.end());
-#pragma warning (default: 26486)
+#pragma warning(default: 26486)
             }
          };
 

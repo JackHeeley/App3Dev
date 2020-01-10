@@ -1,20 +1,20 @@
 //
 // error_context.hpp : implements exception message support
 //
-// Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2017-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #pragma once
 
@@ -47,13 +47,13 @@ namespace error
       ///<param name='a_func'> use predefined ANSI/ISO C99 C preprocessor macro __FUNCTION__ </param>
       ///<param name='a_what'> a short description of the exception.</param>
       BASICUNIVERSALCPPSUPPORT_API context(const char* a_path, int a_line, const char* a_func, const char* a_what) :
-         _file((std::string(a_path).substr(std::string(a_path).find_last_of("/\\") + 1))),
-         _line(a_line),
-         _func(a_func),
-         _reason(SystemError().get_error_text()),
+         m_file((std::string(a_path).substr(std::string(a_path).find_last_of("/\\") + 1))),
+         m_line(a_line),
+         m_func(a_func),
+         m_reason(SystemError().get_error_text()),
          std::exception(a_what)
       {
-         _full_what = logging::decorate_error_context(std::string(_file), _line, std::string(_func), std::exception::what(), _reason);
+         m_full_what = logging::decorate_error_context(std::string(m_file), m_line, std::string(m_func), std::exception::what(), m_reason);
       };
 
       ///<summary> get full description of exception.</summary>
@@ -61,23 +61,23 @@ namespace error
       /// Note: return value is raw pointer to short lived memory that will be invalidated when the exception destructor is called.</returns>
       BASICUNIVERSALCPPSUPPORT_API const char* full_what() const noexcept
       {
-         return _full_what.c_str();
+         return m_full_what.c_str();
       }
 
    private:
       ///<summary> the source file where the exception is thrown.</summary>
-      const std::string _file;
+      const std::string m_file;
 
       ///<summary> the source code line number where the exception is thrown.</summary>
-      const int _line;
+      const int m_line;
 
       ///<summary> the name of the enclosing function where the exception is thrown.</summary>
-      const std::string _func;
+      const std::string m_func;
 
       ///<summary> the underlying system error message (if any system error occurred).</summary>
-      const std::string _reason;
+      const std::string m_reason;
 
       ///<summary> the full description of what went wrong.</summary>
-      std::string _full_what;
+      std::string m_full_what;
    };
 }

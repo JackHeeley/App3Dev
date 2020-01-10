@@ -1,6 +1,8 @@
 //
 // file_logger.hpp : implements file logging
 //
+// Log files grow indefinitely. Users should implement a suitable houskeeping strategy.
+//
 // Copyright (c) 2017-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 //    This program is free software : you can redistribute it and/or modify
@@ -31,10 +33,10 @@
 class file_logger : public logger_interface
 {
 public:
-   ///<summary> construct a default file_logger.</summary>
+   ///<summary> default constructor.</summary>
    BASICUNIVERSALCPPSUPPORT_API file_logger() noexcept;
 
-   ///<summary>construct logger</summary>
+   ///<summary>normal file logger constuctor.</summary>
    ///<param name='fileName'>path and name of the log file.</param>
    ///<param name='filter'>bitmask used to filter log write events.</param>
    BASICUNIVERSALCPPSUPPORT_API file_logger(const std::string fileName, LogFilter filter) noexcept;

@@ -9,20 +9,20 @@
 //
 // See: Microsoft Knowledge Base Article - 259695 
 //
-// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2003-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #include "stdafx.h"
 #include <setupapi.h>
@@ -220,7 +220,7 @@ private:
 */
 
 ///<summary> constructs a DeviceDiscoverer for the chosen device interface class.</summary>
-///<param name='anInterfaceClassGuid'>guid representing the system interface class for a chosen device type</param>
+///<param name='aDeviceType'>value representing a chosen device type</param>
 DeviceDiscoverer::DeviceDiscoverer(DeviceTypeDirectory::DeviceType aDeviceType) noexcept :
 #pragma warning (disable:26447)
    pimpl(spimpl::make_impl<impl>(aDeviceType)),

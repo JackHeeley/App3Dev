@@ -72,7 +72,7 @@ private:
          
       case logger_type::null_logger:
       default:
-         return std::make_shared <null_logger> ();
+         return std::make_shared<null_logger>();
      }
    }
 };

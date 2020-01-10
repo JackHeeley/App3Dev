@@ -41,6 +41,7 @@ private:
    std::mutex the_mutex;
 
 public:
+   ///<summary> default constructor.</summary>
    impl() noexcept :
       fileName("LogFile.log"),
       filter(LogFilter::None),
@@ -49,6 +50,7 @@ public:
    {
    };
 
+   ///<summary> normal constructor.</summary>
    impl(const std::string fileName, LogFilter filter) noexcept :
       fileName(fileName),
       filter(filter),
@@ -74,8 +76,7 @@ public:
       the_mutex()
    {
    }
-
-
+   
    ///<summary> destructor.</summary>
    ~impl() noexcept
    {
@@ -127,34 +128,40 @@ public:
       return !(*this == other);
    }
 
+   ///<summary> set log filter.</summary>
    void set_log_filter(LogFilter filter) noexcept override
    {
       this->filter = filter;
    }
 
+   ///<summary> get log filter.</summary>
    LogFilter get_log_filter() const noexcept override
    {
       return this->filter;
    }
 
+   ///<summary> write (text).</summary>
    void write(LogLevel level, std::string line) override
    {
       std::lock_guard<std::mutex> lock(the_mutex);
       stream << log_level(level) << ": " << utc_timestamp() << " " << line;
    }
 
+   ///<summary> writeln.</summary>
    void writeln(LogLevel level, std::string line) override
    {
       std::lock_guard<std::mutex> lock(the_mutex);
       stream << log_level(level) << ": " << utc_timestamp() << " " << line << std::endl;
    }
 
+   ///<summary> write (exception).</summary>
    void write(LogLevel level, std::exception e) override
    {
       //TODO: stack trace 
       writeln(level, e.what());
    }
 
+   ///<summary> read_all.</summary>
    std::string read_all() const override
    {
       std::ifstream t = std::ifstream(fileName);
@@ -162,6 +169,7 @@ public:
       return str;
    }
 
+   ///<summary> clear.</summary>
    void clear() override
    {
        stream.clear();
@@ -174,12 +182,13 @@ public:
 * ***************************************************************************
 */
 
-///<summary> constructs a default file_logger.</summary>
+///<summary> default constructor.</summary>
 file_logger::file_logger() noexcept :
    pimpl(spimpl::make_impl<impl>())
 {
 }
 
+///<summary> normal constructor for a file_logger.</summary>
 file_logger::file_logger(std::string fileName, LogFilter filter) noexcept :
    pimpl(spimpl::make_impl<impl>(fileName, filter))
 {
@@ -199,38 +208,46 @@ bool file_logger::operator!=(const file_logger& other) const noexcept
    return !(*this == other);
 }
 
+///<summary> set log filter.</summary>
 void file_logger::set_log_filter(LogFilter filter) noexcept
 {
    pimpl->set_log_filter(filter);
 }
 
+///<summary> get log filter.</summary>
 LogFilter file_logger::get_log_filter() const noexcept
 {
    return pimpl->get_log_filter();
 }
 
+///<summary> write (text).</summary>
 void file_logger::write(LogLevel level, std::string line) 
 {
    return pimpl->write(level, line);
 }
 
+///<summary> writeln.</summary>
 void file_logger::writeln(LogLevel level, std::string line)
 {
    return pimpl->writeln(level, line);
 }
 
+///<summary> write (exception).</summary>
 void file_logger::write(LogLevel level, std::exception e)
 {
    return pimpl->write(level, e);
 }
 
+///<summary> read all.</summary>
 std::string file_logger::read_all() const
 {
    return pimpl->read_all();
 }
 
+///<summary> clear.</summary>
 void file_logger::clear()
 {
    pimpl->clear();
 }
+
 #pragma warning (default: FILE_LOGGER_WARNINGS_SUPRESSED)

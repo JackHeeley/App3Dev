@@ -3,20 +3,20 @@
 //
 // see https://docs.microsoft.com/en-gb/windows/win32/memory/file-mapping
 //
-// Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2003-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #include "stdafx.h"
 #include "memory_mapped_file.hpp"

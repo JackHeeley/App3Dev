@@ -1,7 +1,7 @@
 //
 // UnitTestSystemError.cpp : a utf8 everywhere component unit test 
 //
-// Copyright (c) 2019-2030 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2019-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 //    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by

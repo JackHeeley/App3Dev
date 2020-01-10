@@ -1,20 +1,20 @@
 //
 // system_error.cpp : implements system error code and message decoding for Windows
 //
-// Copyright (c) 2017-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2017-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #include "stdafx.h"
 
@@ -128,6 +128,7 @@ public:
       return !(*this == other);
    }
 
+   ///<summary> get error text.</summary>
    const std::string get_error_text() const
    {
       // some error_codes we can construct (e.g. 0x23) aren't current (don't have a message) 
@@ -140,16 +141,19 @@ public:
       return utf8::convert::from_utf16((LPCTSTR)lpBuffer);
    }
 
+   ///<summary> get error code.</summary>
    const int get_error_code() const noexcept
    {
       return (int)error_code;
    }
 
+   ///<summary> clear error text.</summary>
    void clear_error_code() const noexcept
    {
 	   SetLastError(ERROR_SUCCESS);
    }
 
+   ///<summary> destructor.</summary>
    ~impl()
    {
       LocalFree(lpBuffer);
@@ -204,6 +208,7 @@ const int SystemError::get_error_code() const noexcept
    return pimpl->get_error_code();
 }
 
+///<summary> clears the system error code.</summary>
 void SystemError::clear_error_code() const noexcept
 {
 	pimpl->clear_error_code();

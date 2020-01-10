@@ -4,20 +4,20 @@
 // Here we provide a capability to create concrete objects for cdrom device(s).
 // The default deviceNumber (=0), selects the first device found.
 //
-// Copyright (c) 2005-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2005-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #include "stdafx.h"
 #include <winioctl.h>
@@ -59,12 +59,14 @@ public:
    impl(std::string device_path) :
       Device(device_path)
    {
+      // a speculative unlock is ineffective (and logically wrong here)
       locked = false;
    };
 
    // no copy constructor (unique ptr)
    impl(const impl &other) = delete;
    
+   // no move constructor (unique ptr)
    impl(impl&& other) = delete;
 
    // (unique ptr= NonCopyable)

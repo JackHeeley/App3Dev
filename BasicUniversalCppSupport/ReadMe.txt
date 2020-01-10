@@ -54,14 +54,8 @@ Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/Jac
 
 stdAfx.h, targtver.h modified to target windows 7 and higher
 
-abstract_logger.hpp
-    Abstract logging support
-    
 CppUnitTest.hpp
     Wrapper for Microsoft's unit test header CppUnitTest.h (suppression of warnings raised by imported header)
-
-default_logger.hpp
-    A concrete 'do nothing' logger
 
 error_context.hpp
     An error::context type (featuring context tagging on std::exception 'what').
@@ -71,6 +65,21 @@ file_logger.hpp, file_logger.cpp
 
 gsl.hpp
     Wrapper for Microsoft's Guidlines Support Library header gsl.h (suppression of warnings raised by imported header)
+
+log_helpers.hpp
+    static methods to support logging 
+
+logger.hpp
+    Exposes logging options and logging macros to programmers
+
+logger_factory.hpp
+    A factory pattern for creating loggers
+
+logger_interface.hpp
+    Interface for all loggers
+    
+null_logger.hpp
+    A concrete 'do nothing' logger
 
 spimpl.hpp
     Templates support for smart pointer to implementation paradigm using rule of zero. 

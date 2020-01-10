@@ -1,20 +1,20 @@
 //
 // utf8_convert.cpp : implement conversions to support utf8 on Windows
 //
-// Copyright (c) 2016-2019 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
+// Copyright (c) 2016-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
-//    This program is free software : you can redistribute itand /or modify
+//    This program is free software : you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
 //
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with this program.If not, see < http://www.gnu.org/licenses/>.
+//    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #include "stdafx.h"
 
@@ -34,7 +34,7 @@ namespace utf8
    //  Here we adopt this recommendation (and use the published source with minor changes)...
    //
 
-   // In this source file (and only here) 'throw error_context("reason");' is NOT a viable strategy - due to mutual recursion.
+   // In this source file (and only here) 'throw error_context("reason");' is NOT a viable SEH strategy - due to mutual recursion.
    // We just pull in an alternative from the blog... (and don't even bother to dereference it when catching). These exceptions
    // are handled locally, so this does not impact the SEH design as employed everywhere else.
 
