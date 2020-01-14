@@ -133,24 +133,24 @@ int main(int argc, char* argv[])
          exit(1);
       }
 
+      LOG_INFO("Build a ripper, used to acquire the data");
+      Ripper rip(deviceName);
+
+      LOG_INFO("Build a tracker, for reporting progress");
+      progress_tracker tracker(progress);
+
       LOG_INFO("Ripping image from optical disk.");
       std::cout << "Ripping image from optical disk. Please wait..." << std::endl;
-
-      LOG_INFO("Build a tracker for progress");
-      progress_tracker tracker(progress);
 
       LOG_INFO("Launch the tracker as a task (shows progress bar on stdout).");
       auto future = std::async(std::launch::async, tracker);
          
-      ///<summary>Ripper used to acquire the data</summary>
-      Ripper rip(deviceName);
-
       LOG_INFO("Do the ripping from the main thread.");
       rip(fileName, progress);
 
       Expects(progress == 100);   // if not, earlier versions of program would deadlock at join (still good to check)
 
-      LOG_INFO("Block until progress tracker returns.");
+      LOG_INFO("Block until progress tracker returns."); 
       if (!future.get()) 
       {
          LOG_WARNING("Progress thread stalled (did not finish normally).");
@@ -161,7 +161,8 @@ int main(int argc, char* argv[])
       std::system("pause");
       exit(0);
    }
-   catch (const error::context& f)
+   // In addition to (obvious) main thread exceptions, possible exceptions thrown from the tracker task will also propagate and be caught below...
+   catch (const error::context& f) 
    {
       std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.full_what()); // fancy what
       std::cout << std::endl << error_text << std::endl;
