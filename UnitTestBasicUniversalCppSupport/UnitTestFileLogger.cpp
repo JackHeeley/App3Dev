@@ -422,9 +422,9 @@ namespace UnitTestBasicUniversalCppSupport
             RAII_Preserve_LogFilter saveFilter;  
 
 #ifdef _DEBUG
-            std::string FILTERED_TEXT = "EXPECT to see this in the log!"; // if using debug build static default log filtering 
+            std::string FILTERED_TEXT = "EXPECT to see this in the (debug) logs!"; // if using debug build static default log filtering 
 #else
-            std::string FILTERED_TEXT = "DON'T show this in the log!"; // if using release build static default log filtering 
+            std::string FILTERED_TEXT = "DON'T show this in the (release) logs!"; // if using release build static default log filtering 
 #endif
             FILTERED_TEXT.append(utc_timestamp());
             std::atomic<int> progress = 0;
@@ -451,7 +451,7 @@ namespace UnitTestBasicUniversalCppSupport
 
                   std::string thread_output_suppressed("separate thread said: ");
                   thread_output_suppressed.append(FILTERED_TEXT);
-                  LOG_WARNING(thread_output_suppressed);             // issue something that should be filtered out (if using release build static default log filter)
+                  LOG_DEBUG(thread_output_suppressed);             // issue something that should be filtered out (if using release build static default log filter)
                }
                std::cout << progress_bar(progress) << std::endl;
             };
@@ -459,9 +459,9 @@ namespace UnitTestBasicUniversalCppSupport
             // Logger is currently single instanced, so next block affects logging in both threads (not optimal)
 #ifndef STATIC_LOG_FILTERING
             // Dynamic filtering test is inappropriate in this context
-            if (TEST_LOG_LEVEL(LogLevel::Warning))
+            if (TEST_LOG_LEVEL(LogLevel::Debug))
             {
-               TOGGLE_LOG_LEVEL(LogLevel::Warning);
+               TOGGLE_LOG_LEVEL(LogLevel::Debug);
             }
 #endif // !STATIC_LOG_FILTERING
 
@@ -477,7 +477,7 @@ namespace UnitTestBasicUniversalCppSupport
 
             std::string main_output_suppressed("Main thread said : ");
             main_output_suppressed.append(FILTERED_TEXT);
-            LOG_WARNING(main_output_suppressed);                           // issue something that should be filtered
+            LOG_DEBUG(main_output_suppressed);                             // issue something that should be filtered
 
             Expects(progress == 100);  // if not, program would deadlock at join
 
@@ -510,16 +510,16 @@ namespace UnitTestBasicUniversalCppSupport
          utf8::Assert::AreEqual("UnitTestFileLogger.cpp", file.c_str(), "Unexpected filename."); // also confirms __SHORT_FILE__
          std::string expected_throw_line_number("");   // built (not hard coded) to provide resilience (source line numbers change frequently)
 
-         std::string log_text = "This is a LOG_WARNING test"; log_text.append(utc_timestamp()); // unique every run
+         std::string log_text = "This is a LOG_DEBUG test"; log_text.append(utc_timestamp()); // unique every run
 
          // perform the operation under test (First invoke all logging forms)...
          try
          {
             LOG_TRACE("This is a LOG_TRACE test");       
-            LOG_DEBUG("This is a LOG_DEBUG test");       
+            LOG_DEBUG(log_text);                       // special case (LOG_DEBUG filtered by other tests) but should have been restored
             LOG_INFO("This is a LOG_INFO test");
-            LOG_WARNING(log_text);                       // special case (WARNINGS filtered by other tests) but should have been restored
-            LOG_ERROR("This is a LOG_ERROR test");       
+            LOG_WARNING("This is a LOG_WARNING test");
+            LOG_ERROR("This is a LOG_ERROR test");
          }
          catch (...)
          {
@@ -527,8 +527,10 @@ namespace UnitTestBasicUniversalCppSupport
             utf8::Assert::IsTrue(false, "Exception thrown by logging.");
          }
 
-         // test partially succeeds if log_text with this unique timestamp attached, is found in the log...
-         utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_text) == std::string::npos), "WARNING filtering is active (check other unit tests) ");
+#ifdef _DEBUG
+         // test partially succeeds if log_text with this unique timestamp attached, is found in the log (true only in DEBUG builds)...
+         utf8::Assert::IsFalse((LOG_FILE_CONTENTS.find(log_text) == std::string::npos), "DEBUG filtering is active (check other unit tests) ");
+#endif // DEBUG
 
          // test FULLY succeeds if log file now has entries that are correctly decorated (according to the build rules for decoration).
 
