@@ -39,6 +39,7 @@ extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int w
 
 #include <atomic>
 #include <chrono>
+#include <future>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -71,6 +72,9 @@ int main(int argc, char* argv[])
 
    ///<summary> a testable initialization value device name.</summary>
    const std::string NO_DEVICE("device not found");
+
+   ///<summary>atomic int used to track progress.</summary>
+   std::atomic<int> progress = 0;
 
    // Register handler for signals
    signal(SIGINT, signal_handler);     // CTRL-C
@@ -132,13 +136,25 @@ int main(int argc, char* argv[])
 
       LOG_INFO("Ripping image from optical disk.");
       std::cout << "Ripping image from optical disk. Please wait..." << std::endl;
-      {
-         
-         ///<summary>atomic int used to track progress.</summary>
-         std::atomic<int> progress = 0;
-            
-         auto show_progress = [&progress] 
+      {         
+         auto show_progress = [&progress]
          {
+            const auto finished = [&progress]() noexcept
+            {
+               return !(progress < 100);
+            };
+
+            const auto stalled = [&progress]() noexcept
+            {
+               constexpr int limit = 300;
+               static int count = 0;
+               static int last_value = progress;
+
+               if (progress == last_value) count++; else count = 0;
+               last_value = progress;
+               return !(count < limit);
+            };
+
             std::function<std::string(int)> progress_bar = [](int percent)
             {
                std::stringstream bar;
@@ -151,27 +167,35 @@ int main(int argc, char* argv[])
                return bar.str();
             };
 
-            while (progress<100)
+            while (!finished() && !stalled())
             {
                std::this_thread::sleep_for(100ms);
+               if (progress > 5) throw error_context("Simulating an exception in progress thread");
                std::cout << progress_bar(progress);
             }
             std::cout << progress_bar(progress) << std::endl;
+
+            return finished();
          };
 
-         LOG_INFO("Launch the progress bar in a separate thread.");
-         RAII_thread separate_thread(std::thread(show_progress), RAII_thread::DtorAction::detach);
-
+         //LOG_INFO("Launch the progress bar in a separate thread.");
+         //RAII_thread separate_thread(std::thread(show_progress), RAII_thread::DtorAction::detach);
+         LOG_INFO("Launch the progress bar as a task.");
+         auto future = std::async(std::launch::async, show_progress);
+         
          ///<summary>Ripper used to acquire the data</summary>
          Ripper rip(deviceName);
 
          LOG_INFO("Do the ripping from the main thread.");
          rip(fileName, progress);
 
-         Expects(progress == 100);   // if not, program would deadlock at join
+         Expects(progress == 100);   // if not, earlier versions of program would deadlock at join (still good to check)
 
          LOG_INFO("Block until progress bar is finished.");
-         separate_thread.get().join();
+         //separate_thread.get().join();
+         if (!future.get()) {
+            LOG_WARNING("Progress thread stalled (did not finish normally).");
+         }
       }
 
       std::cout << "Ripping completed successfully. You may now remove the optical disk." << std::endl;
