@@ -24,6 +24,9 @@
     <ClInclude Include="UnitTestBasicUniversalCppSupport.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RAII_thread.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

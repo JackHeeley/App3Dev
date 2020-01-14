@@ -30,8 +30,8 @@
 #include <device_discoverer.hpp>
 #include <memory_mapped_file.hpp>
 
+#include "progress_tracker.hpp"
 #include "RAII_physical_lock.hpp"
-#include "RAII_thread.hpp"
 #include "ripper.hpp"
 
 // TODO: We can't control the  test sequence, so there is a race to name the (single) logfile (as used by default logger macros).

@@ -18,10 +18,10 @@
     <ClInclude Include="ripper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RAII_thread.hpp">
+    <ClInclude Include="RAII_physical_lock.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RAII_physical_lock.hpp">
+    <ClInclude Include="progress_tracker.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

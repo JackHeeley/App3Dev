@@ -201,10 +201,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="progress_tracker.hpp" />
     <ClInclude Include="ripper.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="RAII_thread.hpp" />
     <ClInclude Include="RAII_physical_lock.hpp" />
   </ItemGroup>
   <ItemGroup>

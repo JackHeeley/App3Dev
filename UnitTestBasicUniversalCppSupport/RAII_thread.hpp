@@ -53,7 +53,7 @@ public:
 
    ///<summary> explicit delete of copy assignment operator (rule of 5)</summary>
    RAII_thread& RAII_thread::operator=(RAII_thread& other) = delete;
-   
+
    ///<summary> explicit (default) move assignment operator (rule of 5)</summary>
    RAII_thread& RAII_thread::operator=(RAII_thread&& other) = default;
 

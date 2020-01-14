@@ -18,7 +18,6 @@
 //
 #include "stdafx.h"
 
-#include "..\SampleProgram\RAII_thread.hpp"  // TODO: could be moved from program to basic support dll
 #include <atomic>
 #include <chrono>
 #include <iomanip>

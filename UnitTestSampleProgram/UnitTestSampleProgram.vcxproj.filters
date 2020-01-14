@@ -32,9 +32,6 @@
     <ClCompile Include="UnitTestRipper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UnitTestRAII_thread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="UnitTestRAII_physical_lock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

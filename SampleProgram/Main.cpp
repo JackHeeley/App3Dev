@@ -48,7 +48,6 @@ extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int w
 
 #include <signal.h>
 
-using namespace std::chrono_literals;
 
 ///<summary>forward reference to signal handler.</summary> 
 void signal_handler(int signum);
@@ -70,11 +69,11 @@ int main(int argc, char* argv[])
    ///<summary> number of times to test for an absent device.</summary>
    constexpr static int  MAX_RETRIES = 3;
 
+   ///<summary>atomic int used to track progress.</summary>
+   static std::atomic<int> progress = 0;
+   
    ///<summary> a testable initialization value device name.</summary>
    const std::string NO_DEVICE("device not found");
-
-   ///<summary>atomic int used to track progress.</summary>
-   std::atomic<int> progress = 0;
 
    // Register handler for signals
    signal(SIGINT, signal_handler);     // CTRL-C
@@ -136,68 +135,27 @@ int main(int argc, char* argv[])
 
       LOG_INFO("Ripping image from optical disk.");
       std::cout << "Ripping image from optical disk. Please wait..." << std::endl;
-      {         
-         auto show_progress = [&progress]
-         {
-            const auto finished = [&progress]() noexcept
-            {
-               return !(progress < 100);
-            };
 
-            const auto stalled = [&progress]() noexcept
-            {
-               constexpr int limit = 300;
-               static int count = 0;
-               static int last_value = progress;
+      LOG_INFO("Build a tracker for progress");
+      progress_tracker tracker(progress);
 
-               if (progress == last_value) count++; else count = 0;
-               last_value = progress;
-               return !(count < limit);
-            };
-
-            std::function<std::string(int)> progress_bar = [](int percent)
-            {
-               std::stringstream bar;
-               bar << "\r" << "[";
-               for (int i = 0; i < 20; i++)
-               {
-                  bar << ((i < percent / 5) ? u8"█" : " "); 
-               }
-               bar << "]" << std::setw(3) << percent << "%";
-               return bar.str();
-            };
-
-            while (!finished() && !stalled())
-            {
-               std::this_thread::sleep_for(100ms);
-               if (progress > 5) throw error_context("Simulating an exception in progress thread");
-               std::cout << progress_bar(progress);
-            }
-            std::cout << progress_bar(progress) << std::endl;
-
-            return finished();
-         };
-
-         //LOG_INFO("Launch the progress bar in a separate thread.");
-         //RAII_thread separate_thread(std::thread(show_progress), RAII_thread::DtorAction::detach);
-         LOG_INFO("Launch the progress bar as a task.");
-         auto future = std::async(std::launch::async, show_progress);
+      LOG_INFO("Launch the tracker as a task (shows progress bar on stdout).");
+      auto future = std::async(std::launch::async, tracker);
          
-         ///<summary>Ripper used to acquire the data</summary>
-         Ripper rip(deviceName);
+      ///<summary>Ripper used to acquire the data</summary>
+      Ripper rip(deviceName);
 
-         LOG_INFO("Do the ripping from the main thread.");
-         rip(fileName, progress);
+      LOG_INFO("Do the ripping from the main thread.");
+      rip(fileName, progress);
 
-         Expects(progress == 100);   // if not, earlier versions of program would deadlock at join (still good to check)
+      Expects(progress == 100);   // if not, earlier versions of program would deadlock at join (still good to check)
 
-         LOG_INFO("Block until progress bar is finished.");
-         //separate_thread.get().join();
-         if (!future.get()) {
-            LOG_WARNING("Progress thread stalled (did not finish normally).");
-         }
+      LOG_INFO("Block until progress tracker returns.");
+      if (!future.get()) 
+      {
+         LOG_WARNING("Progress thread stalled (did not finish normally).");
       }
-
+      
       std::cout << "Ripping completed successfully. You may now remove the optical disk." << std::endl;
       LOG_INFO("Ripping completed successfully.");
       std::system("pause");
@@ -206,7 +164,6 @@ int main(int argc, char* argv[])
    catch (const error::context& f)
    {
       std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.full_what()); // fancy what
-      //std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.what());    // or simple what if you prefer
       std::cout << std::endl << error_text << std::endl;
       std::system("pause");
       LOG_ERROR(error_text);

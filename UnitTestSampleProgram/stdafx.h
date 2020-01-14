@@ -39,7 +39,6 @@
 #include <cd_rom_device.hpp>
 
 #include <RAII_physical_lock.hpp>
-#include <RAII_thread.hpp>
 #include <ripper.hpp>
 
 #include <utf8_assert.hpp>

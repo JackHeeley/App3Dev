@@ -27,6 +27,7 @@
 #include "logger_interface.hpp"
 #include "logger_factory.hpp"
 #include "null_logger.hpp"
+#include "RAII_thread.hpp"
 #include "spimpl.hpp"
 #include "system_error.hpp"
 #include "utf8_assert.hpp"
