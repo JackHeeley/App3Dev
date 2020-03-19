@@ -10,6 +10,8 @@
 // #C++17 #STANDARDTEMPLATELIBRARY #GUIDLINESUPPORTLIBRARY #UTF8EVERYWHERE
 // #SMARTLOGGING #STRUCTUREDEXCEPTIONHANDLING #UNITTESTING #VISUALSTUDIO
 //
+// FULL DOCUMENTATION AT https://github.com/JackHeeley/App3Dev/wiki
+//
 // Copyright (c) 2017-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 //    This program is free software : you can redistribute it and/or modify
