@@ -93,6 +93,9 @@ utc_timestamp.hpp
 utf8_assert.hpp
     This header is a utf8 wrapper for Microsoft's CppUnitTest Assert class. 
 
+utf8_console.hpp, utf8_console.cpp 
+    These files provide console codepage configuration (needed on windows). 
+    
 utf8_convert.hpp, utf8_convert.cpp 
     These files provide minimum conversions needed to support the utf8 anywhere 
     programming paradigm (on windows). 

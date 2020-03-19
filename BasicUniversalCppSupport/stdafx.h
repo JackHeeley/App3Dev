@@ -34,6 +34,7 @@
 #include "system_error.hpp"
 #include "utc_timestamp.hpp"
 #include "utf8_assert.hpp"       
+#include "utf8_console.hpp"
 #include "utf8_convert.hpp"
 #include "utf8_guid.hpp"         
 

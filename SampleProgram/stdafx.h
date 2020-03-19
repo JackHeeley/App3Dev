@@ -24,6 +24,7 @@
 #include <spimpl.hpp>
 #include <system_error.hpp>
 #include <utc_timestamp.hpp>
+#include <utf8_console.hpp>
 #include <utf8_convert.hpp>
 
 #include <cd_rom_device.hpp>

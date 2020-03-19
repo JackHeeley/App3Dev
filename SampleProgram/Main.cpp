@@ -5,6 +5,11 @@
 // enumerated system device drive, and writes it to a (disk) file 
 // with a fixed name.
 //
+// THE OBJECTIVE IS TO DEMONSTRATE ROBUST CODING PRACTICES WITH:
+//
+// #C++17 #STANDARDTEMPLATELIBRARY #GUIDLINESUPPORTLIBRARY #UTF8EVERYWHERE
+// #SMARTLOGGING #STRUCTUREDEXCEPTIONHANDLING #UNITTESTING #VISUALSTUDIO
+//
 // Copyright (c) 2017-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 //    This program is free software : you can redistribute it and/or modify
@@ -21,21 +26,6 @@
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #include "stdafx.h"
-
-// Visual Studio Properties/General/Advanced/Character Set "Use Unicode Character Set" is defined. 
-// This is a consequence of project properties chosen in accordance with the utf8 everywhere manifesto guidance.
-// The setting does NOT indicate that the project is using unicode character encoding (because it isn't) but rather 
-// to force the compiler to raise errors if utf8 characters are presented to Windows API's designed for UNICODE (E.g. WIN32). 
-// _UNICODE is a good indicator that we are compiling this code to run on Windows. We'll make this explicit...
-#ifdef _UNICODE 
-#define WINDOWS 
-#endif
-
-#ifdef WINDOWS
-// When compiling with /std:c++17 we don't want to #include <windows.h> 
-constexpr auto CP_UTF8 = 65001;
-extern "C" __declspec(dllimport) int __stdcall SetConsoleOutputCP(unsigned int wCodePageID) ;
-#endif
 
 #include <atomic>
 #include <chrono>
@@ -81,11 +71,9 @@ int main(int argc, char* argv[])
 
    try
    {
-#ifdef WINDOWS
       LOG_INFO(u8"Γειά σας Κόσμε! On Windows, switch platform console support to use the utf8 codepage");
-      SetConsoleOutputCP(CP_UTF8);
-      // std::cout << u8"Γειά σας Κόσμε!\n" << std::endl; // try it.
-#endif
+      utf8::console::configure_codepage();
+      std::cout << u8"Γειά σας Κόσμε!\n" << std::endl; // try it.
 
       std::cout << "SampleProgram.exe Copyright(c) 2019-2020 Jack Heeley.\n";
       std::cout << "This program comes with ABSOLUTELY NO WARRANTY; for details refer to GPL 3.0.\n";
@@ -161,24 +149,33 @@ int main(int argc, char* argv[])
       std::system("pause");
       exit(0);
    }
-   // In addition to (obvious) main thread exceptions, possible exceptions thrown from the tracker task will also propagate and be caught below...
+
+   // In addition to (obvious) main thread exceptions, exceptions thrown from the tracker task also propagate and are caught below.
+   // This is (usually) exactly what we've always wanted for SEH, but was hithertofore difficult to arrange. With std::async it's built in.
    catch (const error::context& f) 
    {
-      std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.full_what()); // fancy what
+      std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.full_what()); // fancy what (root cause and locus of error)
       std::cout << std::endl << error_text << std::endl;
       std::system("pause");
       LOG_ERROR(error_text);
       exit(-1);
    }
+
+   // Our design intent is to always use error::context. External libraries can't comply with all of our design requirements though, but will often 
+   // follow best practice and raise std::exceptions. We therefore try to catch and handle these, and other error indications, at point of failure 
+   // when calling platform library functions. If recovery isn't practical, we construct an error::context from the std::exception and throw it.
+   // Here we we provide a last-ditch defence, to handle the possibility that this approach is not perfectly applied everywhere in the code...
    catch (const std::exception& e)
    {
-      LOG_WARNING("A std::exception was thrown. (design intent is to always use error::context).");
-      std::string error_text = "Unhandled Std Exception: "; error_text.append(e.what());   // simple what
+      LOG_WARNING("A std::exception was thrown.");
+      std::string error_text = "Unhandled Std Exception: "; error_text.append(e.what());   // simple what (a comment)
       std::cout << std::endl << error_text << std::endl;
       std::system("pause");
       LOG_ERROR(error_text);
       exit(-1);
    }
+
+   // ...and this is the foxhole, behind the last-ditch, ensuring some kind of controlled program exit (if possible) no matter what was thrown.
    catch (...)
    {
       LOG_WARNING("Something odd was thrown. (design intent is to always use error::context).");
