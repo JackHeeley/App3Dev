@@ -55,11 +55,7 @@ public:
    ///<summary> construct a memory mapped file object.</summary>
    ///<param name='aFilePath'> path name of file to be used.</param>
    ///<param name='aBufferName'> name of buffer in memory. Processes can share buffer if they know this name.</param>
-   ///<param name='aBufferSize'> reference to a DWORD containing size of buffer in bytes.
-   /// If this DWORD contains zero the buffer size will be chosen to fit the size of the actual contents of 
-   /// the swap space file specified by parameter 1. The value can be interrogated with get_buffer_size().</param>
-   ///<remarks> This option supports re-construction from earlier buffer data created in a previous session
-   /// (and persisted to the backing disk file when the buffer is released).</remarks>
+   ///<param name='aBufferSize'> reference to a uint64_t containing size of buffer in bytes.</param>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
    impl(const std::string& aFilePath, const std::string& aBufferName, uint64_t aBufferSize) :
       filePathW(utf8::convert::to_utf16(aFilePath)),
@@ -71,12 +67,6 @@ public:
    {
       bufferSize.QuadPart = aBufferSize;
       openFile();
-
-      if (aBufferSize == 0) 
-      {
-         sizeBufferToBackingFile();
-      }
-
       createFileMapping();
       mapViewOfFile();
    }
@@ -219,18 +209,6 @@ public:
          std::stringstream create_file_failed; create_file_failed << "CreateFile(\"" << utf8::convert::from_utf16(filePathW) << "\", ...) failed";
          throw error_context(create_file_failed.str().c_str());
       }
-   }
-
-   ///<summary> determine the bufferSize by querying the size of the backing file.</summary>
-   ///<exception cref='std::exception'> if the operation could not be completed.</exception>
-   void impl::sizeBufferToBackingFile() 
-   {
-      if (hFile == INVALID_HANDLE_VALUE) 
-      {
-         throw error_context("No file handle available");
-      }
-
-      bufferSize.LowPart = GetFileSize(hFile, (LPDWORD)(&bufferSize.HighPart));
    }
 
    ///<summary> relate disk file to memory object.</summary>

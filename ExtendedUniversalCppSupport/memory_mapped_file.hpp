@@ -49,10 +49,7 @@ public:
    ///<summary> construct a memory mapped file object</summary>
    ///<param name='file_path'> path name of file to be used.</param>
    ///<param name='buffer_name'> name of buffer in memory. Processes can share buffer if they know this name</param>
-   ///<param name='buffer_size'> size of buffer in bytes. If zero the buffer size will be chosen to fit the 
-   /// size of the actual contents of the swap space file specified by parameter 1. The value can be interrogated with get_buffer_size().</param>
-   ///<remarks>The zero buffer size option supports re-construction from earlier buffer data created in a previous session
-   /// (and persisted to the backing disk file when the buffer was released).</remarks>
+   ///<param name='buffer_size'> size of buffer in bytes.</param>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
    EXTENDEDUNIVERSALCPPSUPPORT_API MemoryMappedFile(const std::string& file_path, const std::string& buffer_name, uint64_t buffer_size);
 
@@ -83,4 +80,3 @@ private:
    ///<remarks> with default copy, move and compare support.</remarks>
    spimpl::impl_ptr<impl> pimpl;
 };
-
