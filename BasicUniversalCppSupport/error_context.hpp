@@ -47,13 +47,13 @@ namespace error
       ///<param name='a_func'> use predefined ANSI/ISO C99 C preprocessor macro __FUNCTION__ </param>
       ///<param name='a_what'> a short description of the exception.</param>
       BASICUNIVERSALCPPSUPPORT_API context(const char* a_path, int a_line, const char* a_func, const char* a_what) :
-         m_file((std::string(a_path).substr(std::string(a_path).find_last_of("/\\") + 1))),
+         m_file(get_short_file(a_path)),
          m_line(a_line),
          m_func(a_func),
          m_reason(SystemError().get_error_text()),
          std::exception(a_what)
       {
-         m_full_what = logging::decorate_error_context(std::string(m_file), m_line, std::string(m_func), std::exception::what(), m_reason);
+         m_full_what = logging::decorate_error_context(m_file, m_line, m_func, std::exception::what(), m_reason);
       };
 
       ///<summary> get full description of exception.</summary>
