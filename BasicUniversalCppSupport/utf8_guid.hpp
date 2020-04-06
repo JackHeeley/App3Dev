@@ -71,17 +71,16 @@ namespace utf8
          std::stringstream ss;
          std::string str(aGuidString);
 
-         auto const removeCharsFromString = [&str](gsl::not_null<const char*>(charsToRemove))
+         auto const is_unwanted = [&str](char ch)
          {
-            for (unsigned int i = 0; i < strlen(charsToRemove); ++i)
-            {
-#pragma warning(disable: 26486)
-               str.erase(remove(str.begin(), str.end(), charsToRemove[i]), str.end());
-#pragma warning(default: 26486)
-            }
+            const gsl::not_null<const char*> unwanted_chars = "Lx,";
+            for (unsigned int i = 0; i < strlen(unwanted_chars); ++i) 
+               if (ch == unwanted_chars[i]) return true;
+            return false;
          };
 
-         removeCharsFromString("Lx,");
+         str.erase(remove_if(str.begin(), str.end(), is_unwanted), str.end());
+
          ss << std::hex << str;
          ss >> aGuid.Data1 >> aGuid.Data2 >> aGuid.Data3;
 
