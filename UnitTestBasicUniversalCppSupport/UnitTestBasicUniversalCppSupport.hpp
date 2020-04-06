@@ -35,3 +35,15 @@ namespace UnitTestBasicUniversalCppSupport
 // useful macro conversions for use in unit tests
 #define STRINGIZE(x) #x
 #define TO_STRING_LITERAL(x) STRINGIZE(x)
+
+// This template specialization allows utf8::Assert::AreEqual to compare GUIDs 
+namespace Microsoft
+{
+   namespace VisualStudio
+   {
+      namespace CppUnitTestFramework
+      {
+         template<> static std::wstring ToString<_GUID>(const struct _GUID& t) { return L"_GUID"; }
+      }
+   }
+}

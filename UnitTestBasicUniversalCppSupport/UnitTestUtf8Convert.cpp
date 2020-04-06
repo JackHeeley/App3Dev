@@ -77,11 +77,14 @@ namespace UnitTestBasicUniversalCppSupport
             // perform the operation under test (convert string to GUID)...
             const GUID actual_guid = utf8::guid_convert::to_guid(initial_guid_string);
 
+            // test succeeds if GUID values match (template specialization is required here, see UnitTestBasicUniversalCppSupport.hpp)...
+            utf8::Assert::AreEqual(expected_guid, actual_guid, "converted GUID does not match expected value");
+
             //round trip to get back to a string (since we have no utf8::Assert::AreEqual for GUID type)
             std::string actual_guid_string = utf8::guid_convert::from_guid(actual_guid);
 
             // test succeeds if string values match...
-            utf8::Assert::AreEqual(expected_guid_string, actual_guid_string, "converted GUID does not match expected value");
+            utf8::Assert::AreEqual(expected_guid_string, actual_guid_string, "converted GUID string does not match expected value");
          }
          catch (const std::exception & e)
          {
@@ -104,11 +107,13 @@ namespace UnitTestBasicUniversalCppSupport
             // perform the operation under test (convert string to GUID)...
             const GUID actual_guid = utf8::guid_convert::to_guid(initial_guid_string);
 
+            utf8::Assert::AreEqual(expected_guid, actual_guid, "converted GUID does not match expected value");
+
             //round trip to get back to a string (since we have no utf8::Assert::AreEqual for GUID type)
             std::string actual_guid_string = utf8::guid_convert::from_guid(actual_guid);
 
             // test succeeds if string values match...
-            utf8::Assert::AreEqual(expected_guid_string, actual_guid_string, "converted GUID does not match expected value");
+            utf8::Assert::AreEqual(expected_guid_string, actual_guid_string, "converted GUID string does not match expected value");
          }
          catch (const std::exception & e)
          {

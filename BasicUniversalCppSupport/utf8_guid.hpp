@@ -71,15 +71,9 @@ namespace utf8
          std::stringstream ss;
          std::string str(aGuidString);
 
-         auto const is_unwanted = [&str](char ch)
-         {
-            const gsl::not_null<const char*> unwanted_chars = "Lx,";
-            for (unsigned int i = 0; i < strlen(unwanted_chars); ++i) 
-               if (ch == unwanted_chars[i]) return true;
-            return false;
-         };
-
-         str.erase(remove_if(str.begin(), str.end(), is_unwanted), str.end());
+#pragma warning (disable: 26486)
+         str.erase(remove_if(str.begin(), str.end(), [](unsigned char x) { return std::string::npos != std::string("Lx,").find_first_of(x); }), str.end());
+#pragma warning (default: 26486)
 
          ss << std::hex << str;
          ss >> aGuid.Data1 >> aGuid.Data2 >> aGuid.Data3;
