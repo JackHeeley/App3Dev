@@ -44,6 +44,7 @@ namespace Microsoft
       namespace CppUnitTestFramework
       {
          template<> static std::wstring ToString<_GUID>(const struct _GUID& t) { return L"_GUID"; }
+         // TODO: add other specializations here as required
       }
    }
 }

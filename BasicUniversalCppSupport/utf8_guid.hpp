@@ -31,6 +31,32 @@
 
 #include "gsl.hpp"
 
+///<summary>functor supporting stripping all instances of a set of selected characters from a target string. 
+/// Use object as a predicate for std::remove_if in an erase-remove construct/idiom applied to the target.</summary>
+class char_stripper
+{
+private:
+   const std::string chars_to_strip;
+
+public:
+   ///<summary>construct the functor</summary>
+   ///<param name='some_chars_to_strip'>specifies a specific set of characters to be stripped</param>
+   ///<remarks>removes all instance of each of the characters specified from the target string</remarks>
+   char_stripper(std::string some_chars_to_strip) :
+      chars_to_strip(some_chars_to_strip)
+   {
+   }
+
+   ///<summary> functor acts as predicate for std::remove_if</summary>
+   ///<param name='ch'> a character to be tested for removal</param>
+   ///<returns> true if ch is selected for removal, or false if not.</returns>
+   bool operator()(char ch) noexcept
+   {
+      return std::string::npos != chars_to_strip.find_first_of(ch);
+   }
+};
+
+
 namespace utf8
 {
    ///<summary>convert selected windows types to and from utf8</summary>
@@ -63,7 +89,7 @@ namespace utf8
       ///<summary>convert utf8 std::string to GUID</summary>
       ///<param name='aGuidString'>a utf8 encoded string representation of aGuid in the form
       /// "0xhhhhhhhhL, 0xhhhh, 0xhhhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh"
-      /// where h is any hex digit (lowercase)</param>
+      /// where h is any hex digit</param>
       ///<returns>const GUID (e.g. as supplied in winioctl.h)</returns>
       static inline GUID to_guid(const std::string aGuidString)
       {
@@ -71,8 +97,10 @@ namespace utf8
          std::stringstream ss;
          std::string str(aGuidString);
 
+         const char_stripper strip("Lx,");
+
 #pragma warning (disable: 26486)
-         str.erase(remove_if(str.begin(), str.end(), [](unsigned char x) { return std::string::npos != std::string("Lx,").find_first_of(x); }), str.end());
+         str.erase(remove_if(str.begin(), str.end(), strip), str.end());
 #pragma warning (default: 26486)
 
          ss << std::hex << str;
