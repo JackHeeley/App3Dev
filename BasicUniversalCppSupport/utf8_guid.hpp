@@ -31,34 +31,33 @@
 
 #include "gsl.hpp"
 
-///<summary>functor supporting stripping all instances of a set of selected characters from a target string. 
-/// Use object as a predicate for std::remove_if in an erase-remove construct/idiom applied to the target.</summary>
-class char_stripper
-{
-private:
-   const std::string chars_to_strip;
-
-public:
-   ///<summary>construct the functor</summary>
-   ///<param name='some_chars_to_strip'>specifies a specific set of characters to be stripped</param>
-   ///<remarks>removes all instance of each of the characters specified from the target string</remarks>
-   char_stripper(std::string some_chars_to_strip) :
-      chars_to_strip(some_chars_to_strip)
-   {
-   }
-
-   ///<summary> functor acts as predicate for std::remove_if</summary>
-   ///<param name='ch'> a character to be tested for removal</param>
-   ///<returns> true if ch is selected for removal, or false if not.</returns>
-   bool operator()(char ch) noexcept
-   {
-      return std::string::npos != chars_to_strip.find_first_of(ch);
-   }
-};
-
-
 namespace utf8
 {
+   ///<summary>functor supporting stripping all instances of a set of selected characters from a target string. 
+   /// Use object as a predicate for std::remove_if in an erase-remove construct/idiom applied to the target.</summary>
+   class char_stripper
+   {
+   private:
+      const std::string chars_to_strip;
+
+   public:
+      ///<summary>construct the functor</summary>
+      ///<param name='some_chars_to_strip'>specifies a specific set of characters to be stripped</param>
+      ///<remarks>removes all instance of each of the characters specified from the target string</remarks>
+      char_stripper(std::string some_chars_to_strip) :
+         chars_to_strip(some_chars_to_strip)
+      {
+      }
+
+      ///<summary> functor acts as predicate for std::remove_if</summary>
+      ///<param name='ch'> a character to be tested for removal</param>
+      ///<returns> true if ch is selected for removal, or false if not.</returns>
+      bool operator()(char ch) noexcept
+      {
+         return std::string::npos != chars_to_strip.find_first_of(ch);
+      }
+   };
+
    ///<summary>convert selected windows types to and from utf8</summary>
    class guid_convert
    {
