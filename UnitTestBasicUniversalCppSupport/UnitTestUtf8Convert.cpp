@@ -43,7 +43,7 @@ namespace UnitTestBasicUniversalCppSupport
          }
       }
 
-      TEST_METHOD(TestUtf8ConvertFromGuid)
+       TEST_METHOD(TestUtf8ConvertFromGuid)
       {
          try
          {
@@ -91,7 +91,33 @@ namespace UnitTestBasicUniversalCppSupport
             utf8::Assert::Fail(e.what()); // something went wrong
          }
       }      
-      
+ 
+      TEST_METHOD(TestGuidAsserts)
+      {
+         // a template specialization (see UnitTestBasicUniversalCppSupport.hpp) is required before AreEqual will support _GUID parameter
+         // here we confirm that this measure is sufficient and has the desired effect before we rely on it in other tests
+
+         try
+         {
+            // prepare for test -  express GUID_DEVINTERFACE_CDROM as a string. Format matches lower case DEFINE_GUID text style (see "winioctl.h")...
+            const std::string cdrom_string("0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b");
+            const std::string mismatch("0x53f56309L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b");
+
+            const GUID GUID_MY_CDROM = utf8::guid_convert::to_guid(cdrom_string);
+            const GUID GUID_MISMATCH = utf8::guid_convert::to_guid(mismatch);
+
+            // test succeeds if AreEqual identifies matching GUID objects and AreNotEqual identifies mismatches...
+            utf8::Assert::AreEqual(GUID_MY_CDROM, GUID_DEVINTERFACE_CDROM, "Assert::AreEqual fails to identify equal GUIDs");
+            utf8::Assert::AreNotEqual(GUID_MISMATCH, GUID_DEVINTERFACE_CDROM, "Assert::AreNotEqual fails to identify not equal GUIDs");
+
+            // we have also confirmed the corollory, i.e. correct behaviour when asserts fail.
+         }
+         catch (const std::exception& e)
+         {
+            utf8::Assert::Fail(e.what()); // something went wrong
+         }
+      }
+
       TEST_METHOD(TestUtf8ConvertToGuidSpecials)
       {
          try

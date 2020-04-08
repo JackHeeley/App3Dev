@@ -78,6 +78,12 @@ namespace utf8
          Microsoft::VisualStudio::CppUnitTestFramework::Assert::AreEqual(expected, actual, ignoreCase, message ? utf8::convert::to_utf16(message).c_str() : nullptr, pLineInfo);
       }
 
+      // Verify that two objects are not equal.
+      template<typename T> static void AreNotEqual(const T& expected, const T& actual, const char* message = nullptr, const __LineInfo* pLineInfo = nullptr)
+      {
+         Microsoft::VisualStudio::CppUnitTestFramework::Assert::AreNotEqual(expected, actual, message ? utf8::convert::to_utf16(message).c_str() : nullptr, pLineInfo);
+      }
+      
       // double AreNotEqual comparison:
       static void AreNotEqual(double notExpected, double actual, double tolerance, const char* message = nullptr, const __LineInfo* pLineInfo = nullptr)
       {
