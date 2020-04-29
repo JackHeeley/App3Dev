@@ -48,9 +48,11 @@ static constexpr const char* get_short_file(const char* const full_path)
       for (const char* pos = full_path; *pos != 0x0; ++pos)
       {
          if (*pos == slash)
-            file_part = pos + 1;
+         {
+            if (file_part <= pos)
+               file_part = pos + 1;
+         }
       }
-      if (file_part != full_path) break;
    }
    return file_part;
 };

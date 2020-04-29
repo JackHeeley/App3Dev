@@ -92,6 +92,28 @@ namespace UnitTestBasicUniversalCppSupport
             LOG_ERROR("Couldn't create logger.");     // No logger? This will emit on std::cerr
          }
       }
+
+      TEST_METHOD(TestGetShortFile)
+      {
+         // we expect consistent seperator characters (e.g. as __FILE__ macro will present to loggers) ...
+         utf8::Assert::AreEqual(get_short_file("c:\\dir\\subdir\\file_a.ext"), "file_a.ext"); 
+         utf8::Assert::AreEqual(get_short_file("c:/dir/subdir/file_b.ext"), "file_b.ext");
+         utf8::Assert::AreEqual(get_short_file("file_c.ext"), "file_c.ext");
+         utf8::Assert::AreEqual(get_short_file("c:\\dir\\subdir\\subsubdir\\subsubsubdir\\file_d.ext"), "file_d.ext");
+       
+         // and we support mixed separators for completeness (there is no real trade-off with constexpr)...
+         utf8::Assert::AreEqual(get_short_file("c:\\dir/subdir\\file_e.ext"), "file_e.ext");
+         utf8::Assert::AreEqual(get_short_file("c:/dir/subdir\\file_f.ext"), "file_f.ext");
+         utf8::Assert::AreEqual(get_short_file("c:/dir\\subdir/file_g.ext"), "file_g.ext");
+         utf8::Assert::AreEqual(get_short_file("c:\\dir\\subdir/file_h.ext"), "file_h.ext");
+
+         // we aren't validating paths, and testing suspect edge- and special- cases is always good practice...
+         utf8::Assert::AreEqual(get_short_file("c:\\dir\\subdir////////////file_i.ext"), "file_i.ext");
+         utf8::Assert::AreEqual(get_short_file("////////////////file_j.ext"), "file_j.ext");
+         utf8::Assert::AreEqual(get_short_file("\\\\\\\\\\\\\\\\file_k.ext"), "file_k.ext");
+         utf8::Assert::AreEqual(get_short_file(u8"\\\\\\\\\\\\\\\\φιλε_λ.εχτ"), u8"φιλε_λ.εχτ");
+      }
+
       TEST_METHOD(TestErrorContext)
       {
          // Building 'line' prevents this test from breaking every time unit test changes affect the line number tested here
@@ -100,7 +122,7 @@ namespace UnitTestBasicUniversalCppSupport
          try
          {
             // perform the operation under test...
-            line.insert(0,"(" TO_STRING_LITERAL(__LINE__) ")"); throw error_context("we blew it"); // prepare line number and throw (on same line)
+            line.insert(0, "(" TO_STRING_LITERAL(__LINE__) ")"); throw error_context("we blew it"); // prepare line number and throw (on same line)
          }
          catch (const error::context& e)
          {
