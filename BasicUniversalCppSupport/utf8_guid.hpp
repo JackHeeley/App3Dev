@@ -90,19 +90,17 @@ namespace utf8
       /// "0xhhhhhhhhL, 0xhhhh, 0xhhhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh"
       /// where h is any hex digit</param>
       ///<returns>const GUID (e.g. as supplied in winioctl.h)</returns>
-      static inline GUID to_guid(const std::string aGuidString)
+      static inline GUID to_guid(std::string aGuidString)
       {
          GUID aGuid;
          std::stringstream ss;
-         std::string str(aGuidString);
-
          const char_stripper strip("Lx,");
 
 #pragma warning (disable: 26486)
-         str.erase(remove_if(str.begin(), str.end(), strip), str.end());
+         aGuidString.erase(remove_if(aGuidString.begin(), aGuidString.end(), strip), aGuidString.end());
 #pragma warning (default: 26486)
 
-         ss << std::hex << str;
+         ss << std::hex << aGuidString;
          ss >> aGuid.Data1 >> aGuid.Data2 >> aGuid.Data3;
 
          auto span = gsl::as_span(aGuid.Data4);
