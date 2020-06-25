@@ -147,7 +147,7 @@ public:
       return (int)error_code;
    }
 
-   ///<summary> clear error text.</summary>
+   ///<summary> clear error code.</summary>
    void clear_error_code() const noexcept
    {
 	   SetLastError(ERROR_SUCCESS);

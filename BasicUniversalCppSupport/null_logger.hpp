@@ -39,12 +39,16 @@ public:
    BASICUNIVERSALCPPSUPPORT_API null_logger(const std::string fileName, LogFilter filter) noexcept {}
 
    ///<summary> equals comparison operator.</summary>
-   ///<remarks> defines equals to mean identical member content.</remarks>
-   BASICUNIVERSALCPPSUPPORT_API bool operator==(const null_logger& other) const noexcept = default;
+   ///<remarks> defines equals always true.</remarks>
+   BASICUNIVERSALCPPSUPPORT_API bool operator==(const null_logger& other) const noexcept {
+      return true;
+   }
 
    ///<summary> not equals comparison operator.</summary>
-   ///<remarks> defines not equals to mean differing member content.</remarks>
-   BASICUNIVERSALCPPSUPPORT_API bool operator!=(const null_logger& other) const noexcept = default;
+   ///<remarks> defines not equals never true.</remarks>
+   BASICUNIVERSALCPPSUPPORT_API bool operator!=(const null_logger& other) const noexcept {
+      return false;
+   }
 
    ///<summary> used to determine which messages get logged. loggers compare the filter bitmask supplied
    /// here (or at construction time) with the single bit level supplied as parameter to write operations.</summary>

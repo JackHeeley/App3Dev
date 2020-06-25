@@ -29,14 +29,7 @@
 //
 #include "stdafx.h"
 
-#include <atomic>
-#include <chrono>
 #include <future>
-#include <iomanip>
-#include <iostream>
-#include <string>
-#include <thread>
-#include <vector>
 
 #include <signal.h>
 
