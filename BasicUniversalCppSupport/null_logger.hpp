@@ -26,7 +26,7 @@
 
 #include "logger_interface.hpp"
 
-///<summary>file logger for ansi c++17/utf8 code clients</summary>
+///<summary>null logger for ansi c++17/utf8 code clients</summary>
 class null_logger : public logger_interface
 {
 public:

@@ -350,6 +350,30 @@ namespace UnitTestBasicUniversalCppSupport
          }
       }
 
+      TEST_METHOD(TestFileLoggerIsComparable)
+      {
+         try
+         {
+            // create another logger - contains a handle to same log file as used by default logging macros, but with a log filter that could vary independently...
+            file_logger file_logger_duplicate(log_file_name, LogFilter::Full);
+            file_logger copied_duplicate_logger = file_logger_duplicate; // copy will NOT invalidate file_logger_duplicate.
+
+            // test succeeds if duplicate and copy are considered equal...
+            utf8::Assert::IsTrue((copied_duplicate_logger == file_logger_duplicate), "the two log copies were not considered equal");
+            utf8::Assert::IsFalse((copied_duplicate_logger != file_logger_duplicate), "the two log copies were considered inequal");
+
+            file_logger moved_duplicate_logger = std::move(file_logger_duplicate); // move will (correctly) invalidate file_logger_duplicate.
+
+            //... and after a move, the copied duplicate and moved duplicate are still considered equal.
+            utf8::Assert::IsTrue((copied_duplicate_logger == moved_duplicate_logger), "the copied and moved log objects were not considered equal");
+            utf8::Assert::IsFalse((copied_duplicate_logger != moved_duplicate_logger), "the copied and moved log objects were considered inequal");
+         }
+         catch (const error::context& e)
+         {
+            utf8::Assert::Fail(e.full_what()); // something went wrong
+         }
+      }
+
       TEST_METHOD(TestFileLoggerIsCopyable)
       {
          try
