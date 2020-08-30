@@ -33,33 +33,22 @@
 
 #include <signal.h>
 
-
 ///<summary>forward reference to signal handler.</summary> 
 void signal_handler(int signum);
 
 ///<summary> *** PROGRAM ENTRYPOINT ***.</summary>
 ///<param name = "argc"> number of command line parameters (expected 1).</param>
 ///<param name = "argv"> array of supplied command line parameters (expect only argv[0] i.e. program path).</param>
-///<returns> exit code 0 if no errors were encountered, or exit code -1 if an error occurred.</returns>
+///<returns> exit code EXIT_SUCCESS if no errors were encountered, or exit code EXIT_FAILURE if an error occurred.</returns>
 ///<remarks> uses system pause and stdout to interact with user.</remarks>
 int main(int argc, char* argv[])
 {
-
-   ///<summary> create a file logger available to all components.</summary>
+   ///<summary> create a file logger (available everywhere, including dll code).</summary>
    CREATE_LOGGER(logger_factory::logger_type::file_logger, "ripper.log", DEFAULT_LOG_FILTER);
-
-   ///<summary> filename for ripped image</summary>
-   const static std::string fileName("cdrom_image.iso");
-
-   ///<summary> number of times to test for an absent device.</summary>
-   constexpr static int  MAX_RETRIES = 3;
 
    ///<summary>atomic int used to track progress.</summary>
    static std::atomic<int> progress = 0;
    
-   ///<summary> a testable initialization value device name.</summary>
-   const std::string NO_DEVICE("device not found");
-
    // Register handler for signals
    signal(SIGINT, signal_handler);     // CTRL-C
    signal(SIGBREAK, signal_handler);   // CTRL-BREAK & TERMINATE
@@ -80,41 +69,25 @@ int main(int argc, char* argv[])
 
       LOG_INFO("Sample test program starting.");
       
-      ///<summary>name of the device containing the media to be copied.</summary>
-      std::string deviceName = NO_DEVICE;
-
-      for(int i=0;i<MAX_RETRIES;i++)
+      LOG_INFO("Check if at least one optical reader is available (built-in, or currently attached to the system).");
+      while (DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get().empty())
       {
-         const DeviceDiscoverer all_cdrom_readers(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
-
-         LOG_INFO("Check if at least one reader is attached...");
-         if (all_cdrom_readers.device_path_map.get().empty())
-         {
-            std::cout << "Please attach a suitable (e.g. usb) optical disk reader to the system" << std::endl;
-            std::system("pause");
-            continue;
-         }
-
-         LOG_INFO("Select the first device, and check if an optical disk is loaded...");
-         if (!(CdromDevice::check_for_media(all_cdrom_readers.device_path_map.get()[0])))
-         {
-            std::cout << "Please insert an optical disk into the drive (and wait for it to spin up)." << std::endl;
-            std::system("pause");
-            continue;
-         }
-
-         LOG_INFO("A viable optical disk is present in the (first) attached drive...");
-         deviceName = all_cdrom_readers.device_path_map.get()[0];
-         break;
+         std::cout << "Please attach a suitable (e.g. usb) optical disk reader to the system. Press CTRL-BREAK to abort." << std::endl;
+         std::system("pause");
       }
 
-      LOG_INFO("Check that we are all ready now.");
-      if (!deviceName.compare(NO_DEVICE))
+      LOG_INFO("Select the first such device, and check if an optical disk is loaded.");
+      while (!CdromDevice::check_for_media((DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0])))
       {
-         LOG_ERROR("Optical disk not loaded or drive not attached (program terminating).");
-         std::cout << "Optical disk not loaded or drive not attached (program terminating)" << std::endl;
-         exit(1);
+         std::cout << "Please insert an optical disk into the (first) drive, and wait for it to spin up.  Press CTRL-BREAK to abort." << std::endl;
+         std::system("pause");
       }
+
+      LOG_INFO("A viable optical disk is now confirmed present in the (first) attached optical drive...");
+      const std::string deviceName = DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0];
+
+      ///<summary>choose filename for ripped image</summary>
+      const std::string fileName("cdrom_image.iso");
 
       LOG_INFO("Build a ripper, used to acquire the data");
       Ripper rip(deviceName);
@@ -127,22 +100,22 @@ int main(int argc, char* argv[])
 
       LOG_INFO("Launch the tracker as a task (shows progress bar on stdout).");
       auto future = std::async(std::launch::async, tracker);
-         
+
       LOG_INFO("Do the ripping from the main thread.");
       rip(fileName, progress);
 
-      Expects(progress == 100);   // if not, earlier versions of program would deadlock at join (still good to check)
+      Expects(progress == 100);   // assert the expectation (in case code changes break design assumptions)
 
-      LOG_INFO("Block until progress tracker returns."); 
-      if (!future.get()) 
+      LOG_INFO("Block until progress tracker returns.");
+      if (!future.get())
       {
          LOG_WARNING("Progress thread stalled (did not finish normally).");
       }
-      
+
       std::cout << "Ripping completed successfully. You may now remove the optical disk." << std::endl;
       LOG_INFO("Ripping completed successfully.");
       std::system("pause");
-      exit(0);
+      exit(EXIT_SUCCESS);
    }
 
    // In addition to (obvious) main thread exceptions, exceptions thrown from the tracker task also propagate and are caught below.
@@ -153,7 +126,7 @@ int main(int argc, char* argv[])
       std::cout << std::endl << error_text << std::endl;
       std::system("pause");
       LOG_ERROR(error_text);
-      exit(-1);
+      exit(EXIT_FAILURE);
    }
 
    // Our design intent is to always use error::context. External libraries can't comply with all of our design requirements though, but will often 
@@ -167,7 +140,7 @@ int main(int argc, char* argv[])
       std::cout << std::endl << error_text << std::endl;
       std::system("pause");
       LOG_ERROR(error_text);
-      exit(-1);
+      exit(EXIT_FAILURE);
    }
 
    // ...and this is the foxhole, behind the last-ditch, ensuring some kind of controlled program exit (if possible) no matter what was thrown.
@@ -178,7 +151,7 @@ int main(int argc, char* argv[])
       std::cout << std::endl << error_text << std::endl;
       std::system("pause");
       LOG_ERROR(error_text);
-      exit(-1);
+      exit(EXIT_FAILURE);
    }
 }
 
