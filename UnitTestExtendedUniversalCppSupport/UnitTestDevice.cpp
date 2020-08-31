@@ -92,6 +92,8 @@ namespace UnitTestExtendedUniversalCppSupport
                   case ERROR_NOT_READY:                  // this happens sometimes
                      std::this_thread::sleep_for(1s);
                      continue;
+                  default:
+                     break;
                   }
                }
             }

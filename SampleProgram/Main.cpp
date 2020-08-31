@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
       LOG_INFO("Select the first such device, and check if an optical disk is loaded.");
       while (!CdromDevice::check_for_media((DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0])))
       {
-         std::cout << "Please insert an optical disk into the (first) drive, and wait for it to spin up.  Press CTRL-BREAK to abort." << std::endl;
+         std::cout << "Please insert an optical disk into the (first) drive.  Press CTRL-BREAK to abort." << std::endl;
          std::system("pause");
       }
 
