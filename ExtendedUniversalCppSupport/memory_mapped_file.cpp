@@ -82,7 +82,6 @@ public:
    {
       bufferSize.QuadPart = other.bufferSize.QuadPart;
       openFile();
-
       createFileMapping();
       mapViewOfFile();
    }
@@ -117,7 +116,6 @@ public:
          
          bufferSize.QuadPart = other.bufferSize.QuadPart;
          openFile();
-
          createFileMapping();
          mapViewOfFile();
       }
@@ -168,28 +166,28 @@ public:
    const std::string get_file_path() const
    {
       return utf8::convert::from_utf16(filePathW);
-   };
+   }
 
    ///<summary> get name of memory buffer.</summary>
    ///<returns> text string representing memory buffer name</returns>
    const std::string get_buffer_name() const
    {
       return utf8::convert::from_utf16(bufferNameW);
-   };
+   }
 
    ///<summary> get buffer as a gsl::span.</summary>
    ///<returns> gsl::span (in mmf).</returns>
    gsl::span<unsigned char> get_span() const
    {
       return gsl::as_span<unsigned char>(static_cast<unsigned char*>(buffer_ptr), gsl::narrow<ptrdiff_t>(bufferSize.QuadPart));
-   };
+   }
    
    ///<summary> get size of memory buffer.</summary>
    ///<returns> size of memory buffer in bytes</returns>
    const uint64_t get_buffer_size() const noexcept
    {
        return bufferSize.QuadPart;
-   };
+   }
 
    ///<summary> create disk file to back memory buffer</summary>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
