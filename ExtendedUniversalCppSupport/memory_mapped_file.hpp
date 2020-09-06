@@ -32,7 +32,7 @@
 
 #include <string>
 
-#include <gsl.h>
+#include <gsl.hpp>
 #include <spimpl.hpp>
 
 ///<summary> wraps the system memory mapped file facility.</summary>

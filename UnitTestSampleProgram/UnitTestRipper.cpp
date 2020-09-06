@@ -43,11 +43,11 @@ namespace UnitTestSampleProgram
          }
       }
 
-#pragma warning(disable: 26477)
+#pragma warning(disable: 26477 26485)
       BEGIN_TEST_METHOD_ATTRIBUTE(TestRipperMove)
          TEST_IGNORE()        // TestFunctor takes too long to run every time...
       END_TEST_METHOD_ATTRIBUTE()
-#pragma warning(default: 26477)
+#pragma warning(default: 26477 26485)
       TEST_METHOD(TestRipperMove)
       {
          try
@@ -75,11 +75,11 @@ namespace UnitTestSampleProgram
          }
       }
 
-#pragma warning(disable: 26477)
+#pragma warning(disable: 26477 26485)
       BEGIN_TEST_METHOD_ATTRIBUTE(TestFunctor)
          TEST_IGNORE()        // TestFunctor takes too long to run every time...
       END_TEST_METHOD_ATTRIBUTE()
-#pragma warning(default: 26477)
+#pragma warning(default: 26477 26485)
 
       TEST_METHOD(TestFunctor)
       {

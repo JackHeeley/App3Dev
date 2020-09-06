@@ -29,7 +29,7 @@
 #include <sstream>
 #include <string>
 
-#include "gsl.hpp"
+#include <gsl/gsl>
 
 namespace utf8
 {
@@ -75,7 +75,9 @@ namespace utf8
          ss << ", " << "0x" << std::nouppercase << std::setfill('0') << std::setw(4) << std::hex << aGuid.Data2;
          ss << ", " << "0x" << std::nouppercase << std::setfill('0') << std::setw(4) << std::hex << aGuid.Data3;
 
-         auto span = gsl::as_span(aGuid.Data4);
+#pragma warning(disable : 26485) // false positive vc16.7.2
+         auto span = gsl::make_span(aGuid.Data4);
+#pragma warning(default : 26485) // false positive vc16.7.2
 
          for (auto& elem : span)
          {
@@ -103,7 +105,10 @@ namespace utf8
          ss << std::hex << aGuidString;
          ss >> aGuid.Data1 >> aGuid.Data2 >> aGuid.Data3;
 
-         auto span = gsl::as_span(aGuid.Data4);
+#pragma warning(disable : 26485) // false positive vc16.7.2
+         auto span = gsl::make_span(aGuid.Data4);
+#pragma warning(default : 26485) // false positive vc16.7.2
+
          for (auto& elem : span)
          {
             int value;

@@ -99,11 +99,13 @@ public:
       }
 
       // calculate size of buffer needed to read entire media content
+#pragma warning(disable : 26493) // false positive vc16.7.2
       const uint64_t bufferSize =
          uint64_t{ diskGeometry.Cylinders.LowPart } *
          uint64_t{ diskGeometry.TracksPerCylinder } *
          uint64_t{ diskGeometry.SectorsPerTrack } *
          uint64_t{ diskGeometry.BytesPerSector };
+#pragma warning(default : 26493) // false positive vc16.7.2
 
       return bufferSize;
    }
@@ -113,6 +115,7 @@ public:
    ///<param name ='span'> a gsl::span repesenting a memory location to receive the image.</param>
    ///<param name ='a_progress'> reference to the external location where get_image() %progress is maintained</param>
    ///<exception cref='std::exception'>if the operation could not be completed with m_progress==100.</exception>
+#pragma warning(disable : 26493)
    void impl::get_image(gsl::span<unsigned char> span, std::atomic<int>& a_progress) const
    {
       // initialize the low and high water marks (used in read, and resource limited exception handling)
@@ -188,6 +191,8 @@ public:
 
       Ensures(a_progress == 100);   // if not, program will deadlock
    }
+#pragma warning(default : 26493)
+
 
    ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>
    void impl::lock(void) noexcept
@@ -299,10 +304,10 @@ private:
       {
          seek(lpabyBufferMemoryAddress - lpabyBufferMemoryBase);
          
-#pragma warning (disable:26486 26487)
+#pragma warning (disable:26486 26481 26487)
          read(lpabyBufferMemoryAddress, gsl::narrow_cast<uint32_t>(cbyBlockSize)); // see remarks above
          lpabyBufferMemoryAddress += cbyBlockSize;
-#pragma warning (default:26486 26487)
+#pragma warning (default:26486 26481 26487)
 
          a_progress = gsl::narrow<int>((100 * nBlock) / cBlocks);
       }

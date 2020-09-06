@@ -41,6 +41,7 @@ void signal_handler(int signum);
 ///<param name = "argv"> array of supplied command line parameters (expect only argv[0] i.e. program path).</param>
 ///<returns> exit code EXIT_SUCCESS if no errors were encountered, or exit code EXIT_FAILURE if an error occurred.</returns>
 ///<remarks> uses system pause and stdout to interact with user.</remarks>
+#pragma warning(disable : 26485)
 int main(int argc, char* argv[])
 {
    ///<summary> create a file logger (available everywhere, including dll code).</summary>
@@ -154,6 +155,7 @@ int main(int argc, char* argv[])
       exit(EXIT_FAILURE);
    }
 }
+#pragma warning(default : 26485)
 
 ///<summary>signal handler to manage the locked state of an optical drive.</summary> 
 ///<remarks>User initiated program aborts (CTRL-C CTRL-BREAK and TERMINATE signals) risk

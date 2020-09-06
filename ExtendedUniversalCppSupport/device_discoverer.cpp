@@ -52,7 +52,7 @@ public:
    const GUID theGuid;
 
    ///<summary> pointer to class GUID as required by legacy api's</summary>
-   LPGUID INTERFACE_CLASS_GUID;
+   LPCGUID INTERFACE_CLASS_GUID;
 
    ///<summary> the device path data member.</summary>
    std::map<int, std::string> device_path_data;
@@ -61,9 +61,9 @@ public:
    ///<param name = "aDeviceType"> the device type for the interface class to be enumerated.</param>
    impl(DeviceTypeDirectory::DeviceType aDeviceType) /*noexcept*/ :
       device_path_data(),
-      theGuid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(aDeviceType)))
+      theGuid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(aDeviceType))),
+      INTERFACE_CLASS_GUID(&theGuid)
    {
-      INTERFACE_CLASS_GUID = (LPGUID)(&theGuid);
       m_hDevInfo = getDevInfoHandle(INTERFACE_CLASS_GUID);
 
       SP_DEVICE_INTERFACE_DATA deviceInterfaceData;
@@ -193,8 +193,10 @@ private:
       // allocate and initialize the buffer
       //
       auto buffer = std::vector<unsigned char>(predictedLength);
-
+#pragma warning(disable : 26490)
       PSP_DEVICE_INTERFACE_DETAIL_DATA pDeviceInterfaceDetailData = reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA>(buffer.data());
+#pragma warning(default : 26490)
+
       pDeviceInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
       if(!SetupDiGetInterfaceDeviceDetail(m_hDevInfo,
@@ -207,8 +209,9 @@ private:
       {
          throw error_context("SetupDiGetInterfaceDeviceDetail failed");
       }
-
+#pragma warning(disable : 26485)
       return std::wstring(pDeviceInterfaceDetailData->DevicePath); // copies buffer content before its destroyed
+#pragma warning(default : 26485)
    }
 };
 

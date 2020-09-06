@@ -30,7 +30,7 @@
 #include "gsl.hpp"
 #include "logger_factory.hpp"
 
-#pragma warning(disable: 26429 26489)
+#pragma warning(disable: 26429 26481 26489)
 
 // Extend the standard macros with a __SHORT_FILE__ option
 #define __SHORT_FILE__ (get_short_file(__FILE__))
@@ -57,7 +57,7 @@ static constexpr const char* get_short_file(const char* const full_path)
    return file_part;
 };
 
-#pragma warning(default: 26429 26489)
+#pragma warning(default: 26429 26481 26489)
 
 
 //

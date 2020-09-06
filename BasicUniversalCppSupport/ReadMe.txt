@@ -64,7 +64,7 @@ file_logger.hpp, file_logger.cpp
     A simple logger implementation using a filesystem file.
 
 gsl.hpp
-    Wrapper for Microsoft's Guidlines Support Library header gsl.h (suppression of warnings raised by imported header)
+    Wrapper for Microsoft's Guidlines Support Library header gsl/gsl (suppression of warnings raised by imported header)
 
 log_helpers.hpp
     static methods to support logging 

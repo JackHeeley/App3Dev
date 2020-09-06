@@ -204,11 +204,11 @@ namespace UnitTestExtendedUniversalCppSupport
          }
       }
 
-#pragma warning(disable: 26477)
+#pragma warning(disable: 26477 26485)
       BEGIN_TEST_METHOD_ATTRIBUTE(TestCdromDeviceReadImage)
          TEST_IGNORE()        // TestFunctor takes too long to run every time...
       END_TEST_METHOD_ATTRIBUTE()
-#pragma warning(default: 26477)
+#pragma warning(default: 26477 26485)
       TEST_METHOD(TestCdromDeviceReadImage)
       {
          // RAII door lock helper
@@ -265,7 +265,7 @@ namespace UnitTestExtendedUniversalCppSupport
                {
                   // perform the operation under test (read full device content)...
                   std::atomic<int> progress;
-                  cdrom.get_image(buffer, progress);    // doesn't require an explicit gsl::as_span<unsigned char>(buffer)
+                  cdrom.get_image(buffer, progress);    // doesn't require an explicit gsl::make_span<unsigned char>(buffer)
                   test_done = true;
                }
                catch (const std::exception& e)
@@ -278,7 +278,9 @@ namespace UnitTestExtendedUniversalCppSupport
             // write to file (confirm by mounting iso)
             std::ofstream file("test.iso", std::ios::out | std::ios::binary);
             file.unsetf(std::ios::skipws); // Don't eat new lines in binary mode!!!
+#pragma warning(disable : 26490)
             file.write(reinterpret_cast<const char*>(buffer.data()), buffer.size());
+#pragma warning(default : 26490)
             file.close();
 
             // check results (by hand) - image is good if file mounts and is readable.

@@ -45,9 +45,6 @@
     <ClInclude Include="spimpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gsl.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CppUnitTest.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -75,6 +72,9 @@
     <ClInclude Include="utf8_console.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gsl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -92,8 +92,5 @@
     <ClCompile Include="utf8_console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

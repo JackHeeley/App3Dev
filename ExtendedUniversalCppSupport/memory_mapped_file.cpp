@@ -179,7 +179,7 @@ public:
    ///<returns> gsl::span (in mmf).</returns>
    gsl::span<unsigned char> get_span() const
    {
-      return gsl::as_span<unsigned char>(static_cast<unsigned char*>(buffer_ptr), gsl::narrow<ptrdiff_t>(bufferSize.QuadPart));
+      return gsl::make_span<unsigned char>(static_cast<unsigned char*>(buffer_ptr), gsl::narrow<ptrdiff_t>(bufferSize.QuadPart));
    }
    
    ///<summary> get size of memory buffer.</summary>
@@ -259,8 +259,8 @@ public:
       GetSystemTime(&st);              // Gets the current system time
       SystemTimeToFileTime(&st, &ft);  // Converts the current system time to file time format
       f = SetFileTime(hFile,           // Sets last-write time of the file 
-         (LPFILETIME)nullptr,          // to the converted current system time 
-         (LPFILETIME)nullptr,
+         nullptr,                      // to the converted current system time 
+         nullptr,
          &ft);
 
       return f;
