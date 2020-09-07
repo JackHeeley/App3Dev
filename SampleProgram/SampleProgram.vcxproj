@@ -104,7 +104,7 @@
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <ExceptionHandling>Async</ExceptionHandling>
-      <AdditionalIncludeDirectories>$(SolutionDir)BasicUniversalCppSupport;$(SolutionDir)ExtendedUniversalCppSupport;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)BasicUniversalCppSupport;$(SolutionDir)ExtendedUniversalCppSupport;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <EnablePREfast>true</EnablePREfast>
       <BrowseInformation>true</BrowseInformation>
@@ -127,7 +127,7 @@
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <ExceptionHandling>Async</ExceptionHandling>
-      <AdditionalIncludeDirectories>$(SolutionDir)BasicUniversalCppSupport;$(SolutionDir)ExtendedUniversalCppSupport;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)BasicUniversalCppSupport;$(SolutionDir)ExtendedUniversalCppSupport;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <EnablePREfast>true</EnablePREfast>
       <BrowseInformation>true</BrowseInformation>
@@ -152,7 +152,7 @@
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <ExceptionHandling>Async</ExceptionHandling>
-      <AdditionalIncludeDirectories>$(SolutionDir)BasicUniversalCppSupport;$(SolutionDir)ExtendedUniversalCppSupport;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)BasicUniversalCppSupport;$(SolutionDir)ExtendedUniversalCppSupport;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <EnablePREfast>true</EnablePREfast>
       <BrowseInformation>true</BrowseInformation>
@@ -179,7 +179,7 @@
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <ExceptionHandling>Async</ExceptionHandling>
-      <AdditionalIncludeDirectories>$(SolutionDir)BasicUniversalCppSupport;$(SolutionDir)ExtendedUniversalCppSupport;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)BasicUniversalCppSupport;$(SolutionDir)ExtendedUniversalCppSupport;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <EnablePREfast>true</EnablePREfast>
       <BrowseInformation>true</BrowseInformation>

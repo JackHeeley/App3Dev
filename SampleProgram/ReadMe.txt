@@ -170,4 +170,5 @@ DONE:
 75. Logging optimizations now acceptably tidy. Unit test device ioctl has been reworked to retry device not ready (occurs in some paths).
 76. Refactored logging to a good level of readability. Reworked some comments and warnings.
 77. Comprehensive review of comments.
-
+78. Replaced deprecated nuget gsl package with ms-gsl 3.0.1 (copied headers to solution).
+79. Fixed broken check-in (ms-gsl 3.0.1 headers were not added properly to solution).

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BasicUniversalCppSupport", "BasicUniversalCppSupport\BasicUniversalCppSupport.vcxproj", "{DC8F2D7C-2428-439A-B15E-9A9946224FE7}"
 EndProject
@@ -17,6 +17,22 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTestBasicUniversalCppSupport", "UnitTestBasicUniversalCppSupport\UnitTestBasicUniversalCppSupport.vcxproj", "{CC1EBB7B-3CAF-412E-99C3-BDF6A58E7DD5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTestExtendedUniversalCppSupport", "UnitTestExtendedUniversalCppSupport\UnitTestExtendedUniversalCppSupport.vcxproj", "{5B6DBFD3-3D79-4964-A1E7-C2C3C0A8B2B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gsl", "gsl", "{103A5918-0CB9-49D3-837A-325D913488E1}"
+	ProjectSection(SolutionItems) = preProject
+		include\gsl\gsl = include\gsl\gsl
+		include\gsl\gsl_algorithm = include\gsl\gsl_algorithm
+		include\gsl\gsl_assert = include\gsl\gsl_assert
+		include\gsl\gsl_byte = include\gsl\gsl_byte
+		include\gsl\gsl_util = include\gsl\gsl_util
+		include\gsl\multi_span = include\gsl\multi_span
+		include\gsl\pointers = include\gsl\pointers
+		include\gsl\span = include\gsl\span
+		include\gsl\span_ext = include\gsl\span_ext
+		include\gsl\string_span = include\gsl\string_span
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{6DE150E0-2705-49E8-A01D-4EC517035DB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,5 +93,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{103A5918-0CB9-49D3-837A-325D913488E1} = {6DE150E0-2705-49E8-A01D-4EC517035DB6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1ABA8C0-25F0-411B-AFDE-F004EF4D0D05}
 	EndGlobalSection
 EndGlobal
