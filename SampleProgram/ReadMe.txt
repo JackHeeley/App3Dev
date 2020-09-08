@@ -58,25 +58,48 @@ THIS PROJECT IS BUILT WITH ISO C++17 /std:c++17 compiler option
 
 StdAfx.h, targtver.h modified to target windows 7 and higher
 
-main,cpp
+==============================================================================
+Motivation:
+
+To provide working examples of recommended practices in modern C++ circa 2020.
+==============================================================================
+
+main.cpp
     This file contains the entrypoint and main program. It manages the
-    rip operation, logging, progress reporting, exception handling,
+    rip (data copy) operation, logging, progress reporting, exception handling,
     and program interruption.
+
+    main() demonstrates robust approaches to: character encoding, a flexible and
+    efficient logging idiom, structured exception handling, signal handling, and 
+    multi-threading. These are recommended as being readable examples of effective,
+    simple and reusable ways to apply modern c++ to arbitrary assignments. The 
+    facilities used to demonstrate these approaches are provided by the reusable
+    "basic support library" (dll). 
+
+progress_tracker.hpp
+    Provides mechanisms to display a simple progress bar on the console.
+    The functor is designed to run as a task launched by std::async. This is
+    multi-threaded, shows synchronizing of stateful data (progress), and can 
+    demonstrate that exception throwing within tasks, is catchable by the thread
+    that launched the task.
 
 RAII_physical_lock.hpp
     Provides an RAII object that prevents the user from interrupting the rip 
     by opening the optical drive when busy. The design attempts to unlock the 
-    door on all return paths, BUT FAILS because there are ways to stop a 
-    program abruptly without unrolling the stack (signals). main.cpp steps 
-    in and provides a signal handler.
-
-RAII_thread.hpp
-    Uses RAII to ensure proper thread synchronization as the program ends
-    (in all paths).
+    door on all return paths, BUT IS DOOMED TO FAILURE in this attempt. This
+    is because there are ways to stop a program abruptly without unrolling the
+    stack (i.e. signals).
+    
+    The code demonstrates a limitation of the RAII approach (it will reliably restore
+    internal program state on all program paths, but not external system state if
+    the program is interrupted). main.cpp demonstrates a work around by providing a 
+    signal handler. 
 
 ripper.hpp
-    Assembles the various components and provides a functor to 
-    rip the contents of an optical disk into a system file.
+    Assembles the various components provided in the "extended support library" which 
+    is an example of domain specific specific encapsulation (win32 kernel api's) in a dll. 
+    ripper provides a functor that efficiently copies the contents of an optical disk 
+    into a system file, using the extended support provided by the dll.
        
 History & todo list
 ===================
