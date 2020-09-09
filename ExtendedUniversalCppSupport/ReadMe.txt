@@ -40,6 +40,30 @@ Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/Jac
 
 StdAfx.h, targtver.h modified to target windows 7 and higher
 
+==============================================================================
+Motivation:
+
+To provide an example of encapsulating domain knowledge (in a dll). Here we 
+provide facilities to read the content of an optical disk and write it efficiently
+to a filesystem (disk file). Encapsulation isolates the client code from platform 
+dependencies, and the client programmer from the need to have or develop expertise 
+in the specific platform api's (in this case win32 device i/o and setupDi) as
+used here.
+
+Contains multiple examples of using the pimpl paradigm to isolate and localize
+code that is unable to conform to our adopted/preferred coding style rules. In 
+this case we are obliged to use legacy c-style api's, which don't follow current 
+gsl guidance, expose inconsistent ways to indicate success, and use wide character 
+unicode strings as parameters and return codes.
+
+We use pimpl to avoid propagating these issues into our wider client code.
+
+The code also demonstrates that cross-cutting solutions for character encoding, 
+logging and structured exception handling are available to support dll's.
+
+This dll has unit tests provided by another project in this solution.
+==============================================================================
+
 cd_rom_device.hpp, cd_rom_device.cpp
     These files represent a CDROM device with enough functionality to
     acquire (read) raw content, and perform some basic ioctls.

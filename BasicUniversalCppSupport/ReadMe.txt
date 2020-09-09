@@ -54,41 +54,59 @@ Copyright (c) 2003-2019 Jack Heeley, all rights reserved. https://github.com/Jac
 
 stdAfx.h, targtver.h modified to target windows 7 and higher
 
+==============================================================================
+Motivation:
+
+To provide the smallest set of support needed to allow a standardized approach
+to cross-cutting issues affecting modern c++ applications; and to present
+orthodox, efficient and robust character encoding, exception handling, 
+unit-testing and logging features and strategies.
+
+This dll has unit tests provided by another project in this solution.
+==============================================================================
+
 CppUnitTest.hpp
     Wrapper for Microsoft's unit test header CppUnitTest.h (suppression of warnings raised by imported header)
 
 error_context.hpp
-    An error::context type (featuring context tagging on std::exception 'what').
+    An error::context type (featuring context tagging on std::exception 'what'). The context thrown when an
+    unhandled error occurs is sufficient for a last-ditch exception handler to fully notify a user (or 
+    tester) of what went wrong (often in terms that a user will undertand).
 
 file_logger.hpp, file_logger.cpp
-    A simple logger implementation using a filesystem file.
+    A simple logger implementation using a filesystem file. Writes are synchronized for multi-threading.
 
 gsl.hpp
     Wrapper for Microsoft's Guidlines Support Library header gsl/gsl (suppression of warnings raised by imported header)
 
 log_helpers.hpp
-    static methods to support logging 
+    static methods to support logging. Logging is configurable at build time and degenerates to no-op/comment when disabled. 
 
 logger.hpp
-    Exposes logging options and logging macros to programmers
+    Exposes logging options and logging macros to programmers. Logging can be configured differently for 
+    release and debug builds. A build optional to allow dynamic re-configuring of logging at run time 
+    is available here (with some performance penalty).
 
 logger_factory.hpp
-    A factory pattern for creating loggers
+    A factory pattern for creating loggers. The active logger is accessed via a shared pointer, available to all runtime 
+    components (main program and dlls). 
 
 logger_interface.hpp
     Interface for all loggers
     
 null_logger.hpp
-    A concrete 'do nothing' logger
+    A 'do nothing' logger implementation (used if no active file_logger has been provided)
 
 spimpl.hpp
-    Templates support for smart pointer to implementation paradigm using rule of zero. 
+    Templates support for "smart pointer to implementation" paradigm using rule of zero.
+    The hpp file just wraps Andrey Upadyshev's spimpl.h. This is a key recommendation for
+    encapsulation (e.g. of platform code), and is used extensively in App3Dev.
 
 system_error.hpp, system_error.cpp
     These files provide a service to fetch the system error text in the default locale.
 
 utc_timestamp.hpp
-    Timestamp support (used for logging purposes, and available for etc.)
+    Timestamp support (provided for logging purposes, and available to client code).
 
 utf8_assert.hpp
     This header is a utf8 wrapper for Microsoft's CppUnitTest Assert class. 
@@ -102,5 +120,5 @@ utf8_convert.hpp, utf8_convert.cpp
 
 utf8_guid.hpp
     This header supplies utf8 string conversions to and from windows GUID type.
-    It is not platform independent, and should only be included in a localized
-    way (in .cpp files where an encapsulated windows impl inner class needs it).
+    It is not platform independent, and client code should be careful (localize) where 
+    this header is included (e.g. in .cpp files where an encapsulated windows impl inner class needs it).

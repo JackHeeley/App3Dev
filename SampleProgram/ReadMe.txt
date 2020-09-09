@@ -62,6 +62,8 @@ StdAfx.h, targtver.h modified to target windows 7 and higher
 Motivation:
 
 To provide working examples of recommended practices in modern C++ circa 2020.
+
+This program has unit tests provided by another project in this solution.
 ==============================================================================
 
 main.cpp
