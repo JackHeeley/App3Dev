@@ -307,17 +307,14 @@ public:
 ///<summary> construct a memory mapped file object</summary>
 ///<param name='file_path'> path name of file to be used.</param>
 ///<param name='buffer_name'> name of buffer in memory. Processes can share buffer if they know this name</param>
-///<param name='buffer_size'> size of buffer in bytes. If zero the buffer size will be chosen to fit the 
-/// size of the actual contents of the swap space file specified by parameter 1. The value can be interrogatedwith get_buffer_size().</param>
-///<remarks>The zero buffer size option supports re-construction from earlier buffer data created in a previous session
-/// (and persisted to the backing disk file when the buffer was released).</remarks>
+///<param name='buffer_size'> size of buffer in bytes.</param>
 ///<exception cref='std::exception'>if the operation could not be completed.</exception>
 MemoryMappedFile::MemoryMappedFile(const std::string& file_path, const std::string& buffer_name, uint64_t buffer_size) :
    pimpl(spimpl::make_impl<impl>(file_path, buffer_name, buffer_size))
 {
 }
 
-///<summary> get name of disk file used as swap space for buffer</summary>
+///<summary> get path name of disk file used as swap space for buffer</summary>
 ///<returns> text string representing file name</returns>
 const std::string MemoryMappedFile::get_file_path() const
 { 
@@ -332,14 +329,14 @@ const std::string MemoryMappedFile::get_buffer_name() const
 };
 
 ///<summary> get buffer as a gsl::span.</summary>
-///<returns> gsl::span (in mmf)</returns>
+///<returns> a gsl span (with content in address space of the memory mapped file)</returns>
 gsl::span<unsigned char> MemoryMappedFile::get_span() const
 {
    return pimpl->get_span();
 };
 
-///<summary> get base address of buffer (a user space virtual address).</summary>
-///<returns> address of memory buffer</returns>
+///<summary> get buffer size.</summary>
+///<returns> length memory buffer in bytes.</returns>
 const uint64_t MemoryMappedFile::get_buffer_size() const noexcept
 {
    return pimpl->get_buffer_size();
