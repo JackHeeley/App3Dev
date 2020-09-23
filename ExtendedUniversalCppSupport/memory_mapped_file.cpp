@@ -252,18 +252,11 @@ public:
    ///<summary> update the file time (not automatically done with memory mapped files).</summary>
    BOOL SetFileToCurrentTime(HANDLE hFile) noexcept
    {
-      FILETIME ft;
       SYSTEMTIME st;
-      BOOL f;
+      FILETIME ft;
 
-      GetSystemTime(&st);              // Gets the current system time
-      SystemTimeToFileTime(&st, &ft);  // Converts the current system time to file time format
-      f = SetFileTime(hFile,           // Sets last-write time of the file 
-         nullptr,                      // to the converted current system time 
-         nullptr,
-         &ft);
-
-      return f;
+      GetSystemTime(&st);                                
+      return SystemTimeToFileTime(&st, &ft) ? SetFileTime(hFile, nullptr, nullptr, &ft) : false;
    }
 
    ///<summary> commit buffer to disk and release memory.</summary>
