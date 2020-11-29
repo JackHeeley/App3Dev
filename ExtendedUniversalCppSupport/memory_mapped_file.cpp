@@ -278,11 +278,22 @@ public:
 
       if (hFile != INVALID_HANDLE_VALUE) 
       {
+         // special case of truncating a shorter write to an existing large disk file
+         if (!SetFilePointerEx(hFile, bufferSize, NULL, FILE_BEGIN))
+         {
+            throw error_context("SetFilePointerEx failed");
+         }
+         
+         if (!SetEndOfFile(hFile))
+         {
+            throw error_context("SetEndOfFile failed");
+         }
+
          if (!SetFileToCurrentTime(hFile))
          {
             throw error_context("SetFileToCurrentTime failed");
          }
-         
+
          CloseHandle(hFile);
          hFile = INVALID_HANDLE_VALUE;
       }

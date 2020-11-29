@@ -198,3 +198,4 @@ DONE:
 78. Replaced deprecated nuget gsl package with ms-gsl 3.0.1 (copied headers to solution).
 79. Fixed broken check-in (ms-gsl 3.0.1 headers were not added properly to solution).
 80. Fixed error handling in MemoryMappedFile (impacting copy constructor) & improved unit test
+81. Fixed failure to truncate size on disk of large memory mapped files when committing a subsequent, but smaller image.
