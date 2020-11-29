@@ -70,7 +70,8 @@ public:
    EXTENDEDUNIVERSALCPPSUPPORT_API gsl::span<unsigned char> get_span() const;
 
    ///<summary> commit buffer to disk and release memory.</summary>
-   void release();
+   ///<remarks> exposed here for unit testing purposes only (no other use-cases will benefit)</remarks>
+   EXTENDEDUNIVERSALCPPSUPPORT_API void release();
 
 private:
    ///<summary> forward reference to private implementation.</summary>

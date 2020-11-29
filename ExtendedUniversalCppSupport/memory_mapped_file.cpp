@@ -221,13 +221,16 @@ public:
          bufferNameW.c_str()
       );
 
-      if (hFileMap != nullptr) 
+      if (hFileMap == nullptr)
+      {
+         throw error_context("CreateFileMapping failed");
+      }
+      else
       {
          if (GetLastError() == ERROR_ALREADY_EXISTS) 
          {
-            CloseHandle(hFileMap);
-            hFileMap = nullptr;
-            throw error_context("CreateFileMapping failed");
+            LOG_WARNING("File mapping already exists");  
+            // this might cause a problem if existing file mapping isn't at least as large as this request
          }
       }
    }

@@ -68,7 +68,7 @@ namespace UnitTestExtendedUniversalCppSupport
                const SystemError lastError;
                const int errorCode = lastError.get_error_code();
                const std::string errorText = lastError.get_error_text();
-               std::stringstream ss;  
+               std::stringstream ss;
                ss << "get_buffer_address()  failed (" << errorCode << ") " << errorText;
                const std::string failString = ss.str();
                utf8::Assert::Fail(failString.c_str());
@@ -78,8 +78,89 @@ namespace UnitTestExtendedUniversalCppSupport
          {
             utf8::Assert::Fail(e.what()); // something went wrong
          }
-      }      
+      }     
       
+      TEST_METHOD(TestMemoryMappedFileCopyConstructor)
+      {
+         try
+         {
+            // prepare for test...
+            const std::string file_path("test.iso");
+            const std::string buffer_name("test_buffer");
+            constexpr uint64_t buffer_size = 1024;
+
+            MemoryMappedFile mmf_0(file_path, buffer_name, buffer_size);
+
+            // perform the operation under test (construct a memory mapped file using copy costructor)...
+            MemoryMappedFile mmf(mmf_0);
+
+            // disturb the original object in a way that should not disturb the copied object...
+            mmf_0.release();
+            utf8::Assert::IsTrue(mmf_0.get_span().size() == 0, "Buffer in original object has not been disturbed (test prep failed");
+            
+            // test succeeds if construction doesn't throw and...
+            utf8::Assert::AreEqual(mmf.get_buffer_name(), buffer_name, "buffer_name retrieved doesn't match buffer_name supplied");
+            utf8::Assert::AreEqual(mmf.get_file_path(), file_path, "file_path retrieved doesn't match file_path supplied");
+            utf8::Assert::AreEqual(mmf.get_buffer_size(), buffer_size, "buffer_size retrieved doesn't match buffer_size supplied");
+            try
+            {
+               const auto buffer = mmf.get_span();
+            }
+            catch (...)
+            {
+               const SystemError lastError;
+               const int errorCode = lastError.get_error_code();
+               const std::string errorText = lastError.get_error_text();
+               std::stringstream ss;
+               ss << "get_buffer_address()  failed (" << errorCode << ") " << errorText;
+               const std::string failString = ss.str();
+               utf8::Assert::Fail(failString.c_str());
+            }
+         }
+         catch (std::exception e)
+         {
+            utf8::Assert::Fail(e.what()); // something went wrong
+         }
+      }
+
+      TEST_METHOD(TestMemoryMappedFileMoveConstructor)
+      {
+         try
+         {
+            // prepare for test...
+            const std::string file_path("test.iso");
+            const std::string buffer_name("test_buffer");
+            constexpr uint64_t buffer_size = 1024;
+
+            MemoryMappedFile mmf_0(file_path, buffer_name, buffer_size);
+
+            // perform the operation under test (construct a memory mapped file using move costructor)...
+            MemoryMappedFile mmf(std::move(mmf_0));
+
+            // test succeeds if construction doesn't throw and...
+            utf8::Assert::AreEqual(mmf.get_buffer_name(), buffer_name, "buffer_name retrieved doesn't match buffer_name supplied");
+            utf8::Assert::AreEqual(mmf.get_file_path(), file_path, "file_path retrieved doesn't match file_path supplied");
+            utf8::Assert::AreEqual(mmf.get_buffer_size(), buffer_size, "buffer_size retrieved doesn't match buffer_size supplied");
+            try
+            {
+               const auto buffer = mmf.get_span();
+            }
+            catch (...)
+            {
+               const SystemError lastError;
+               const int errorCode = lastError.get_error_code();
+               const std::string errorText = lastError.get_error_text();
+               std::stringstream ss;
+               ss << "get_buffer_address()  failed (" << errorCode << ") " << errorText;
+               const std::string failString = ss.str();
+               utf8::Assert::Fail(failString.c_str());
+            }
+         }
+         catch (std::exception e)
+         {
+            utf8::Assert::Fail(e.what()); // something went wrong
+         }
+      }
       TEST_METHOD(TestMemoryMappedFileGetBuffer)
       {
          try
