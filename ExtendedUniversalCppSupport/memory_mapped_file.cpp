@@ -159,6 +159,19 @@ public:
       {
          LOG_WARNING(e.what());
       }
+
+      if (hFileMap != nullptr)
+      {
+         CloseHandle(hFileMap);
+         hFileMap = nullptr;
+      }
+
+      if (hFile != INVALID_HANDLE_VALUE)
+      {
+         CloseHandle(hFile);
+         hFile = INVALID_HANDLE_VALUE;
+      }
+
    }
 
    ///<summary> get path name of disk file used as swap space for buffer</summary>
