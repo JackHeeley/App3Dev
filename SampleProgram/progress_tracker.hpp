@@ -51,10 +51,10 @@ private:
    };
 
    ///<summary> test if progress has stalled.</summary>
-   ///<returns> false if progress has changed recently (true if it has remained unchanged for a predefined number of tests).</returns>
+   ///<returns> false if progress hasn't improved recently (true if it hasn't improved for a predefined number of tests).</returns>
    const bool is_stalled() noexcept
    {
-      if (m_progress == previous_value)
+      if (m_progress <= previous_value)
          stalled_count++;
       else
          stalled_count = 0;
@@ -87,6 +87,7 @@ public:
       stalled_count(0),
       previous_value(a_progress)
    {
+      Expects(0 <= a_progress && a_progress <= 100);
    }
 
    ///<summary> functor displays progress to stdout.</summary>

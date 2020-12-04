@@ -141,21 +141,21 @@ public:
    }
 
    ///<summary> write (text).</summary>
-   void write(LogLevel level, std::string line) override
+   void write(LogLevel level, const std::string& line) override
    {
       std::lock_guard<std::mutex> lock(the_mutex);
       stream << log_level(level) << ": " << utc_timestamp() << " " << line;
    }
 
    ///<summary> writeln.</summary>
-   void writeln(LogLevel level, std::string line) override
+   void writeln(LogLevel level, const std::string& line) override
    {
       std::lock_guard<std::mutex> lock(the_mutex);
       stream << log_level(level) << ": " << utc_timestamp() << " " << line << std::endl;
    }
 
    ///<summary> write (exception).</summary>
-   void write(LogLevel level, std::exception e) override
+   void write(LogLevel level, const std::exception& e) override
    {
       //TODO: stack trace 
       writeln(level, e.what());
@@ -189,7 +189,7 @@ file_logger::file_logger() noexcept :
 }
 
 ///<summary> normal constructor for a file_logger.</summary>
-file_logger::file_logger(std::string fileName, LogFilter filter) noexcept :
+file_logger::file_logger(const std::string& fileName, LogFilter filter) noexcept :
    pimpl(spimpl::make_impl<impl>(fileName, filter))
 {
 }
@@ -221,19 +221,19 @@ LogFilter file_logger::get_log_filter() const noexcept
 }
 
 ///<summary> write (text).</summary>
-void file_logger::write(LogLevel level, std::string line) 
+void file_logger::write(LogLevel level, const std::string& line) 
 {
    return pimpl->write(level, line);
 }
 
 ///<summary> writeln.</summary>
-void file_logger::writeln(LogLevel level, std::string line)
+void file_logger::writeln(LogLevel level, const std::string& line)
 {
    return pimpl->writeln(level, line);
 }
 
 ///<summary> write (exception).</summary>
-void file_logger::write(LogLevel level, std::exception e)
+void file_logger::write(LogLevel level, const std::exception& e)
 {
    return pimpl->write(level, e);
 }

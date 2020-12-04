@@ -33,7 +33,7 @@ private:
 public:
    ///<summary> construct a ripper.</summary>
    ///<param name='devicePath'> the utf8 name of a raw system cdrom device containing media.</param>
-   Ripper(std::string devicePath) :
+   Ripper(const std::string& devicePath) :
       m_cdr(devicePath)
    {
       LOG_INFO(std::string("Ripper Device ").append(devicePath));
@@ -42,7 +42,7 @@ public:
    ///<summary> functor to perform the rip operation.</summary>
    ///<param name='filePath'> the utf8 name of a file to receive the (iso 9660) image.</param>
    ///<param name='a_progress'> reference to where percentage read progress will be maintained (during the rip operation).</param>
-   void operator()(std::string filePath, std::atomic<int>& a_progress)
+   void operator()(const std::string& filePath, std::atomic<int>& a_progress)
    {
       RAII_physical_lock lock(m_cdr);
 

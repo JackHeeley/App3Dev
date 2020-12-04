@@ -35,6 +35,7 @@ namespace utf8
 {
    ///<summary>functor supporting stripping all instances of a set of selected characters from a target string. 
    /// Use object as a predicate for std::remove_if in an erase-remove construct/idiom applied to the target.</summary>
+   ///<remarks> A class offers best readability at point of use, but we might consider a lambda here (current need/usage is very localized)</remarks>
    class char_stripper
    {
    private:
@@ -75,9 +76,7 @@ namespace utf8
          ss << ", " << "0x" << std::nouppercase << std::setfill('0') << std::setw(4) << std::hex << aGuid.Data2;
          ss << ", " << "0x" << std::nouppercase << std::setfill('0') << std::setw(4) << std::hex << aGuid.Data3;
 
-#pragma warning(disable : 26485) // false positive vc16.7.2
          auto span = gsl::make_span(aGuid.Data4);
-#pragma warning(default : 26485) // false positive vc16.7.2
 
          for (auto& elem : span)
          {
@@ -92,22 +91,19 @@ namespace utf8
       /// "0xhhhhhhhhL, 0xhhhh, 0xhhhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh"
       /// where h is any hex digit</param>
       ///<returns>const GUID (e.g. as supplied in winioctl.h)</returns>
-      static inline GUID to_guid(std::string aGuidString)
+      static inline GUID to_guid(const std::string& aGuidString)
       {
          GUID aGuid;
          std::stringstream ss;
-         const char_stripper strip("Lx,");
+         const char_stripper strip("Lx,");      
+         std::string theGuidString(aGuidString);
 
-#pragma warning (disable: 26486)
-         aGuidString.erase(remove_if(aGuidString.begin(), aGuidString.end(), strip), aGuidString.end());
-#pragma warning (default: 26486)
+         theGuidString.erase(remove_if(theGuidString.begin(), theGuidString.end(), strip), theGuidString.end());
 
-         ss << std::hex << aGuidString;
+         ss << std::hex << theGuidString;
          ss >> aGuid.Data1 >> aGuid.Data2 >> aGuid.Data3;
 
-#pragma warning(disable : 26485) // false positive vc16.7.2
          auto span = gsl::make_span(aGuid.Data4);
-#pragma warning(default : 26485) // false positive vc16.7.2
 
          for (auto& elem : span)
          {

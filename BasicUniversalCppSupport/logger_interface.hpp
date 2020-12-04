@@ -149,19 +149,19 @@ public:
    /// <param name="level">the LogLevel used to filter log messages.
    /// write does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask</param>
    /// <param name="line">The message to log</param>
-   BASICUNIVERSALCPPSUPPORT_API virtual void write(LogLevel level, std::string line) = 0;
+   BASICUNIVERSALCPPSUPPORT_API virtual void write(LogLevel level, const std::string& line) = 0;
 
    /// <summary> Write message to log with newline.</summary>
    /// <param name="level">the LogLevel used to filter log messages.
    /// writeln does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask</param>
    /// <param name="line">The message to log</param>
-   BASICUNIVERSALCPPSUPPORT_API virtual void writeln(LogLevel level, std::string line) = 0;
+   BASICUNIVERSALCPPSUPPORT_API virtual void writeln(LogLevel level, const std::string& line) = 0;
 
    /// <summary> Write exception to log.</summary>
    /// <param name="level">the LogLevel used to filter log messages.
    /// write does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask</param>
    /// <param name="line">The message to log</param>
-   BASICUNIVERSALCPPSUPPORT_API virtual void write(LogLevel level, std::exception e) = 0;
+   BASICUNIVERSALCPPSUPPORT_API virtual void write(LogLevel level, const std::exception& e) = 0;
 
    /// <summary> Read the complete log file.</summary>
    /// <returns>The log file contents as a std::string</returns>

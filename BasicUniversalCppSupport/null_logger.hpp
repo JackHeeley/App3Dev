@@ -63,19 +63,19 @@ public:
    ///<remarks> writeln does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask.</remarks>
    ///<param name="level"> the LogLevel used to filter log messages.</param>
    ///<param name="text"> The message to log.</param>
-   BASICUNIVERSALCPPSUPPORT_API void write(LogLevel level, std::string line) noexcept override {}
+   BASICUNIVERSALCPPSUPPORT_API void write(LogLevel level, const std::string& line) noexcept override {}
 
    ///<summary> Write message to log with newline.</summary>
    ///<remarks> writeln does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask.</remarks>
    ///<param name="level"> the LogLevel used to filter log messages.</param>
    ///<param name="line"> The message to log.</param>
-   BASICUNIVERSALCPPSUPPORT_API void writeln(LogLevel level, std::string line) noexcept override {}
+   BASICUNIVERSALCPPSUPPORT_API void writeln(LogLevel level, const std::string& line) noexcept override {}
 
    ///<summary> Write exception to log (multi-line).</summary>
    ///<remarks> writeln does nothing if the single bit level parameter is not set in the loggers current LogFilter bitmask.</remarks>
    ///<param name="level"> the LogLevel used to filter log messages.</param>
    ///<param name="line">The message to log</param>
-   BASICUNIVERSALCPPSUPPORT_API void write(LogLevel level, std::exception e) noexcept override {}
+   BASICUNIVERSALCPPSUPPORT_API void write(LogLevel level, const std::exception& e) noexcept override {}
 
    ///<summary>Read the complete log file. </summary>
    ///<returns>The log file contents in raw bytes</returns>

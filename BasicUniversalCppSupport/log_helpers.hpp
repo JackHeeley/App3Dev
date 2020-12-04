@@ -28,6 +28,7 @@
 #include <string>
 
 #include "gsl.hpp"
+#include "logger.hpp"
 #include "logger_factory.hpp"
 
 #pragma warning(disable: 26429 26481 26489)
@@ -95,7 +96,7 @@ namespace logging
    ///<param name='logFilter'>a bit mapped filter used to select which types of log events should be recorded in this log.</param>
    ///<returns> a shared pointer to the abstract_logger instance representing the singleton logger (just created, or created earlier).</returns>
    ///<remarks>Don't use directly, ENTRYPOINTS should use the macro: CREATE_LOG(logger_factory::type::file_logger, "ripper.log", LogFilter::Full)</remarks>
-   static const std::shared_ptr<logger_interface> create_logger(logger_factory::logger_type logType = logger_factory::logger_type::null_logger, const std::string logFilePath = std::string(), LogFilter logFilter = DEFAULT_LOG_FILTER)
+   static const std::shared_ptr<logger_interface> create_logger(logger_factory::logger_type logType = logger_factory::logger_type::null_logger, const std::string& logFilePath = std::string(), LogFilter logFilter = DEFAULT_LOG_FILTER)
    {
       return logger_factory::getInstance(logType, logFilePath, logFilter);
    };
@@ -103,7 +104,7 @@ namespace logging
    ///<summary>Emit log message</summary>
    ///<param name='level'>value used to filter log entry recording.</param>
    ///<remarks>Don't use directly, favour using macros instead. E.g. LOG_ERROR("there was an error")</remarks>
-   static void log_it(LogLevel level, std::string text)
+   static void log_it(LogLevel level, const std::string& text)
    {
       try
       {
@@ -154,15 +155,14 @@ namespace logging
 
    ///<summary>build file detail use to 'decorate' log and exception text</summary>
    ///<remarks>Don't use directly, favour using macros instead. E.g. LOG_INFO() etc.</remarks>
-   static const std::string build_file_detail(std::string file, const int lineNo)
+   static const std::string build_file_detail(const std::string& file, const int lineNo)
    {
-      std::string detail = file.append("()");
-      return detail.insert(detail.find_last_of(")"), std::to_string(lineNo));
+      return std::string(file) + "(" + std::to_string(lineNo) + ")";
    };
 
    ///<summary>'decorate' log and exception text</summary>
    ///<remarks>Don't use directly, favour using macros instead. E.g. LOG_INFO() etc.</remarks>
-   static const std::string decorate_log_text(std::string file, int lineNo, std::string text)
+   static const std::string decorate_log_text(const std::string& file, int lineNo, const std::string& text)
    {
       std::stringstream stream;
       stream << std::left << std::setw(FILE_DETAIL_WIDTH) << build_file_detail(file, lineNo) << ": " << text;
@@ -171,11 +171,9 @@ namespace logging
 
    ///<summary>'decorate' error context</summary>
    ///<remarks>Don't use directly, favour using macro instead.E.g. throw error_context("some description of cause");</remarks>
-   static const std::string decorate_error_context(std::string pathName, int lineNo, std::string function, std::string text, std::string reason)
+   static const std::string decorate_error_context(const std::string& pathName, int lineNo, const std::string& function, const std::string& text, const std::string& reason)
    {
-      std::stringstream stream;
-      stream << build_file_detail(pathName, lineNo) << " " << function << ": " << text << " - " << reason ;
-      return stream.str();
+       return build_file_detail(pathName, lineNo) + " " + function + ": " + text + " - " + reason;
    };
 
 #pragma warning(default: SUPPRESS_LOGGING_WARNINGS)

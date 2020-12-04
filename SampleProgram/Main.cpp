@@ -90,19 +90,19 @@ int main(int argc, char* argv[])
       ///<summary>choose filename for ripped image</summary>
       const std::string fileName("cdrom_image.iso");
 
+      // pre-empt starting a race on std::cout between main thread and progress tracker 
+      std::cout << "Ripping image from optical disk. Please wait..." << std::endl;
+      
       LOG_INFO("Build a ripper, used to acquire the data");
       Ripper rip(deviceName);
 
       LOG_INFO("Build a tracker, for reporting progress");
       progress_tracker tracker(progress);
 
-      LOG_INFO("Ripping image from optical disk.");
-      std::cout << "Ripping image from optical disk. Please wait..." << std::endl;
-
       LOG_INFO("Launch the tracker as a task (shows progress bar on stdout).");
       auto future = std::async(std::launch::async, tracker);
 
-      LOG_INFO("Do the ripping from the main thread.");
+      LOG_INFO("Ripping image from optical disk (done from main thread).");
       rip(fileName, progress);
 
       Expects(progress == 100);   // assert the expectation (in case code changes break design assumptions)

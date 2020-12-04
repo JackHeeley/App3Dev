@@ -40,7 +40,7 @@ public:
    ///<summary> constructs a movable user mode Device that can be used to access a particular system device instance.</summary>
    ///<param name='device_path'> the system name of the device to use.</param>
    ///<exception cref='std::exception'>if construction fails.</exception>
-   EXTENDEDUNIVERSALCPPSUPPORT_API Device(std::string device_path);
+   EXTENDEDUNIVERSALCPPSUPPORT_API Device(const std::string& device_path);
 
    /// <summary> issue a synchronous device i/o control message. The thread is suspended until this request completes.</summary>
    ///<param name ='dwIoControlCode'> Specifies the IOCTL_XXX to be set up. For more information about system specific device-type-specific I/O codes, 

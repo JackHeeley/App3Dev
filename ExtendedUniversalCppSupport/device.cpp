@@ -44,7 +44,7 @@ public:
    ///<summary> constructs a user mode Device that can be used to access a particular system device instance.</summary>
    ///<param name='a_device_path'> the system name of the device to use.</param>
    ///<exception cref='std::exception'>if construction fails.</exception>
-   impl(std::string a_device_path) :
+   impl(const std::string& a_device_path) :
       device_path_w(utf8::convert::to_utf16(a_device_path)),
       hDevice(INVALID_HANDLE_VALUE)
    {
@@ -232,7 +232,7 @@ public:
 ///<param name='a_device_path'> the system name of the device to use.</param>
 ///<exception cref='std::exception'> if construction fails.</exception>
 ///<remarks>opens the device</remarks>
-Device::Device(std::string a_device_path) : 
+Device::Device(const std::string& a_device_path) : 
    pimpl(spimpl::make_unique_impl<impl>(a_device_path))
 {
 }

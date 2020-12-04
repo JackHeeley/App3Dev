@@ -56,7 +56,7 @@ private:
 public:
    ///<summary> construct a cdrom device.</summary> 
    ///<param name='device_path'>the path selecting the physical device instance</param>
-   impl(std::string device_path) :
+   impl(const std::string& device_path) :
       Device(device_path)
    {
       // a speculative unlock is ineffective (and logically wrong here)
@@ -325,7 +325,7 @@ private:
 ///<summary> constructs a user mode Device that can be used to access a particular system cdrom instance.</summary>
 ///<param name='device_path'> the system name of the cdrom device to use.</param>
 ///<exception cref='std::exception'>if construction fails.</exception>
-CdromDevice::CdromDevice(std::string device_path) :
+CdromDevice::CdromDevice(const std::string& device_path) :
    pimpl(spimpl::make_unique_impl<impl>(device_path))
 {
 }

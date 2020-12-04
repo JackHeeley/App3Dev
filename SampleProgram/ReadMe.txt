@@ -200,3 +200,7 @@ DONE:
 80. Fixed error handling in MemoryMappedFile (impacting copy constructor) & improved unit test
 81. Fixed failure to truncate size on disk of large memory mapped files when committing a subsequent, but smaller image.
 82. Robustness. Potential small leaks avoided in exception paths by closing handles in ~MemoryMappedFile().
+83. Applied passing by const reference to function input parameters (performance opportunities that we missed earlier).
+    Small changes in progress_tracker to improve robustness (check expectation that progress runs forward in range from 0 to 100).
+    Fixed utf8::to_guid() and removed disable warnings no longer triggered (was probably a const promise violation, just fixed).
+    Improved consistency and style of string concatenations used in logging.
