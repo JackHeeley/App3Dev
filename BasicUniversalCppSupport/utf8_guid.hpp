@@ -20,6 +20,11 @@
 //
 #pragma once
 
+#ifdef BASICUNIVERSALCPPSUPPORT_EXPORTS
+#define BASICUNIVERSALCPPSUPPORT_API __declspec(dllexport)
+#else
+#define BASICUNIVERSALCPPSUPPORT_API __declspec(dllimport)
+#endif
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files:
 #define NOMINMAX
@@ -69,7 +74,7 @@ namespace utf8
       ///<returns>a utf8 encoded string representation of aGuid in the form
       /// "0xhhhhhhhhL, 0xhhhh, 0xhhhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh"
       /// where h is any hex digit (lowercase)</returns>
-      static inline std::string from_guid(const GUID aGuid)
+      BASICUNIVERSALCPPSUPPORT_API static inline std::string from_guid(const GUID aGuid)
       {
          std::stringstream ss;
          ss << "0x" << std::nouppercase << std::setfill('0') << std::setw(8) << std::hex << aGuid.Data1 <<"L";   
@@ -91,7 +96,7 @@ namespace utf8
       /// "0xhhhhhhhhL, 0xhhhh, 0xhhhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh, 0xhh"
       /// where h is any hex digit</param>
       ///<returns>const GUID (e.g. as supplied in winioctl.h)</returns>
-      static inline GUID to_guid(const std::string& aGuidString)
+      BASICUNIVERSALCPPSUPPORT_API static inline GUID to_guid(const std::string& aGuidString)
       {
          GUID aGuid;
          std::stringstream ss;

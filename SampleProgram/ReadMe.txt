@@ -205,3 +205,5 @@ DONE:
     Fixed utf8::to_guid() and removed disable warnings no longer triggered (was probably a const promise violation, just fixed).
     Improved consistency and style of string concatenations used in logging.
 84. Re-checked and revised all disabled warnings for compiler version 16.8.2
+85. Fixed implementation of the template ToString specialization to allow _GUID parameters in Asserts 
+    (now GUID's are correctly displayed in Assert outputs (e.g. as shown in the Test Explorer summary pane)

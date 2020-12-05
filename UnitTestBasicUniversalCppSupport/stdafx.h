@@ -32,6 +32,7 @@
 #include "system_error.hpp"
 #include "utf8_assert.hpp"
 #include "utf8_convert.hpp"
+#include "utf8_guid.hpp"
 #include "utc_timestamp.hpp"
 
 #include "UnitTestBasicUniversalCppSupport.hpp"

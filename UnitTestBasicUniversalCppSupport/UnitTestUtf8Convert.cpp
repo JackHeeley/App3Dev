@@ -110,7 +110,19 @@ namespace UnitTestBasicUniversalCppSupport
             utf8::Assert::AreEqual(GUID_MY_CDROM, GUID_DEVINTERFACE_CDROM, "Assert::AreEqual fails to identify equal GUIDs");
             utf8::Assert::AreNotEqual(GUID_MISMATCH, GUID_DEVINTERFACE_CDROM, "Assert::AreNotEqual fails to identify not equal GUIDs");
 
-            // we have also confirmed the corollory, i.e. correct behaviour when asserts fail.
+            //// we have also confirmed the corollory, i.e. correct behaviour when the asserts fail. (This test can't be automated)
+            //// uncommenting here also offers an opportunity to do a visual check on the _GUID template specialization supplied 
+            //// (see: UnitTestBasicUniversalCppSupport.hpp)
+            //try
+            //{
+            //   utf8::Assert::AreNotEqual(GUID_MY_CDROM, GUID_DEVINTERFACE_CDROM, "Assert::AreNotEqual correctly aborted with equal GUIDs");
+            //   utf8::Assert::AreEqual(GUID_MISMATCH, GUID_DEVINTERFACE_CDROM, "Assert::AreEqual correctly aborted with not equal GUIDs");
+            //}
+            //catch (...)
+            //{
+            //   // we wish this would do the trick, but you can't catch an assert this way.
+            //}
+
          }
          catch (const std::exception& e)
          {

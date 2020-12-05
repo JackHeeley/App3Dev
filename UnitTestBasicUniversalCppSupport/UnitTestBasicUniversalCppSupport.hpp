@@ -19,6 +19,8 @@
 #pragma once
 
 #include <string>
+#include "utf8_guid.hpp"
+
 
 // TODO: We can't control the  test sequence, so there is a race to name the (single) logfile (as used by default logger macros).
 // The Current logger_factory implementation doesn't even indicate who won, so unit tests can fail simply because they hard code 
@@ -34,14 +36,20 @@ namespace UnitTestBasicUniversalCppSupport
 #define STRINGIZE(x) #x
 #define TO_STRING_LITERAL(x) STRINGIZE(x)
 
-// This template specialization allows utf8::Assert::AreEqual to compare GUIDs 
 namespace Microsoft
 {
    namespace VisualStudio
    {
       namespace CppUnitTestFramework
       {
-         template<> static std::wstring ToString<_GUID>(const struct _GUID& t) { return L"_GUID"; }
+         // This template specialization allows utf8::Assert::AreEqual to compare GUIDs 
+         // It is needed to generate diagnostic text as shown in the test explorer summary pane.
+         template<>
+         static std::wstring ToString<_GUID>(const struct _GUID& t) 
+         { 
+            return utf8::convert::to_utf16(utf8::guid_convert::from_guid(t)); 
+         }
+
          // TODO: add other specializations here as required
       }
    }
