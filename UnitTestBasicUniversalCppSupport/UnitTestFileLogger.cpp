@@ -47,9 +47,7 @@ namespace UnitTestBasicUniversalCppSupport
          {
             try
             {
-#pragma warning (disable: 26486)
                m_saved_filter = logger_factory::getInstance()->get_log_filter();
-#pragma warning (default: 26486)
             }
             catch (...)
             {
@@ -66,9 +64,7 @@ namespace UnitTestBasicUniversalCppSupport
          {
             try
             {
-#pragma warning (disable: 26486)
                logger_factory::getInstance()->set_log_filter(m_saved_filter);
-#pragma warning (default: 26486)
             }
             catch (...)
             {
@@ -79,9 +75,9 @@ namespace UnitTestBasicUniversalCppSupport
 
    public:
 
-#pragma warning(disable: 26440 26477 26497)
+#pragma warning(disable: 26440)
       TEST_CLASS_INITIALIZE(InitializeUnitTestFileLogger) noexcept
-#pragma warning(default: 26440 26477 26497)
+#pragma warning(default: 26440)
       {
          try
          {
@@ -126,12 +122,10 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (const error::context& e)
          {
-#pragma warning(disable:26489) // warning C26489: Don't dereference a pointer that may be invalid
             const std::string what_string(e.full_what());
             utf8::Assert::IsTrue(what_string.find("UnitTestFileLogger.cpp") != std::string::npos, "Didn't find __FILE__ in exception what().");
             utf8::Assert::IsTrue(what_string.find(line) != std::string::npos, "Didn't find (throw) __LINE__ in exception what().");
             utf8::Assert::IsTrue(what_string.find(__FUNCTION__) != std::string::npos, "Didn't find __FUNCTION__ in exception what().");
-#pragma warning(default:26489)
          }
       }
 
@@ -150,9 +144,7 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (const error::context & e)
          {
-#pragma warning(disable:26489) // warning C26489: Don't dereference a pointer that may be invalid
             utf8::Assert::Fail(e.full_what()); // something went wrong
-#pragma warning(default:26489)
          }
       }
 
@@ -245,11 +237,11 @@ namespace UnitTestBasicUniversalCppSupport
 
 
 #ifdef STATIC_LOG_FILTERING
-#pragma warning(disable: 26477 26485)
+#pragma warning(disable: 26485)
       BEGIN_TEST_METHOD_ATTRIBUTE(TestFileLoggerFilteringAdvanced)
          TEST_IGNORE()        // TestFileLoggerFilteringAdvanced Static logging can't be changed at runtime (TOGGLE_LOG_LEVEL has no effect)
          END_TEST_METHOD_ATTRIBUTE()
-#pragma warning(default: 26477 26485)
+#pragma warning(default: 26485)
 #endif
       TEST_METHOD(TestFileLoggerFilteringAdvanced)
       {
@@ -344,9 +336,7 @@ namespace UnitTestBasicUniversalCppSupport
          }
          catch (const error::context & e)
          {
-#pragma warning(disable:26489)
             utf8::Assert::Fail(e.full_what()); // something went wrong
-#pragma warning(default:26489)
          }
       }
 
@@ -591,9 +581,7 @@ namespace UnitTestBasicUniversalCppSupport
          catch (const error::context & e)
          {
             // test succeeds if the error_context has all the anticipated details present (when caught).
-#pragma warning(disable:26489)
             const std::string what_string(e.full_what());
-#pragma warning(default:26489)
             utf8::Assert::IsTrue(what_string.find(__SHORT_FILE__) != std::string::npos, "Didn't find __FILE__ in exception what().");
             utf8::Assert::IsTrue(what_string.find(expected_throw_line_number) != std::string::npos, "Didn't find (throw) __LINE__ in exception what().");
             utf8::Assert::IsTrue(what_string.find(__FUNCTION__) != std::string::npos, "Didn't find __FUNCTION__ in exception what().");

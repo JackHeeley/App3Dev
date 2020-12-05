@@ -21,7 +21,7 @@
 #include <fstream>
 #include <mutex>
 
-#define FILE_LOGGER_WARNINGS_SUPRESSED 26447 26486
+#define FILE_LOGGER_WARNINGS_SUPRESSED 26447
 #pragma warning (disable: FILE_LOGGER_WARNINGS_SUPRESSED)
 
 /*

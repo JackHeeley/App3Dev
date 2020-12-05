@@ -30,9 +30,9 @@ namespace UnitTestExtendedUniversalCppSupport
    {
    public:
 
-#pragma warning(disable: 26440 26477 26497)
+#pragma warning(disable: 26440)
       TEST_CLASS_INITIALIZE(InitializeUnitTestCdRomDevice) noexcept
-#pragma warning(default: 26440 26477 26497)
+#pragma warning(default: 26440)
       {
          try
          {
@@ -204,11 +204,11 @@ namespace UnitTestExtendedUniversalCppSupport
          }
       }
 
-#pragma warning(disable: 26477 26485)
+#pragma warning(disable: 26485)
       BEGIN_TEST_METHOD_ATTRIBUTE(TestCdromDeviceReadImage)
          TEST_IGNORE()        // TestFunctor takes too long to run every time...
       END_TEST_METHOD_ATTRIBUTE()
-#pragma warning(default: 26477 26485)
+#pragma warning(default: 26485)
       TEST_METHOD(TestCdromDeviceReadImage)
       {
          // RAII door lock helper

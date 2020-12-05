@@ -26,21 +26,13 @@
 // trim from start (in place)
 const auto ltrim = [](std::string& s)
 {
-#pragma warning (disable: 26486)
-   s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
-      return !std::isspace(ch, std::locale::classic());
-   }));
-#pragma warning (default: 26486)
+   s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) { return !std::isspace(ch, std::locale::classic()); }));
 };
 
 // trim from end (in place)
 const auto rtrim = [](std::string& s)
 {
-#pragma warning (disable: 26486)
-   s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
-      return !std::isspace(ch, std::locale::classic());
-   }).base(), s.end());
-#pragma warning (default: 26486)
+   s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) { return !std::isspace(ch, std::locale::classic()); }).base(), s.end());
 };
 
 // trim from both ends (in place)

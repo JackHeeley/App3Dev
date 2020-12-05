@@ -31,7 +31,8 @@
 #include "logger.hpp"
 #include "logger_factory.hpp"
 
-#pragma warning(disable: 26429 26481 26489)
+#define LOG_HELPERS_WARNINGS_SUPPRESSED 26429 26481
+#pragma warning(disable: LOG_HELPERS_WARNINGS_SUPPRESSED)
 
 // Extend the standard macros with a __SHORT_FILE__ option
 #define __SHORT_FILE__ (get_short_file(__FILE__))
@@ -58,7 +59,7 @@ static constexpr const char* get_short_file(const char* const full_path)
    return file_part;
 };
 
-#pragma warning(default: 26429 26481 26489)
+#pragma warning(default: LOG_HELPERS_WARNINGS_SUPPRESSED)
 
 
 //
@@ -67,9 +68,6 @@ static constexpr const char* get_short_file(const char* const full_path)
 
 namespace logging
 {
-#define SUPPRESS_LOGGING_WARNINGS 26486 26444
-#pragma warning(disable: SUPPRESS_LOGGING_WARNINGS)
-
    ///<summary>a compile time check to see if a logging level has been enabled.</summary>
    ///<remarks>constexpr allows (but doesn't force) the compiler to optimize away inactive logging code.
    /// This optimizing opportunity comes at the (small) cost of requiring log levels to be pre-determined and immutable.</remarks>
@@ -175,6 +173,4 @@ namespace logging
    {
        return build_file_detail(pathName, lineNo) + " " + function + ": " + text + " - " + reason;
    };
-
-#pragma warning(default: SUPPRESS_LOGGING_WARNINGS)
 };

@@ -89,9 +89,7 @@ public:
 
    std::string get_device_type_as_string(DeviceType aDeviceType)
    {
-#pragma warning(disable: 26486)
       return utf8::guid_convert::from_guid(device_type_map[aDeviceType]);
-#pragma warning(default: 26486)
    }
 
 };

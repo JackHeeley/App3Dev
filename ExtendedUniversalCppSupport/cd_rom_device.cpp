@@ -304,10 +304,10 @@ private:
       {
          seek(lpabyBufferMemoryAddress - lpabyBufferMemoryBase);
          
-#pragma warning (disable:26486 26481 26487)
          read(lpabyBufferMemoryAddress, gsl::narrow_cast<uint32_t>(cbyBlockSize)); // see remarks above
+#pragma warning (disable:26481)
          lpabyBufferMemoryAddress += cbyBlockSize;
-#pragma warning (default:26486 26481 26487)
+#pragma warning (default:26481)
 
          a_progress = gsl::narrow<int>((100 * nBlock) / cBlocks);
       }

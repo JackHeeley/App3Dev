@@ -27,9 +27,7 @@
 
 namespace UnitTestExtendedUniversalCppSupport
 {
-#pragma warning(disable: 26426)
    const std::string log_file_name("UnitTest.log");
-#pragma warning(default: 26426)
 };
 
 // useful macro conversions for use in unit tests@END
