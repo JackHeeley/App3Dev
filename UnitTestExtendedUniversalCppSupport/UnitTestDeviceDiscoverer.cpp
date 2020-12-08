@@ -27,9 +27,9 @@ namespace UnitTestExtendedUniversalCppSupport
 	{
 	public:
 		
-#pragma warning(disable: 26440)
+#pragma warning(disable: 26440 26497)
       TEST_CLASS_INITIALIZE(InitializeUnitDeviceDiscoverer) noexcept
-#pragma warning(default: 26440)
+#pragma warning(default: 26440 26497)
       {
          try
          {

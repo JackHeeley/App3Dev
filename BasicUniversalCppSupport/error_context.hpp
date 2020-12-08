@@ -1,6 +1,8 @@
 //
 // error_context.hpp : implements exception message support
 //
+// This code extends std::exception to pass diagnostics to the catch handler
+//
 // Copyright (c) 2017-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
 //    This program is free software : you can redistribute it and/or modify
@@ -35,7 +37,7 @@
 
 namespace error
 {
-   ///<summary> a "preferred" exception type with added locus/context details.</summary>
+   ///<summary> an exception subclass for ansi c++17/utf8 code clients with additional diagnostics.</summary>
    ///<remarks> the macro 'error_context(_text)' will construct one of these for you.</remarks>
    class context : public std::exception
    {

@@ -99,13 +99,11 @@ public:
       }
 
       // calculate size of buffer needed to read entire media content
-#pragma warning(disable : 26493) // false positive vc16.7.2
       const uint64_t bufferSize =
-         uint64_t{ diskGeometry.Cylinders.LowPart } *
-         uint64_t{ diskGeometry.TracksPerCylinder } *
-         uint64_t{ diskGeometry.SectorsPerTrack } *
-         uint64_t{ diskGeometry.BytesPerSector };
-#pragma warning(default : 26493) // false positive vc16.7.2
+         gsl::narrow<uint64_t>(diskGeometry.Cylinders.LowPart) *
+         gsl::narrow<uint64_t>(diskGeometry.TracksPerCylinder) *
+         gsl::narrow<uint64_t>(diskGeometry.SectorsPerTrack) *
+         gsl::narrow<uint64_t>(diskGeometry.BytesPerSector);
 
       return bufferSize;
    }

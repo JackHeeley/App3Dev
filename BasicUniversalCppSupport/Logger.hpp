@@ -35,7 +35,7 @@
 //                           maintain cosmetic appearance in logs
 // 
 // DEFAULT_LOG_FILTER      - The default (immutable) log filter enabling log levels (ERROR, WARNING, TRACE etc) 
-//                           This can be set differently per build configuration.
+//                           The value chosen can be set differently per build configuration.
 //
 // LOG_TEXT                - Use decorated or non-decorated text in the log entries. You can also vary this per build 
 //                           configuration.
