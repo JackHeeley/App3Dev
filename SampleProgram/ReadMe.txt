@@ -208,3 +208,4 @@ DONE:
 85. Fixed implementation of the template ToString specialization to allow _GUID parameters in Asserts 
     (now GUID's are correctly displayed in Assert outputs (e.g. as shown in the Test Explorer summary pane)
 86. Revisited some comments and checked/corrected disabled warnings for clean build with the compile time disable debug option selected 
+87. Upgraded ms-gsl 3.0.1 to ms-gsl 3.1.0 (copied new headers into solution) and rebuilt with updated compiler version 16.8.3
