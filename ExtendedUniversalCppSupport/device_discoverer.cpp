@@ -2,7 +2,7 @@
 // device_discoverer.cpp : implements device driver interface mechanisms
 //
 // Here we enumerate the devices of a particular type (defined by
-// an interface class) using the SetupDi interface, and provide a 
+// an interface class) with the SetupDi interface, and provide a 
 // method to get the device path(s) needed when opening device(s).
 //
 // These paths can be used to instantiate device objects.

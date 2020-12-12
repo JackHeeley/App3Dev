@@ -26,7 +26,7 @@
 namespace utf8
 {
    // std::wstring_convert is deprecated at C++17 (for security reasons) with no standard alternative yet available.
-   // The community advice is to use a library, or build your own, or accept the risk. Microsoft advise using
+   // The community advice is to use a library, or build your own, or accept the risk. Microsoft advise use of
    // MultiByteToWideChar and WideCharToMultiByte as alternatives. See:
    // 
    //  https://docs.microsoft.com/en-us/archive/msdn-magazine/2016/september/c-unicode-encoding-conversions-with-stl-strings-and-win32-apis
@@ -57,7 +57,7 @@ namespace utf8
       }
    }; 
 
-   // Exceptions that may arise in the safe conversion, are handled here (we retry using unsafe conversion).
+   // Exceptions that may arise in the safe conversion, are handled here (we retry with unsafe conversion).
    // Since conversion is part of error reporting, we need to arrange that system errors are not disturbed
    // (in the exception path).
    class RAII_preserve_last_error
@@ -90,7 +90,7 @@ namespace utf8
       }
    };
 
-   ///<summary>convert utf8 string to utf16 string using ::MultiByteToWideChar</summary>
+   ///<summary>convert utf8 string to utf16 string with ::MultiByteToWideChar</summary>
    ///<param name='utf8'>utf8 encoded string</param>
    ///<returns>utf16 encoded string representation of utf8</returns>
    ///<remarks>WARNING: AVOID THROWING error_context HERE. This can lead to mutual recursion/infinite loop.</remarks>
@@ -145,7 +145,7 @@ namespace utf8
       return utf16;
    }
 
-   ///<summary>convert utf16 string to utf8 string using ::WideCharToMultiByte</summary>
+   ///<summary>convert utf16 string to utf8 string with ::WideCharToMultiByte</summary>
    ///<param name='utf16'>utf16 encoded string</param>
    ///<returns>utf8 encoded string representation of utf16</returns>
    ///<remarks>WARNING: AVOID USING error_context HERE. This can lead to mutual recursion/infinite loop.</remarks>
@@ -210,7 +210,7 @@ namespace utf8
 
 #pragma warning(disable: 4996)
 
-   ///<summary>convert utf16 string to utf8 string using std::codecvt</summary>
+   ///<summary>convert utf16 string to utf8 string with std::codecvt</summary>
    ///<param name='wstr'>utf16 encoded string</param>
    ///<returns>utf8 encoded string representation of wstr</returns>
    static std::string from_utf16_unsafe(const std::wstring& wstr)
@@ -218,7 +218,7 @@ namespace utf8
       return std::wstring_convert<std::codecvt_utf8_utf16 <wchar_t>, wchar_t>().to_bytes(wstr);
    }
 
-   ///<summary>convert utf8 string to utf16 string using std::codecvt</summary>
+   ///<summary>convert utf8 string to utf16 string with std::codecvt</summary>
    ///<param name='str'>utf8 encoded string</param>
    ///<returns>utf16 encoded string representation of str</returns>
    static std::wstring to_utf16_unsafe(const std::string& str)

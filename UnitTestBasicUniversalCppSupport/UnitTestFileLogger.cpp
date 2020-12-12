@@ -458,9 +458,9 @@ namespace UnitTestBasicUniversalCppSupport
             RAII_Preserve_LogFilter saveFilter;  
 
 #ifdef _DEBUG
-            std::string FILTERED_TEXT = "EXPECT to see this in the (debug) logs!"; // if using debug build static default log filtering 
+            std::string FILTERED_TEXT = "EXPECT to see this in the (debug) logs!"; // if doing debug build static default log filtering 
 #else
-            std::string FILTERED_TEXT = "DON'T show this in the (release) logs!"; // if using release build static default log filtering 
+            std::string FILTERED_TEXT = "DON'T show this in the (release) logs!"; // if doing release build static default log filtering 
 #endif
             FILTERED_TEXT.append(utc_timestamp());
             std::atomic<int> progress = 0;
@@ -487,7 +487,7 @@ namespace UnitTestBasicUniversalCppSupport
 
                   std::string thread_output_suppressed("separate thread said: ");
                   thread_output_suppressed.append(FILTERED_TEXT);
-                  LOG_DEBUG(thread_output_suppressed);             // issue something that should be filtered out (if using release build static default log filter)
+                  LOG_DEBUG(thread_output_suppressed);             // issue something that should be filtered out (if doing release build static default log filter)
                }
                std::cout << progress_bar(progress) << std::endl;
             };

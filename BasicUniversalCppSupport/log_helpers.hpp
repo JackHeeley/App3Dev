@@ -101,7 +101,7 @@ namespace logging
 
    ///<summary>Emit log message</summary>
    ///<param name='level'>value used to filter log entry recording.</param>
-   ///<remarks>Don't use directly, favour using macros instead. E.g. LOG_ERROR("there was an error")</remarks>
+   ///<remarks>Don't use directly, favour logger macros instead. E.g. LOG_ERROR("there was an error")</remarks>
    static void log_it(LogLevel level, const std::string& text)
    {
       try
@@ -116,7 +116,7 @@ namespace logging
 
    ///<summary>Query active logging level(s)</summary>
    ///<param name='level'>a log level to test.</param>
-   ///<remarks>Don't use directly, favour using macro instead: TEST_LOG_LEVEL(LogLevel::Debug)</remarks>
+   ///<remarks>Don't use directly, favour logger macros instead: TEST_LOG_LEVEL(LogLevel::Debug)</remarks>
    ///<returns>true if the level parameter is currently set in the log filter (meaning this level will be recorded), otherwise false.</returns>
    ///<remarks>#ifdef STATIC_LOG_FILTERING (see Logger.hpp) then this (the logger's internal filter) is ignored.</remarks>
    static bool test_log_level(LogLevel level)
@@ -126,7 +126,7 @@ namespace logging
 
    ///<summary>Toggle an active logging level(s)</summary>
    ///<param name='level'>a log level to test.</param>
-   ///<remarks>Don't use directly, favour using macros instead: TOGGLE_LOG_LEVEL(LogLevel::Debug)
+   ///<remarks>Don't use directly, favour logger macros instead: TOGGLE_LOG_LEVEL(LogLevel::Debug)
    ///On return, if the level was previously set it will now be clear. If it was clear, it will now be reset.</remarks>
    ///<remarks>#ifdef STATIC_LOG_FILTERING (see Logger.hpp) then this (the logger's internal filter) is ignored.</remarks>
    static void toggle_log_level(LogLevel level)
@@ -136,7 +136,7 @@ namespace logging
 
    ///<summary>Fetch log content (provided primarily as unit test support).</summary>
    ///<returns>Entire content of the log file as a string (or an empty string if an error occurred).</returns>
-   ///<remarks>Don't use directly, favour using macro instead: LOG_FILE_CONTENTS().</remarks>
+   ///<remarks>Don't use directly, favour logger macros instead: LOG_FILE_CONTENTS().</remarks>
    static const std::string read_all()
    {
       std::string log_content;
@@ -152,14 +152,14 @@ namespace logging
    };
 
    ///<summary>build file detail use to 'decorate' log and exception text</summary>
-   ///<remarks>Don't use directly, favour using macros instead. E.g. LOG_INFO() etc.</remarks>
+   ///<remarks>Don't use directly, favour logger macros instead. E.g. LOG_INFO() etc.</remarks>
    static const std::string build_file_detail(const std::string& file, const int lineNo)
    {
       return std::string(file) + "(" + std::to_string(lineNo) + ")";
    };
 
    ///<summary>'decorate' log and exception text</summary>
-   ///<remarks>Don't use directly, favour using macros instead. E.g. LOG_INFO() etc.</remarks>
+   ///<remarks>Don't use directly, favour logger macros instead. E.g. LOG_INFO() etc.</remarks>
    static const std::string decorate_log_text(const std::string& file, int lineNo, const std::string& text)
    {
       std::stringstream stream;
@@ -168,7 +168,7 @@ namespace logging
    };
 
    ///<summary>'decorate' error context</summary>
-   ///<remarks>Don't use directly, favour using macro instead.E.g. throw error_context("some description of cause");</remarks>
+   ///<remarks>Don't use directly, favour logger macros instead.E.g. throw error_context("some description of cause");</remarks>
    static const std::string decorate_error_context(const std::string& pathName, int lineNo, const std::string& function, const std::string& text, const std::string& reason)
    {
        return build_file_detail(pathName, lineNo) + " " + function + ": " + text + " - " + reason;

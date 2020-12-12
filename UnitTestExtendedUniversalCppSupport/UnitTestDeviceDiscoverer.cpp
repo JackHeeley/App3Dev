@@ -59,7 +59,7 @@ namespace UnitTestExtendedUniversalCppSupport
 
             // check result (unhappy flow)  
             std::string bad_device0_path = bad_device.device_path_map.get()[-1]; // try as we might we don't throw here
-            utf8::Assert::IsTrue((bad_device0_path == ""), "we retrieved a name for a non-existing enumeration of a device identified using an invalid guid");
+            utf8::Assert::IsTrue((bad_device0_path == ""), "we retrieved a name for a non-existing enumeration of a device identified with an invalid guid");
          }
          catch (const std::exception& e)
          {

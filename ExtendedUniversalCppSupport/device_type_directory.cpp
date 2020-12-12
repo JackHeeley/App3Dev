@@ -30,7 +30,7 @@
 
 
 ///<summary> the private implementation of DeviceTypeDirectory. A Singleton.</summary>
-///<remarks> Motivation for using an inner class is to encapsulate/hide 'GUID' (a Windows specific type).</remarks>
+///<remarks> Motivation for use of an inner class is to encapsulate/hide 'GUID' (a Windows specific type).</remarks>
 class DeviceTypeDirectory::impl
 {
 

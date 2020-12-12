@@ -27,10 +27,9 @@
 #include "CppUnitTest.hpp"
 #include "utf8_convert.hpp"
 
-using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-
 namespace utf8
 {
+   using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
    class Assert : public Microsoft::VisualStudio::CppUnitTestFramework::Assert
    {

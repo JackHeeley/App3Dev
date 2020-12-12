@@ -209,3 +209,5 @@ DONE:
     (now GUID's are correctly displayed in Assert outputs (e.g. as shown in the Test Explorer summary pane)
 86. Revisited some comments and checked/corrected disabled warnings for clean build with the compile time disable debug option selected 
 87. Upgraded ms-gsl 3.0.1 to ms-gsl 3.1.0 (copied new headers into solution) and rebuilt with updated compiler version 16.8.3
+88. Removed word "using" from code comments and strings so that keyword can be searched for.
+    Removed two instances of naked "using namespace..." in headers at global scope (relocated them to a locally scoped inner block)
