@@ -29,7 +29,7 @@ namespace UnitTestSampleProgram
    public:
 
 #pragma warning(disable: 26440 26497)
-      TEST_CLASS_INITIALIZE(InitializeUnitTestRAII_physical_lock) noexcept
+      TEST_CLASS_INITIALIZE(InitializeUnitTestRAII_physical_lock) noexcept // NOLINT(clang-diagnostic-missing-braces)
 #pragma warning(default: 26440 26497)
       {
          try

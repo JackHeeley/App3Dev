@@ -30,7 +30,7 @@ namespace UnitTestExtendedUniversalCppSupport
    public:
 
 #pragma warning(disable: 26440 26497)
-      TEST_CLASS_INITIALIZE(InitializeUnitTestMemoryMappedFile) noexcept
+      TEST_CLASS_INITIALIZE(InitializeUnitTestMemoryMappedFile) noexcept   // NOLINT(clang-diagnostic-missing-braces)
 #pragma warning(default: 26440 26497)
       {
          try
@@ -61,7 +61,7 @@ namespace UnitTestExtendedUniversalCppSupport
             utf8::Assert::AreEqual(mmf.get_buffer_size(), buffer_size, "buffer_size retrieved doesn't match buffer_size supplied");
             try
             {
-               const auto buffer = mmf.get_span();
+               std::ignore = mmf.get_span();
             }
             catch (...)
             {
@@ -104,7 +104,7 @@ namespace UnitTestExtendedUniversalCppSupport
             utf8::Assert::AreEqual(mmf.get_buffer_size(), buffer_size, "buffer_size retrieved doesn't match buffer_size supplied");
             try
             {
-               const auto buffer = mmf.get_span();
+               std::ignore = mmf.get_span();
             }
             catch (...)
             {
@@ -143,7 +143,7 @@ namespace UnitTestExtendedUniversalCppSupport
             utf8::Assert::AreEqual(mmf.get_buffer_size(), buffer_size, "buffer_size retrieved doesn't match buffer_size supplied");
             try
             {
-               const auto buffer = mmf.get_span();
+               std::ignore = mmf.get_span();
             }
             catch (...)
             {
@@ -178,7 +178,7 @@ namespace UnitTestExtendedUniversalCppSupport
             utf8::Assert::AreEqual(mmf.get_buffer_size(), buffer_size, "buffer_size retrieved doesn't match buffer_size supplied");
             try
             {
-               const auto span = mmf.get_span();
+               std::ignore = mmf.get_span();
             }
             catch (...)
             {

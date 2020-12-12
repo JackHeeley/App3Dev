@@ -28,7 +28,7 @@ namespace UnitTestExtendedUniversalCppSupport
    public:
 
 #pragma warning(disable: 26440 26497)
-      TEST_CLASS_INITIALIZE(InitializeUnitDeviceTypeDirectory) noexcept
+      TEST_CLASS_INITIALIZE(InitializeUnitDeviceTypeDirectory) noexcept // NOLINT(clang-diagnostic-missing-braces)
 #pragma warning(default: 26440 26497)
       {
          try
@@ -51,16 +51,16 @@ namespace UnitTestExtendedUniversalCppSupport
             // check result (happy flow)  
             utf8::Assert::IsTrue((disk_guid == GUID_DEVINTERFACE_DISK), "Value return was not as expected");
 
-            // do some more stuff that shouldn't throw
-            const GUID cdrom_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::CDROM_DEVICES)));
-            const GUID partition_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::PARTITION_DEVICES)));
-            const GUID writeOnceDisk_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::WRITEONCEDISK_DEVICES)));
-            const GUID MediumChanger_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::MEDIUMCHANGER_DEVICES)));
-            const GUID floppy_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::FLOPPY_DEVICES)));
-            const GUID cdchanger_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::CDCHANGER_DEVICES)));
-            const GUID storageport_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::STORAGEPORT_DEVICES)));
-            const GUID vmlun_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::VMLUN_DEVICES)));
-            const GUID ses_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::SES_DEVICES)));
+            // do some more stuff that shouldn't throw 
+            const GUID cdrom_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::CDROM_DEVICES)));                  // NOLINT(clang-diagnostic-unused-variable, clang-analyzer-deadcode.DeadStores)
+            const GUID partition_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::PARTITION_DEVICES)));          // NOLINT(clang-diagnostic-unused-variable, clang-analyzer-deadcode.DeadStores)
+            const GUID writeOnceDisk_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::WRITEONCEDISK_DEVICES)));  // NOLINT(clang-diagnostic-unused-variable, clang-analyzer-deadcode.DeadStores)
+            const GUID MediumChanger_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::MEDIUMCHANGER_DEVICES)));  // NOLINT(clang-diagnostic-unused-variable, clang-analyzer-deadcode.DeadStores)
+            const GUID floppy_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::FLOPPY_DEVICES)));                // NOLINT(clang-diagnostic-unused-variable, clang-analyzer-deadcode.DeadStores)
+            const GUID cdchanger_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::CDCHANGER_DEVICES)));          // NOLINT(clang-diagnostic-unused-variable, clang-analyzer-deadcode.DeadStores)
+            const GUID storageport_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::STORAGEPORT_DEVICES)));      // NOLINT(clang-diagnostic-unused-variable, clang-analyzer-deadcode.DeadStores)
+            const GUID vmlun_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::VMLUN_DEVICES)));                  // NOLINT(clang-diagnostic-unused-variable, clang-analyzer-deadcode.DeadStores)
+            const GUID ses_guid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(DeviceTypeDirectory::DeviceType::SES_DEVICES)));                      // NOLINT(clang-diagnostic-unused-variable, clang-analyzer-deadcode.DeadStores)
          }
          catch (const std::exception & e)
          {

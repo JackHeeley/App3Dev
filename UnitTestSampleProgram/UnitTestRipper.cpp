@@ -30,7 +30,7 @@ namespace UnitTestSampleProgram
    public:
 
 #pragma warning(disable: 26440 26497)
-      TEST_CLASS_INITIALIZE(InitializeUnitTestRipper) noexcept
+      TEST_CLASS_INITIALIZE(InitializeUnitTestRipper) noexcept // NOLINT(clang-diagnostic-missing-braces)
 #pragma warning(default: 26440 26497)
       {
          try
@@ -60,7 +60,7 @@ namespace UnitTestSampleProgram
             auto deviceName = cdromDevices.device_path_map.get()[0];
 
             //perform operation under test
-            Ripper rip = std::move(Ripper(deviceName));
+            Ripper rip = std::move(Ripper(deviceName));     // NOLINT(clang-diagnostic-pessimizing-move)
 
             // check results (use the moved ripper)
             std::atomic<int> progress;

@@ -58,10 +58,10 @@ public:
    impl(impl&& other) noexcept = delete;
 
    ///<summary> no copy assignment operator (class has unique ptr and const member)</summary>
-   impl& impl::operator=(impl& other) = delete;
+   impl& operator=(impl& other) = delete;
  
    ///<summary> no move assignment operator (class has const member)</summary>
-   impl& impl::operator=(impl&& other) = delete;
+   impl& operator=(impl&& other) = delete;
    
    ///<summary> destructor</summary> 
    ///<remarks>If the handle to the device is open, it will be closed here.</remarks>

@@ -49,7 +49,7 @@ private:
 public:
    ///<summary> class GUID that identifies the device interface (for standard devices see wioctl.h)</summary>
    ///<remarks> This is the same GUID as used by a device driver when calling IoRegisterDeviceInterface.</remarks>
-   const GUID theGuid;
+   GUID theGuid;
 
    ///<summary> pointer to class GUID as required by legacy api's</summary>
    LPCGUID INTERFACE_CLASS_GUID;
@@ -60,9 +60,9 @@ public:
    ///<summary> construct a DeviceDiscoverer::private_impl object used to enumerate the devices of a particular device interface class.</summary>
    ///<param name = "aDeviceType"> the device type for the interface class to be enumerated.</param>
    impl(DeviceTypeDirectory::DeviceType aDeviceType) /*noexcept*/ :
-      device_path_data(),
       theGuid(utf8::guid_convert::to_guid(DeviceTypeDirectory::get_device_type_as_string(aDeviceType))),
-      INTERFACE_CLASS_GUID(&theGuid)
+      INTERFACE_CLASS_GUID(&theGuid),
+      device_path_data()
    {
       m_hDevInfo = getDevInfoHandle(INTERFACE_CLASS_GUID);
 
@@ -78,9 +78,9 @@ public:
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean accessible data is identical.</remarks>
-   const bool impl::operator==(const impl& other) const
+   const bool operator==(const impl& other) const
    {
-      if ((this == nullptr) || (&other == nullptr)) return false;       // moved object
+      if ((this == nullptr) || (&other == nullptr)) return false;       // moved object NOLINT (false positive)
       if (this == &other) return true; // same object
       return (
          (INTERFACE_CLASS_GUID == other.INTERFACE_CLASS_GUID) &&
@@ -91,7 +91,7 @@ public:
 
    ///<summary> not equals comparison operator.</summary>
    ///<remarks> defines not equals to mean accessible data differs.</remarks>
-   const bool impl::operator!=(const impl& other) const
+   const bool operator!=(const impl& other) const
    {
       return (!((*this) == other));
    }
@@ -103,10 +103,10 @@ public:
    impl(impl&& other) = default;
 
    ///<summary> copy assignment operator</summary>
-   impl& impl::operator=(impl& other) = default;
+   impl& operator=(impl& other) = default;
 
    ///<summary> move assignment operator </summary>
-   impl& impl::operator=(impl&& other) = default;
+   impl& operator=(impl&& other) = default;
    
    ///<summary> dtor release resources used by the class.</summary>
    ~impl()

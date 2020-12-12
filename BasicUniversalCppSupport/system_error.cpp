@@ -87,7 +87,7 @@ public:
    }
 
    ///<summary> copy assignment operator.</summary>
-   impl& impl::operator=(impl& other) noexcept
+   impl& operator=(impl& other) noexcept
    {
       if (this != &other)
       {
@@ -98,7 +98,7 @@ public:
    }
 
    ///<summary> move assignment operator.</summary>
-   impl& impl::operator=(impl&& other) noexcept
+   impl& operator=(impl&& other) noexcept
    {
       if (this != &other)
       {
@@ -111,9 +111,9 @@ public:
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean accessible data is identical.</remarks>
-   bool impl::operator==(const impl& other) const
+   bool operator==(const impl& other) const
    {
-      if ((this == nullptr) || (&other == nullptr)) return false;       // moved object
+      if ((this == nullptr) || (&other == nullptr)) return false;       // moved object NOLINT (false positive)
       if (this == &other) return true;                                  // same object
       return (
          (error_code == other.error_code) &&
@@ -123,7 +123,7 @@ public:
 
    ///<summary> not equals comparison operator.</summary>
    ///<remarks> defines not equals to mean accessible data differs.</remarks>
-   bool impl::operator!=(const impl& other) const
+   bool operator!=(const impl& other) const
    {
       return !(*this == other);
    }

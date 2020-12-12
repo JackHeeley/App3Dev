@@ -215,7 +215,7 @@ namespace utf8
    ///<returns>utf8 encoded string representation of wstr</returns>
    static std::string from_utf16_unsafe(const std::wstring& wstr)
    {
-      return std::wstring_convert<std::codecvt_utf8_utf16 <wchar_t>, wchar_t>().to_bytes(wstr);
+      return std::wstring_convert<std::codecvt_utf8_utf16 <wchar_t>, wchar_t>().to_bytes(wstr); // NOLINT(clang-diagnostic-deprecated-declarations)
    }
 
    ///<summary>convert utf8 string to utf16 string with std::codecvt</summary>
@@ -223,7 +223,7 @@ namespace utf8
    ///<returns>utf16 encoded string representation of str</returns>
    static std::wstring to_utf16_unsafe(const std::string& str)
    {
-      return std::wstring_convert<std::codecvt_utf8_utf16 <wchar_t>, wchar_t>().from_bytes(str);
+      return std::wstring_convert<std::codecvt_utf8_utf16 <wchar_t>, wchar_t>().from_bytes(str);   // NOLINT(clang-diagnostic-deprecated-declarations)
    }
 
 #pragma warning(default: 4996)

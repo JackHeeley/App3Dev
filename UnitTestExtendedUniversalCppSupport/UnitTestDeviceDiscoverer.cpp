@@ -28,7 +28,7 @@ namespace UnitTestExtendedUniversalCppSupport
 	public:
 		
 #pragma warning(disable: 26440 26497)
-      TEST_CLASS_INITIALIZE(InitializeUnitDeviceDiscoverer) noexcept
+      TEST_CLASS_INITIALIZE(InitializeUnitDeviceDiscoverer) noexcept // NOLINT(clang-diagnostic-missing-braces)
 #pragma warning(default: 26440 26497)
       {
          try
@@ -125,7 +125,9 @@ namespace UnitTestExtendedUniversalCppSupport
             const auto n_disk_devices_before = disk.device_path_map.get().size();
             const auto n_cdrom_devices_before = cdrom.device_path_map.get().size();
 
-            // check pre-condition
+            // check pre-conditions
+            utf8::Assert::IsTrue((n_disk_devices_before > 0), "Test precondition not met");
+            utf8::Assert::IsTrue((n_cdrom_devices_before > 0), "Test precondition not met");
             utf8::Assert::IsTrue((disk != cdrom), "DeviceDiscoverer objects matched before copy");
 
             // perform the operation under test (copy construct)...
@@ -166,7 +168,7 @@ namespace UnitTestExtendedUniversalCppSupport
             utf8::Assert::IsTrue((disk == cdrom_copy), "move failed to create an identical object");
 
             // after moves source must be left in a valid (but unspecified) state. In this case we find source addressable (as required), and different (not required).
-            utf8::Assert::IsFalse((cdrom == cdrom_copy), "moved from object is equal after move");
+            utf8::Assert::IsFalse((cdrom == cdrom_copy), "moved from object is equal after move"); // NOLINT(clang-analyzer-cplusplus.Move)
          }
          catch (std::exception e)
          {

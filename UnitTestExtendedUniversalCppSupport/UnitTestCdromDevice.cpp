@@ -31,7 +31,7 @@ namespace UnitTestExtendedUniversalCppSupport
    public:
 
 #pragma warning(disable: 26440 26497)
-      TEST_CLASS_INITIALIZE(InitializeUnitTestCdRomDevice) noexcept
+      TEST_CLASS_INITIALIZE(InitializeUnitTestCdRomDevice) noexcept  // NOLINT(clang-diagnostic-missing-braces)
 #pragma warning(default: 26440 26497)
       {
          try
@@ -178,7 +178,7 @@ namespace UnitTestExtendedUniversalCppSupport
                try
                {
                   // perform the operation under test (query device geometry and calculate media size)...
-                  const auto size = cdrom.get_image_size();
+                  std::ignore = cdrom.get_image_size();
                   break;
                }
                catch (const std::exception& e)

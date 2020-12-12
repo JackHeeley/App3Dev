@@ -103,7 +103,7 @@ public:
    }
 
    ///<summary> copy assignment operator.</summary>
-   impl& impl::operator=(impl& other)
+   impl& operator=(impl& other)
    {
       if (this != &other)
       {
@@ -123,7 +123,7 @@ public:
    }
 
    ///<summary> move assignment operator.</summary>
-   impl& impl::operator=(impl&& other) noexcept
+   impl& operator=(impl&& other) noexcept
    {
       if (this != &other)
       {
@@ -149,7 +149,7 @@ public:
    }
 
    ///<summary> destructor.</summary>
-   impl::~impl()
+   ~impl()
    {
       try
       {
@@ -204,7 +204,7 @@ public:
 
    ///<summary> create disk file to back memory buffer</summary>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
-   void impl::openFile() 
+   void openFile() 
    {
       hFile = CreateFile(filePathW.c_str(),
          GENERIC_READ | GENERIC_WRITE,
@@ -224,7 +224,7 @@ public:
 
    ///<summary> relate disk file to memory object.</summary>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
-   void impl::createFileMapping() 
+   void createFileMapping() 
    {
       hFileMap = CreateFileMapping(hFile,
          nullptr,
@@ -250,7 +250,7 @@ public:
 
    ///<summary> map view of file into memory.</summary>
    ///<exception cref='std::exception'> if the operation could not be completed.</exception>
-   void impl::mapViewOfFile()
+   void mapViewOfFile()
    {
       buffer_ptr = MapViewOfFile(hFileMap,
          FILE_MAP_READ | FILE_MAP_WRITE,
@@ -276,7 +276,7 @@ public:
    }
 
    ///<summary> commit buffer to disk and release memory.</summary>
-   void impl::release() 
+   void release() 
    {
       if (hFileMap != nullptr) 
       {

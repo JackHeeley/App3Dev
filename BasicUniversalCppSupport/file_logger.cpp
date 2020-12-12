@@ -43,8 +43,8 @@ private:
 public:
    ///<summary> default constructor.</summary>
    impl() noexcept :
-      fileName("LogFile.log"),
       filter(LogFilter::None),
+      fileName("LogFile.log"),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app)),
       the_mutex()
    {
@@ -52,8 +52,8 @@ public:
 
    ///<summary> normal constructor.</summary>
    impl(const std::string fileName, LogFilter filter) noexcept :
-      fileName(fileName),
       filter(filter),
+      fileName(fileName),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app)),
       the_mutex()
    {
@@ -61,8 +61,8 @@ public:
 
    ///<summary> copy constructor.</summary>
    impl(const impl& other) noexcept :
-      fileName(other.fileName),
       filter(other.filter),
+      fileName(other.fileName),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app)),
       the_mutex()
    {
@@ -70,8 +70,8 @@ public:
 
    ///<summary> move constructor.</summary>
    impl(impl&& other) noexcept :
-      fileName(other.fileName),
       filter(other.filter),
+      fileName(other.fileName),
       stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app)),
       the_mutex()
    {
@@ -82,7 +82,7 @@ public:
    {
       try
       {
-         clear();
+         stream.clear();
       }
       catch (const std::exception& e)
       {
@@ -91,11 +91,11 @@ public:
    }
    
    ///<summary> copy assignment operator.</summary>
-   impl& impl::operator=(impl& other)
+   impl& operator=(impl& other)
    {
       if (this != &other)
       {
-		   fileName = other.fileName;
+         fileName = other.fileName;
          filter = other.filter;
          stream = std::ofstream(fileName, std::ofstream::out | std::ofstream::app);
       }
@@ -103,7 +103,7 @@ public:
    }
 
    ///<summary> move assignment operator.</summary>
-   impl& impl::operator=(impl&& other) noexcept
+   impl& operator=(impl&& other) noexcept
    {
       if (this != &other)
       {

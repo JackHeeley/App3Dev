@@ -32,7 +32,7 @@ namespace UnitTestExtendedUniversalCppSupport
    public:
 
 #pragma warning(disable: 26440 26497)
-      TEST_CLASS_INITIALIZE(InitializeUnitTestDevice) noexcept
+      TEST_CLASS_INITIALIZE(InitializeUnitTestDevice) noexcept // NOLINT(clang-diagnostic-missing-braces)
 #pragma warning(default: 26440 26497)
       {
          try
@@ -120,7 +120,7 @@ namespace UnitTestExtendedUniversalCppSupport
             // continue with an exception path test (issue a bad ioctl to the device)...
             try
             {
-               nBytesReturned = cdrom.ioctl(IOCTL_STORAGE_BAD_IOCTL, nullptr, 0, nullptr, 0);
+               std::ignore = cdrom.ioctl(IOCTL_STORAGE_BAD_IOCTL, nullptr, 0, nullptr, 0);
                utf8::Assert::Fail("ioctl didn't reject a foreign ctl_code");
             }
             catch (const std::exception& e)

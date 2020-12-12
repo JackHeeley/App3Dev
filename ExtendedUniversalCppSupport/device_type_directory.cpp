@@ -79,10 +79,10 @@ public:
    impl(impl&& other) noexcept = delete;
 
    ///<summary> no copy assignment operator (singleton).</summary>
-   impl& impl::operator=(impl& other) = delete;
+   impl& operator=(impl& other) = delete;
 
    ///<summary> no move assignment operator (singleton).</summary>
-   impl& impl::operator=(impl&& other) = delete;
+   impl& operator=(impl&& other) = delete;
 
    ///<summary> explicit default destructor (rule of 5).</summary>
    ~impl() = default;

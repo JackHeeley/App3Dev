@@ -211,3 +211,6 @@ DONE:
 87. Upgraded ms-gsl 3.0.1 to ms-gsl 3.1.0 (copied new headers into solution) and rebuilt with updated compiler version 16.8.3
 88. Removed word "using" from code comments and strings so that keyword can be searched for.
     Removed two instances of naked "using namespace..." in headers at global scope (relocated them to a locally scoped inner block)
+89. Prepared code to build clean with clang-tidy (using compiler Version 16.9.0 Preview 2.0) You can use the preview and enable clang-tidy
+    using the project properties code analysis setting. Because it is slow consider keeping it disabled in debug builds 
+    (optimize core build cycle).

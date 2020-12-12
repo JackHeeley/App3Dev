@@ -70,10 +70,10 @@ public:
    impl(impl&& other) = delete;
 
    // (unique ptr= NonCopyable)
-   impl& impl::operator=(impl& other) = delete;
+   impl& operator=(impl& other) = delete;
 
    // base class has const members (non-moveable after construction)
-   impl& impl::operator=(impl&& other) = delete; 
+   impl& operator=(impl&& other) = delete; 
 
    ///<summary> destructor maintains accessible device state at end of use.</summary> 
    ~impl(void)
@@ -87,7 +87,7 @@ public:
    ///<summary> get size of media image.</summary>
    ///<returns> size in bytes of image data.</returns>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   const uint64_t impl::get_image_size() const
+   const uint64_t get_image_size() const
    {
       // query current media for data needed for buffer size calculation
       const DISK_GEOMETRY diskGeometry = get_disk_geometry();
@@ -114,7 +114,7 @@ public:
    ///<param name ='a_progress'> reference to the external location where get_image() %progress is maintained</param>
    ///<exception cref='std::exception'>if the operation could not be completed with m_progress==100.</exception>
 #pragma warning(disable : 26493)
-   void impl::get_image(gsl::span<unsigned char> span, std::atomic<int>& a_progress) const
+   void get_image(gsl::span<unsigned char> span, std::atomic<int>& a_progress) const
    {
       // initialize the low and high water marks (used in read, and resource limited exception handling)
       LPBYTE lpabyBufferMemoryBase = span.data();
@@ -193,7 +193,7 @@ public:
 
 
    ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>
-   void impl::lock(void) noexcept
+   void lock(void) noexcept
    {
       try
       {
@@ -206,7 +206,7 @@ public:
    }
 
    ///<summary> allows media removal. If the cdrom is already in the unlocked state, then this method does nothing.</summary>
-   void impl::unlock(void) noexcept
+   void unlock(void) noexcept
    {
       try
       {
@@ -220,14 +220,14 @@ public:
 
    ///<summary>query the locked state of the cdrom.</summary>
    ///<returns>true if the cdrom is locked.</returns>
-   bool impl::get_locked(void) const noexcept
+   bool get_locked(void) const noexcept
    {
       return locked;
    }
 
    ///<summary> load the media (closes the door of the CD drive)</summary>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void impl::load(void) const
+   void load(void) const
    {
       const DWORD nBytesReturned =
          ioctl(IOCTL_STORAGE_LOAD_MEDIA, nullptr, 0, nullptr, 0);
@@ -240,7 +240,7 @@ public:
 
    ///<summary> eject the media (opens the door of the CD drive)</summary>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   void impl::eject(void) const
+   void eject(void) const
    {
       const DWORD nBytesReturned =
          ioctl(IOCTL_STORAGE_EJECT_MEDIA, nullptr, 0, nullptr, 0);
@@ -255,7 +255,7 @@ private:
    ///<summary>apply the IOCTL to allow/disallow media removal</summary>
    ///<remarks>this physically locks the cdrom tray door</remarks>
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   bool impl::lock_control(bool aLockedValue) const
+   bool lock_control(bool aLockedValue) const
    {
       PREVENT_MEDIA_REMOVAL lpInBuffer;
 
@@ -273,7 +273,7 @@ private:
 
    ///<summary>get shape and size of medium currently in cdrom drive</summary>
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   const DISK_GEOMETRY impl::get_disk_geometry(void) const
+   const DISK_GEOMETRY get_disk_geometry(void) const
    {
       DISK_GEOMETRY disk_geometry;
 
@@ -296,7 +296,7 @@ private:
    ///<param name='cbyBlockSize'>the size in bytes of the blocks to read</param>
    ///<param name ='a_progress'> reference to the external location where get_image() %progress is maintained</param>
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   void impl::read_blocks(LPBYTE& lpabyBufferMemoryBase, LPBYTE& lpabyBufferMemoryAddress, uint64_t cBlocks, uint64_t cbyBlockSize, std::atomic<int>& a_progress) const
+   void read_blocks(LPBYTE& lpabyBufferMemoryBase, LPBYTE& lpabyBufferMemoryAddress, uint64_t cBlocks, uint64_t cbyBlockSize, std::atomic<int>& a_progress) const
    {
       for (uint64_t nBlock = 0; nBlock < cBlocks; nBlock++)
       {
