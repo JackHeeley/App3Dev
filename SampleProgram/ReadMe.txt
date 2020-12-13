@@ -218,3 +218,14 @@ DONE:
     compiler update will fix these but some developers will still be running earlier versions well into the future). Reconfigured projects 
     so that code analysis is ONLY APPLIED to the premium x64 release build. This is a compromise because of the time needed to do (full and 
     deep static analysis. The core development/debug pdca cycle efficiency should be respected.
+91. Additional tray door lock tests added. They do not yet stress or replicate the issue seen - which seems to be that the device open
+    as implemented - does not apply security controls as we anticipated. Opening the device with default security in shared mode results 
+    in the driver scoping its block-the-unlock response to requests originating from the same local process.
+92. CdRom device tray door lock feature was found to be been broken and had been fixed. Invoking the unit tests could break a simultaneously 
+    running SampleProgram.exe. Tests could succeed in ejecting the current media while door is theoretically "locked" and while the cd is 
+    being read by another program. Unit tests on lock feature were passing. Issue in cdRomDevice fixed. Also needed to claim exclusive access
+    when tray door is locked. Unit tests have been extended. 
+
+KNOWN ISSUES: Code added at 92 is quick-and-dirty prototyping/investigation. Unit Tests and the runtime need attention. Search for //TODO:
+
+    

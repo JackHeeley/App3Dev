@@ -257,6 +257,39 @@ private:
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
    bool lock_control(bool aLockedValue) const
    {
+
+      //TODO: Tidy up the exclusive access prototype here... 
+#pragma warning(disable:26494)
+      CDROM_EXCLUSIVE_ACCESS lpInBufferEA;
+      CDROM_EXCLUSIVE_LOCK lpInBufferEL;
+#pragma warning(default:26494)
+
+      if (aLockedValue)
+      {
+         lpInBufferEA.RequestType = ExclusiveAccessLockDevice;
+         lpInBufferEA.Flags = CDROM_LOCK_IGNORE_VOLUME;
+      }
+      else
+      {
+         lpInBufferEA.RequestType = ExclusiveAccessUnlockDevice;
+         lpInBufferEA.Flags = 0; // not CDROM_NO_MEDIA_NOTIFICATIONS;
+      }
+
+      lpInBufferEL.Access = lpInBufferEA;
+      lpInBufferEL.CallerName[0] = UCHAR { 'J' };
+      lpInBufferEL.CallerName[1] = UCHAR { 'a' };
+      lpInBufferEL.CallerName[2] = UCHAR { 'c' };
+      lpInBufferEL.CallerName[3] = UCHAR { 'k' };
+      lpInBufferEL.CallerName[4] = 0;
+
+      const DWORD nBytesReturnedEL =
+         ioctl(IOCTL_CDROM_EXCLUSIVE_ACCESS, &lpInBufferEL, sizeof(CDROM_EXCLUSIVE_LOCK), nullptr, 0);
+
+      if (nBytesReturnedEL != 0)
+      {
+         throw error_context("ioctl returned non-zero length");
+      }
+      
       PREVENT_MEDIA_REMOVAL lpInBuffer;
 
       lpInBuffer.PreventMediaRemoval = aLockedValue;

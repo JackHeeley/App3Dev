@@ -60,8 +60,9 @@ public:
    EXTENDEDUNIVERSALCPPSUPPORT_API void CdromDevice::get_image(gsl::span<unsigned char> span, std::atomic<int>& a_progress) const;
 
    ///<summary> prevents media removal.</summary>
-   ///<remarks> by locking the door of the optical drive. This feature is not supported by all optical drives.
-   /// Use get_locked to query the lock state.</remarks>
+   ///<remarks> by locking the door of the optical drive. (This feature is not supported by all optical drives).
+   /// lock() also claims exclusive access to the device, which makes ioctl and reads from other processes fail 
+   /// until the next subsquient call to unlock(). Use get_locked() to query the lock state.</remarks>
    EXTENDEDUNIVERSALCPPSUPPORT_API void lock(void) noexcept;
 
    ///<summary> allows media removal again (after a lock).</summary>

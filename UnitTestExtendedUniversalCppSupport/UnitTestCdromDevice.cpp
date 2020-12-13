@@ -19,6 +19,7 @@
 #include "stdafx.h"
 
 #include <fstream>
+#include <future>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std::chrono_literals;
@@ -123,6 +124,365 @@ namespace UnitTestExtendedUniversalCppSupport
                   {
                   case ERROR_INVALID_FUNCTION:        // good (eject is invalid if device is locked)
                   case ERROR_SUCCESS:                 // since WINDOWS 10 1803
+                  case ERROR_ACCESS_DENIED:           // since we claimed exclusive access
+                     break;
+
+                  case ERROR_NOT_READY:
+                  case ERROR_MEDIA_CHANGED:
+                  case ERROR_IO_DEVICE:
+                     std::this_thread::sleep_for(1s); // not ready conditions, expected in some test sequences
+                     break;
+
+                  default: throw e;                   // freaky stuff
+                  }
+               }
+            }
+
+            // tray door is unlocked as scoped_lock goes out of scope (both normal and exception path)
+            utf8::Assert::IsFalse(cdrom0.get_locked(), "cdrom0 reports locked when expected state is unlocked");
+
+            // continue perform the operation under test (expect success now)...
+            cdrom0.eject();            // check results (visually confirm that tray opens)
+
+            // restore the system state (close the tray - if possible)...
+            try
+            {
+               cdrom0.load();            // check results (visually confirm that tray closes)
+            }
+            catch (const std::exception& e)
+            {
+               switch (SystemError().get_error_code())
+               {
+               case ERROR_INVALID_FUNCTION:
+                  break;               // some devices don't support load (tester will have to shut the door by hand)
+               default:
+                  throw e;
+               }
+            }
+         }
+         catch (const std::exception& e)
+         {
+            utf8::Assert::Fail(e.what()); // something went wrong
+         }
+      }
+
+      //TODO: TIDY UP THESE CUT AND PASTE VARIANTS ON TestCdromTrayLocking
+      TEST_METHOD(TestCdromTrayLockingAdvanced)
+      {
+         // RAII door lock helper. We could pull in header from SampleProgram (but thats a bit unstructured)
+         class RAII_physical_lock
+         {
+            CdromDevice& m_cdr;
+
+         public:
+            RAII_physical_lock(CdromDevice& cdrom) noexcept : m_cdr(cdrom)
+            {
+               m_cdr.lock();
+            }
+            ///<summary> deleted copy constructor.</summary>
+            RAII_physical_lock(RAII_physical_lock& other) = delete;
+
+            ///<summary> deleted move constructor.</summary>
+            RAII_physical_lock(RAII_physical_lock&& other) = delete;
+
+            ///<summary> deleted copy assignment.</summary>
+            RAII_physical_lock& operator=(RAII_physical_lock& other) = delete;
+
+            ///<summary> deleted move assignment.</summary>
+            RAII_physical_lock& operator=(RAII_physical_lock&& other) = delete;
+
+            ~RAII_physical_lock()
+            {
+               m_cdr.unlock();
+            }
+         };
+
+         // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
+         try
+         {
+            std::string device_path = DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0];
+            CdromDevice cdrom0(device_path);
+            CdromDevice cdrom1(device_path);
+
+            int retries = 10;
+
+            while (retries-- > 0)
+            {
+               try
+               {
+                  // perpare for test (lock the tray door)...
+                  RAII_physical_lock scoped_lock(cdrom0);
+
+                  utf8::Assert::IsTrue(cdrom0.get_locked(), "cdrom0 reports unlocked when expected state is locked");
+
+                  // perform the operation under test USING A DIFERENT OBJECT INSTANCE THIS TIME...
+                  cdrom1.eject();
+
+                  // check results (expect fail with invalid function)
+                  utf8::Assert::Fail("tray door could be opened despite being locked");
+               }
+               catch (const std::exception& e)
+               {
+                  switch (SystemError().get_error_code())
+                  {
+                  case ERROR_INVALID_FUNCTION:        // good (eject is invalid if device is locked)
+                  case ERROR_SUCCESS:                 // since WINDOWS 10 1803
+                  case ERROR_ACCESS_DENIED:           // since we claimed exclusive access
+                     break;
+
+                  case ERROR_NOT_READY:
+                  case ERROR_MEDIA_CHANGED:
+                  case ERROR_IO_DEVICE:
+                     std::this_thread::sleep_for(1s); // not ready conditions, expected in some test sequences
+                     break;
+
+                  default: throw e;                   // freaky stuff
+                  }
+               }
+            }
+
+            // tray door is unlocked as scoped_lock goes out of scope (both normal and exception path)
+            utf8::Assert::IsFalse(cdrom0.get_locked(), "cdrom0 reports locked when expected state is unlocked");
+
+            // continue perform the operation under test (expect success now)...
+            cdrom0.eject();            // check results (visually confirm that tray opens)
+
+            // restore the system state (close the tray - if possible)...
+            try
+            {
+               cdrom0.load();            // check results (visually confirm that tray closes)
+            }
+            catch (const std::exception& e)
+            {
+               switch (SystemError().get_error_code())
+               {
+               case ERROR_INVALID_FUNCTION:
+                  break;               // some devices don't support load (tester will have to shut the door by hand)
+               default:
+                  throw e;
+               }
+            }
+         }
+         catch (const std::exception& e)
+         {
+            utf8::Assert::Fail(e.what()); // something went wrong
+         }
+      }
+
+      TEST_METHOD(TestCdromTrayLockingMultiThreaded)
+      {
+         // RAII door lock helper. We could pull in header from SampleProgram (but thats a bit unstructured)
+         class RAII_physical_lock
+         {
+            CdromDevice& m_cdr;
+
+         public:
+            RAII_physical_lock(CdromDevice& cdrom) noexcept : m_cdr(cdrom)
+            {
+               m_cdr.lock();
+            }
+            ///<summary> deleted copy constructor.</summary>
+            RAII_physical_lock(RAII_physical_lock& other) = delete;
+
+            ///<summary> deleted move constructor.</summary>
+            RAII_physical_lock(RAII_physical_lock&& other) = delete;
+
+            ///<summary> deleted copy assignment.</summary>
+            RAII_physical_lock& operator=(RAII_physical_lock& other) = delete;
+
+            ///<summary> deleted move assignment.</summary>
+            RAII_physical_lock& operator=(RAII_physical_lock&& other) = delete;
+
+            ~RAII_physical_lock()
+            {
+               m_cdr.unlock();
+            }
+         };
+
+         // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
+         try
+         {
+            std::string device_path = DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0];
+            CdromDevice cdrom0(device_path);
+            CdromDevice cdrom1(device_path);
+
+            int retries = 10;
+
+            while (retries-- > 0)
+            {
+               try
+               {
+                  // perpare for test (lock the tray door)...
+                  RAII_physical_lock scoped_lock(cdrom0);
+
+                  utf8::Assert::IsTrue(cdrom0.get_locked(), "cdrom0 reports unlocked when expected state is locked");
+
+                  // perform the operation under test USING A DIFERENT THREAD THIS TIME...
+                  auto future = std::async(std::launch::async, [&cdrom1] { cdrom1.eject(); return true; });
+
+                  if (!future.get())
+                  {
+                     //future should return true or get() should rethrow the exception (so we should never end up here)
+                     utf8::Assert::Fail("test coding issue: the std::async predicate didn't operate as per design intent.");
+                  }
+
+                  // check results (expect fail with invalid function)
+                  utf8::Assert::Fail("tray door could be opened despite being locked");
+
+               }
+               catch (const std::exception& e)
+               {
+                  switch (SystemError().get_error_code())
+                  {
+                  case ERROR_INVALID_FUNCTION:        // good (eject is invalid if device is locked)
+                  case ERROR_SUCCESS:                 // since WINDOWS 10 1803
+                  case ERROR_ACCESS_DENIED:           // since we claimed exclusive access
+                     break;
+
+                  case ERROR_NOT_READY:
+                  case ERROR_MEDIA_CHANGED:
+                  case ERROR_IO_DEVICE:
+                     std::this_thread::sleep_for(1s); // not ready conditions, expected in some test sequences
+                     break;
+
+                  default: throw e;                   // freaky stuff
+                  }
+               }
+            }
+
+            // tray door is unlocked as scoped_lock goes out of scope (both normal and exception path)
+            utf8::Assert::IsFalse(cdrom0.get_locked(), "cdrom0 reports locked when expected state is unlocked");
+
+            // continue perform the operation under test (expect success now)...
+            cdrom0.eject();            // check results (visually confirm that tray opens)
+
+            // restore the system state (close the tray - if possible)...
+            try
+            {
+               cdrom0.load();            // check results (visually confirm that tray closes)
+            }
+            catch (const std::exception& e)
+            {
+               switch (SystemError().get_error_code())
+               {
+               case ERROR_INVALID_FUNCTION:
+                  break;               // some devices don't support load (tester will have to shut the door by hand)
+               default:
+                  throw e;
+               }
+            }
+         }
+         catch (const std::exception& e)
+         {
+            utf8::Assert::Fail(e.what()); // something went wrong
+         }
+      }
+
+
+      TEST_METHOD(TestCdromTrayLockingMultiUser)
+      {
+         // RAII door lock helper. We could pull in header from SampleProgram (but thats a bit unstructured)
+         class RAII_physical_lock
+         {
+            CdromDevice& m_cdr;
+
+         public:
+            RAII_physical_lock(CdromDevice& cdrom) noexcept : m_cdr(cdrom)
+            {
+               m_cdr.lock();
+            }
+            ///<summary> deleted copy constructor.</summary>
+            RAII_physical_lock(RAII_physical_lock& other) = delete;
+
+            ///<summary> deleted move constructor.</summary>
+            RAII_physical_lock(RAII_physical_lock&& other) = delete;
+
+            ///<summary> deleted copy assignment.</summary>
+            RAII_physical_lock& operator=(RAII_physical_lock& other) = delete;
+
+            ///<summary> deleted move assignment.</summary>
+            RAII_physical_lock& operator=(RAII_physical_lock&& other) = delete;
+
+            ~RAII_physical_lock()
+            {
+               m_cdr.unlock();
+            }
+         };
+
+         class RAII_impersonate
+         {
+
+         public:
+            RAII_impersonate() noexcept
+            {
+               if (!ImpersonateSelf(SecurityAnonymous))
+               {
+                  LOG_ERROR("RAII_impersonate ImpersonateSelf failed");
+               }
+            }
+
+            ///<summary> deleted copy constructor.</summary>
+            RAII_impersonate(RAII_impersonate& other) = delete;
+
+            ///<summary> deleted move constructor.</summary>
+            RAII_impersonate(RAII_impersonate&& other) = delete;
+
+            ///<summary> deleted copy assignment.</summary>
+            RAII_impersonate& operator=(RAII_impersonate& other) = delete;
+
+            ///<summary> deleted move assignment.</summary>
+            RAII_impersonate& operator=(RAII_impersonate&& other) = delete;
+
+            ~RAII_impersonate()
+            {
+               RevertToSelf();
+            }
+         };
+
+         // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
+         try
+         {
+            std::string device_path = DeviceDiscoverer(DeviceTypeDirectory::DeviceType::CDROM_DEVICES).device_path_map.get()[0];
+            CdromDevice cdrom0(device_path);
+            CdromDevice cdrom1(device_path);
+
+            int retries = 10;
+
+            while (retries-- > 0)
+            {
+               try
+               {
+                  // perpare for test (lock the tray door)...
+                  RAII_physical_lock scoped_lock(cdrom0);
+
+                  utf8::Assert::IsTrue(cdrom0.get_locked(), "cdrom0 reports unlocked when expected state is locked");
+
+                  // TODO: perform the operation under test impersonating another user...
+                  auto future = std::async(std::launch::async, [&cdrom1]
+                     { 
+                        RAII_impersonate I_am_my_own_imposter;
+                        cdrom1.eject(); 
+                        return true;
+                     }
+                  );
+
+                  if (!future.get())
+                  {
+                     //future should return true or get() should rethrow the exception (so we should never end up here)
+                     utf8::Assert::Fail("test coding issue: the std::async predicate didn't operate as per design intent.");
+                  }
+
+                  // check results (expect fail with invalid function)
+                  utf8::Assert::Fail("tray door could be opened despite being locked");
+
+               }
+               catch (const std::exception& e)
+               {
+                  switch (SystemError().get_error_code())
+                  {
+                  case ERROR_INVALID_FUNCTION:        // good (eject is invalid if device is locked)
+                  case ERROR_SUCCESS:                 // since WINDOWS 10 1803
+                  case ERROR_ACCESS_DENIED:           // since we claimed exclusive access
                      break;
 
                   case ERROR_NOT_READY:
