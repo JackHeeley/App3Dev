@@ -24,6 +24,9 @@
     <ClInclude Include="progress_tracker.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="toolsver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

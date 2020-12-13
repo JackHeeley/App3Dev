@@ -2,8 +2,10 @@
 // or project specific include files that are used frequently, but
 // are changed infrequently
 //
-
 #pragma once
+
+// add check for tools limitations (clang support) with impact on build preferences
+#include "toolsver.h"
 
 #include "targetver.h"
 

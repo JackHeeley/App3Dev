@@ -5,6 +5,9 @@
 
 #pragma once
 
+// add check for tools limitations (clang support) with impact on build preferences
+#include "toolsver.h"
+
 #include "targetver.h"
 
 // Headers for CppUnitTest

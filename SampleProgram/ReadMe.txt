@@ -214,3 +214,7 @@ DONE:
 89. Prepared code to build clean with clang-tidy (using compiler Version 16.9.0 Preview 2.0) You can use the preview and enable clang-tidy
     using the project properties code analysis setting. Because it is slow consider keeping it disabled in debug builds 
     (optimize core build cycle).
+90. Added toolsver.h to all projects so that clang-tidy limitations and workround are explained to affected parties (a soon to be released
+    compiler update will fix these but some developers will still be running earlier versions well into the future). Reconfigured projects 
+    so that code analysis is ONLY APPLIED to the premium x64 release build. This is a compromise because of the time needed to do (full and 
+    deep static analysis. The core development/debug pdca cycle efficiency should be respected.

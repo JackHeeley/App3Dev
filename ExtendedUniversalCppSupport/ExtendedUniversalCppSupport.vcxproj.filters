@@ -39,6 +39,9 @@
     <ClInclude Include="device_type_directory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="toolsver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
