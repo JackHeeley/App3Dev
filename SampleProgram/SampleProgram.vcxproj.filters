@@ -27,6 +27,9 @@
     <ClInclude Include="toolsver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RAII_exclusive_access_lock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

@@ -49,19 +49,13 @@ static void simulate_resource_limitation(void)
 class CdromDevice::impl : Device
 {
 
-private:
-   ///<summary> physical locked state of drive door</summary>
-   bool locked;
-
 public:
    ///<summary> construct a cdrom device.</summary> 
    ///<param name='device_path'>the path selecting the physical device instance</param>
    impl(const std::string& device_path) :
       Device(device_path)
    {
-      // a speculative unlock is ineffective (and logically wrong here)
-      locked = false;
-   };
+   }
 
    // no copy constructor (unique ptr)
    impl(const impl &other) = delete;
@@ -76,13 +70,7 @@ public:
    impl& operator=(impl&& other) = delete; 
 
    ///<summary> destructor maintains accessible device state at end of use.</summary> 
-   ~impl(void)
-   {
-      if (locked)
-      {
-         unlock();
-      }
-   }
+   ~impl(void) = default;
  
    ///<summary> get size of media image.</summary>
    ///<returns> size in bytes of image data.</returns>
@@ -192,12 +180,12 @@ public:
 #pragma warning(default : 26493)
 
 
-   ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>
+   ///<summary> prevents media removal (if the hardware has a lockable drive).</summary>
    void lock(void) noexcept
    {
       try
       {
-         locked = lock_control(true);
+         lock_control(true);
       }
       catch (const error::context & e)
       {
@@ -205,12 +193,12 @@ public:
       }
    }
 
-   ///<summary> allows media removal. If the cdrom is already in the unlocked state, then this method does nothing.</summary>
+   ///<summary> allows media removal.</summary>
    void unlock(void) noexcept
    {
       try
       {
-         locked = lock_control(false);
+         lock_control(false);
       }
       catch (const error::context& e)
       {
@@ -218,11 +206,30 @@ public:
       }
    }
 
-   ///<summary>query the locked state of the cdrom.</summary>
-   ///<returns>true if the cdrom is locked.</returns>
-   bool get_locked(void) const noexcept
+   ///<summary> claim exclusive access to the physical device.</summary>
+   void claim_exclusive_access(const std::string& moniker) noexcept
    {
-      return locked;
+      try
+      {
+         claim_control(true, moniker);
+      }
+      catch (const error::context& e)
+      {
+         LOG_WARNING(e.full_what());
+      }
+   }
+
+   ///<summary> release exclisive access to the physical device.</summary>
+   void release_exclusive_access(const std::string& moniker) noexcept
+   {
+      try
+      {
+         claim_control(false, moniker);
+      }
+      catch (const error::context& e)
+      {
+         LOG_WARNING(e.full_what());
+      }
    }
 
    ///<summary> load the media (closes the door of the CD drive)</summary>
@@ -252,44 +259,12 @@ public:
    }
 
 private:
+
    ///<summary>apply the IOCTL to allow/disallow media removal</summary>
    ///<remarks>this physically locks the cdrom tray door</remarks>
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
-   bool lock_control(bool aLockedValue) const
+   void lock_control(bool aLockedValue) const
    {
-
-      //TODO: Tidy up the exclusive access prototype here... 
-#pragma warning(disable:26494)
-      CDROM_EXCLUSIVE_ACCESS lpInBufferEA;
-      CDROM_EXCLUSIVE_LOCK lpInBufferEL;
-#pragma warning(default:26494)
-
-      if (aLockedValue)
-      {
-         lpInBufferEA.RequestType = ExclusiveAccessLockDevice;
-         lpInBufferEA.Flags = CDROM_LOCK_IGNORE_VOLUME;
-      }
-      else
-      {
-         lpInBufferEA.RequestType = ExclusiveAccessUnlockDevice;
-         lpInBufferEA.Flags = 0; // not CDROM_NO_MEDIA_NOTIFICATIONS;
-      }
-
-      lpInBufferEL.Access = lpInBufferEA;
-      lpInBufferEL.CallerName[0] = UCHAR { 'J' };
-      lpInBufferEL.CallerName[1] = UCHAR { 'a' };
-      lpInBufferEL.CallerName[2] = UCHAR { 'c' };
-      lpInBufferEL.CallerName[3] = UCHAR { 'k' };
-      lpInBufferEL.CallerName[4] = 0;
-
-      const DWORD nBytesReturnedEL =
-         ioctl(IOCTL_CDROM_EXCLUSIVE_ACCESS, &lpInBufferEL, sizeof(CDROM_EXCLUSIVE_LOCK), nullptr, 0);
-
-      if (nBytesReturnedEL != 0)
-      {
-         throw error_context("ioctl returned non-zero length");
-      }
-      
       PREVENT_MEDIA_REMOVAL lpInBuffer;
 
       lpInBuffer.PreventMediaRemoval = aLockedValue;
@@ -301,7 +276,48 @@ private:
       {
          throw error_context("ioctl returned non-zero length");
       }
-      return aLockedValue;
+   }
+
+   ///<summary>apply the IOCTL to claim/release exclusive access of physical device</summary>
+   ///<remarks>this makes the overlying file system temporarily inaccessible. The moniker
+   /// parameter passed at claim should be unique and the same value used to release the device.</remarks>
+   ///<param name='anExclusiveAccessValue'> true to claim, or false to release the device.</param> 
+   ///<param name='aCallerName'> A NULL-terminated string that identifies the application or system component that has a lock on the CD-ROM device. 
+   /// The length of the string must be less than or equal to CDROM_EXCLUSIVE_CALLER_LENGTH bytes, including the NULL character at the end of the string.
+   /// The string must contain alphanumerics (A - Z, a - z, 0 - 9), spaces, periods, commas, colons (:), semi-colons (;), hyphens (-), and underscores (_).</param> 
+   ///<exception cref='std::exception'>if the operation could not be completed</exception>
+   void claim_control(bool anExclusiveAccessValue, const std::string& aCallerName) const
+   {
+
+#pragma warning(disable:26494)
+      CDROM_EXCLUSIVE_LOCK lpInBuffer;
+#pragma warning(default:26494)
+
+      if (anExclusiveAccessValue)
+      {
+         lpInBuffer.Access.RequestType = ExclusiveAccessLockDevice;
+         lpInBuffer.Access.Flags = CDROM_LOCK_IGNORE_VOLUME;
+      }
+      else
+      {
+         lpInBuffer.Access.RequestType = ExclusiveAccessUnlockDevice;
+         lpInBuffer.Access.Flags = 0; // not CDROM_NO_MEDIA_NOTIFICATIONS;
+      }
+
+#pragma warning(disable:26490)
+      if (strcpy_s(reinterpret_cast<char*>(lpInBuffer.CallerName), CDROM_EXCLUSIVE_CALLER_LENGTH, aCallerName.c_str()) != 0)
+#pragma warning(default:26490)
+      {
+         throw error_context("parameter error (aCallerName)");
+      }
+
+      const DWORD nBytesReturned =
+         ioctl(IOCTL_CDROM_EXCLUSIVE_ACCESS, &lpInBuffer, sizeof(CDROM_EXCLUSIVE_LOCK), nullptr, 0);
+
+      if (nBytesReturned != 0)
+      {
+         throw error_context("ioctl returned non-zero length");
+      }
    }
 
    ///<summary>get shape and size of medium currently in cdrom drive</summary>
@@ -379,6 +395,18 @@ void CdromDevice::get_image(gsl::span<unsigned char>span, std::atomic<int>& a_pr
    pimpl->get_image(span, a_progress);
 }
 
+///<summary> claim exclusive access to the physical device.</summary>
+void CdromDevice::claim_exclusive_access(const std::string& moniker) noexcept
+{
+   return pimpl->claim_exclusive_access(moniker);
+}
+
+///<summary> release exclusive access to the physical device.</summary>
+void CdromDevice::release_exclusive_access(const std::string& moniker) noexcept
+{
+   pimpl->release_exclusive_access(moniker);
+}
+
 ///<summary> prevents media removal. If the cdrom is already in the locked state, then this method does nothing.</summary>
 void CdromDevice::lock(void) noexcept
 {
@@ -389,13 +417,6 @@ void CdromDevice::lock(void) noexcept
 void CdromDevice::unlock(void) noexcept
 {
    pimpl->unlock();
-}
-
-///<summary>query the locked state of the cdrom.</summary>
-///<returns>true if the cdrom is locked.</returns>
-const bool CdromDevice::get_locked(void) const noexcept
-{
-   return pimpl->get_locked();
 }
 
 ///<summary> load the media (closes the door of the CD drive)</summary>

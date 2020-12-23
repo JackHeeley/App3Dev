@@ -209,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="progress_tracker.hpp" />
+    <ClInclude Include="RAII_exclusive_access_lock.hpp" />
     <ClInclude Include="ripper.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

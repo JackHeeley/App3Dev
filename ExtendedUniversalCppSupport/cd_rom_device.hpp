@@ -59,18 +59,31 @@ public:
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
    EXTENDEDUNIVERSALCPPSUPPORT_API void CdromDevice::get_image(gsl::span<unsigned char> span, std::atomic<int>& a_progress) const;
 
+   ///<summary> claims exclusive access to device.</summary>
+   ///<remarks> by sending IOCTL. If successful, the filesystem that overlays the physical device will be inaccessible 
+   /// until a call to release_exclusive_access() is made</remarks>
+   ///<param name='aCallerName'> A NULL-terminated string that identifies the application or system component that has a lock on the CD-ROM device. 
+   /// The length of the string must be less than or equal to CDROM_EXCLUSIVE_CALLER_LENGTH bytes, including the NULL character at the end of the string.
+   /// The string must contain alphanumerics (A - Z, a - z, 0 - 9), spaces, periods, commas, colons (:), semi-colons (;), hyphens (-), and underscores (_).</param> 
+   ///<exception cref='std::exception'>if the operation could not be completed</exception>
+   EXTENDEDUNIVERSALCPPSUPPORT_API void claim_exclusive_access(const std::string& aCallerName) noexcept;
+
+   ///<summary> releases previously claimed exclusive access to device.</summary>
+   ///<remarks> Use after an earlier successful call to request_exclusive_acccess().</remarks>
+   ///<param name='aCallerName'> A NULL-terminated string that identifies the application or system component that has a lock on the CD-ROM device. 
+   /// The length of the string must be less than or equal to CDROM_EXCLUSIVE_CALLER_LENGTH bytes, including the NULL character at the end of the string.
+   /// The string must contain alphanumerics (A - Z, a - z, 0 - 9), spaces, periods, commas, colons (:), semi-colons (;), hyphens (-), and underscores (_).</param> 
+   ///<exception cref='std::exception'>if the operation could not be completed</exception>
+   EXTENDEDUNIVERSALCPPSUPPORT_API void release_exclusive_access(const std::string& aCallerName) noexcept;
+
    ///<summary> prevents media removal.</summary>
    ///<remarks> by locking the door of the optical drive. (This feature is not supported by all optical drives).
    /// lock() also claims exclusive access to the device, which makes ioctl and reads from other processes fail 
-   /// until the next subsquient call to unlock(). Use get_locked() to query the lock state.</remarks>
+   /// until the next subsequent call to unlock().</remarks>
    EXTENDEDUNIVERSALCPPSUPPORT_API void lock(void) noexcept;
 
    ///<summary> allows media removal again (after a lock).</summary>
    EXTENDEDUNIVERSALCPPSUPPORT_API void unlock(void) noexcept;
-
-   ///<summary>query the locked state of the cdrom.</summary>
-   ///<returns>true if the cdrom is locked.</returns>
-   EXTENDEDUNIVERSALCPPSUPPORT_API const bool get_locked(void) const noexcept;
 
    ///<summary> load the media (closes the door of the CD drive) This feature is not supported by all optical drives.</summary>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>

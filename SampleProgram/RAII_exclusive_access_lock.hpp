@@ -1,8 +1,5 @@
 //
-// RAII_physical_lock.hpp : implements an optical drive physical lock helper class.
-//
-// Note: Many (but not all) optical media devices support physical locking and unlocking
-// to prevent media removal at critical times.
+// RAII_exclusive_access_lock.hpp : implements an optical drive physical lock helper class.
 //
 // Copyright (c) 2005-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
@@ -24,43 +21,53 @@
 #include <cd_rom_device.hpp>
 #include <logger.hpp>
 
-///<summary> RAII object used to lock the physical media tray door on CDROM.</summary>
+///<summary> RAII object used to claim exclusive access to a specific physical CDROM.</summary>
 ///<remarks> Be aware that signalled process termination (Eg CRTL+C or CTRL+BREAK) will bypass these destructors!</remarks>
-class RAII_physical_lock
+class RAII_exclusive_access_lock
 {
 private:
    ///<summary> the referenced cdrom.</summary>
    CdromDevice& m_cdr;
+   std::string m_callerName;
 
 public:
-   ///<summary> lock tray door at construction time.</summary>
-   ///<param name='cdr'> a reference to the cdrom to lock.</param>
-   RAII_physical_lock::RAII_physical_lock(CdromDevice& cdr) noexcept
+   ///<summary> claim exclusive access at construction time.</summary>
+   ///<param name='cdr'> a reference to the cdrom to claim.</param>
+   RAII_exclusive_access_lock::RAII_exclusive_access_lock(CdromDevice& cdr, const std::string& callerName) noexcept
       : m_cdr(cdr)
    {
-      m_cdr.lock();
+      try
+      {
+         m_callerName = callerName;
+         m_cdr.claim_exclusive_access(m_callerName);
+      }
+      catch (...)
+      {
+         LOG_WARNING("Couldn't construct an RAII_excliusive_access_lock");
+      }
    }
 
    ///<summary> deleted copy constructor.</summary>
    ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   RAII_physical_lock(RAII_physical_lock& other) = delete;
+   RAII_exclusive_access_lock(RAII_exclusive_access_lock& other) = delete;
 
    ///<summary> deleted move constructor.</summary>
    ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   RAII_physical_lock(RAII_physical_lock&& other) = delete;
+   RAII_exclusive_access_lock(RAII_exclusive_access_lock&& other) = delete;
 
    ///<summary> deleted copy assignment.</summary>
    ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   RAII_physical_lock& operator=(RAII_physical_lock& other) = delete;
+   RAII_exclusive_access_lock& operator=(RAII_exclusive_access_lock& other) = delete;
 
    ///<summary> deleted move assignment.</summary>
    ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   RAII_physical_lock& operator=(RAII_physical_lock&& other) = delete;
+   RAII_exclusive_access_lock& operator=(RAII_exclusive_access_lock&& other) = delete;
 
-   ///<summary>unlock tray door in all return paths</summary>
-   ~RAII_physical_lock() noexcept
+   ///<summary>release the exclusive access all return paths</summary>
+   ~RAII_exclusive_access_lock() noexcept
    {
-      LOG_INFO("~RAII_physical_lock invoked");
-      m_cdr.unlock();
+      LOG_INFO("~RAII_exclusive_access_lock invoked");
+      m_cdr.release_exclusive_access(m_callerName);
    }
 };
+

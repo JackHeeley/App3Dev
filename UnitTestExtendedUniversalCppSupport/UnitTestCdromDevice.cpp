@@ -110,8 +110,6 @@ namespace UnitTestExtendedUniversalCppSupport
                   // perpare for test (lock the tray door)...
                   RAII_physical_lock scoped_lock(cdrom0);
 
-                  utf8::Assert::IsTrue(cdrom0.get_locked(), "cdrom0 reports unlocked when expected state is locked");
-
                   // perform the operation under test...
                   cdrom0.eject();
 
@@ -137,9 +135,6 @@ namespace UnitTestExtendedUniversalCppSupport
                   }
                }
             }
-
-            // tray door is unlocked as scoped_lock goes out of scope (both normal and exception path)
-            utf8::Assert::IsFalse(cdrom0.get_locked(), "cdrom0 reports locked when expected state is unlocked");
 
             // continue perform the operation under test (expect success now)...
             cdrom0.eject();            // check results (visually confirm that tray opens)
@@ -213,8 +208,6 @@ namespace UnitTestExtendedUniversalCppSupport
                   // perpare for test (lock the tray door)...
                   RAII_physical_lock scoped_lock(cdrom0);
 
-                  utf8::Assert::IsTrue(cdrom0.get_locked(), "cdrom0 reports unlocked when expected state is locked");
-
                   // perform the operation under test USING A DIFERENT OBJECT INSTANCE THIS TIME...
                   cdrom1.eject();
 
@@ -240,9 +233,6 @@ namespace UnitTestExtendedUniversalCppSupport
                   }
                }
             }
-
-            // tray door is unlocked as scoped_lock goes out of scope (both normal and exception path)
-            utf8::Assert::IsFalse(cdrom0.get_locked(), "cdrom0 reports locked when expected state is unlocked");
 
             // continue perform the operation under test (expect success now)...
             cdrom0.eject();            // check results (visually confirm that tray opens)
@@ -315,8 +305,6 @@ namespace UnitTestExtendedUniversalCppSupport
                   // perpare for test (lock the tray door)...
                   RAII_physical_lock scoped_lock(cdrom0);
 
-                  utf8::Assert::IsTrue(cdrom0.get_locked(), "cdrom0 reports unlocked when expected state is locked");
-
                   // perform the operation under test USING A DIFERENT THREAD THIS TIME...
                   auto future = std::async(std::launch::async, [&cdrom1] { cdrom1.eject(); return true; });
 
@@ -349,9 +337,6 @@ namespace UnitTestExtendedUniversalCppSupport
                   }
                }
             }
-
-            // tray door is unlocked as scoped_lock goes out of scope (both normal and exception path)
-            utf8::Assert::IsFalse(cdrom0.get_locked(), "cdrom0 reports locked when expected state is unlocked");
 
             // continue perform the operation under test (expect success now)...
             cdrom0.eject();            // check results (visually confirm that tray opens)
@@ -455,8 +440,6 @@ namespace UnitTestExtendedUniversalCppSupport
                   // perpare for test (lock the tray door)...
                   RAII_physical_lock scoped_lock(cdrom0);
 
-                  utf8::Assert::IsTrue(cdrom0.get_locked(), "cdrom0 reports unlocked when expected state is locked");
-
                   // TODO: perform the operation under test impersonating another user...
                   auto future = std::async(std::launch::async, [&cdrom1]
                      { 
@@ -495,9 +478,6 @@ namespace UnitTestExtendedUniversalCppSupport
                   }
                }
             }
-
-            // tray door is unlocked as scoped_lock goes out of scope (both normal and exception path)
-            utf8::Assert::IsFalse(cdrom0.get_locked(), "cdrom0 reports locked when expected state is unlocked");
 
             // continue perform the operation under test (expect success now)...
             cdrom0.eject();            // check results (visually confirm that tray opens)

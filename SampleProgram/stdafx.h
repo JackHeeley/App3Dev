@@ -35,5 +35,6 @@
 #include <memory_mapped_file.hpp>
 
 #include "progress_tracker.hpp"
+#include "RAII_exclusive_access_lock.hpp"
 #include "RAII_physical_lock.hpp"
 #include "ripper.hpp"

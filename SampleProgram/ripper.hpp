@@ -22,6 +22,7 @@
 
 #include "logger.hpp"
 #include "RAII_physical_lock.hpp"
+#include "RAII_exclusive_access_lock.hpp"
 
 ///<summary> functor class to rip image.</summary>
 class Ripper
@@ -45,6 +46,7 @@ public:
    void operator()(const std::string& filePath, std::atomic<int>& a_progress)
    {
       RAII_physical_lock lock(m_cdr);
+      RAII_exclusive_access_lock ea_lock(m_cdr, "Rip_" + utc_timestamp());
 
       LOG_INFO(std::string("Ripping to ").append(filePath));
 

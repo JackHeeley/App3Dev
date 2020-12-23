@@ -97,6 +97,12 @@ RAII_physical_lock.hpp
     the program is interrupted). main.cpp demonstrates a work around by providing a 
     signal handler. 
 
+RAII_exclusive_access_lock.hpp
+    Provides an RAII object that prevents other software from interrupting the rip 
+    by using the optical drive when busy. The design releases exclusive access lock 
+    on all return paths. In the event of a signalled stop the system  (Windows) will 
+    take care of the unlocking by releasing the lock when the process terminates.
+
 ripper.hpp
     Assembles the various components provided in the "extended support library" which 
     is an example of domain specific specific encapsulation (win32 kernel api's) in a dll. 
@@ -225,7 +231,5 @@ DONE:
     running SampleProgram.exe. Tests could succeed in ejecting the current media while door is theoretically "locked" and while the cd is 
     being read by another program. Unit tests on lock feature were passing. Issue in cdRomDevice fixed. Also needed to claim exclusive access
     when tray door is locked. Unit tests have been extended. 
-
-KNOWN ISSUES: Code added at 92 is quick-and-dirty prototyping/investigation. Unit Tests and the runtime need attention. Search for //TODO:
-
+93. Added RAII_exclusive_access_lock.hpp and reworked / simplified exclusive access and tray door locking to remove redundant responsibilities.
     

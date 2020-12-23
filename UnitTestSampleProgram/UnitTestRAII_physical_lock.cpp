@@ -56,9 +56,6 @@ namespace UnitTestSampleProgram
             //perform operation under test
             RAII_physical_lock lock(m_cdr);
             
-            //check results phase I ...
-            utf8::Assert::IsTrue(m_cdr.get_locked(), "drive door should still be locked"); 
-
             try
             {
                m_cdr.eject();
@@ -66,18 +63,13 @@ namespace UnitTestSampleProgram
             }
             catch (...)
             {
-               utf8::Assert::IsTrue(m_cdr.get_locked(), "drive door should still be locked");
             }
-
-            utf8::Assert::IsTrue(m_cdr.get_locked(), "drive door should still be locked"); 
          }
          catch (const std::exception & e)
          {
             utf8::Assert::Fail(e.what()); // something went wrong
          }
 
-         //check results phase II ...
-         utf8::Assert::IsTrue(!m_cdr.get_locked(), "drive door should now be unlocked"); // something went wrong
       }
    };
 }
