@@ -1,5 +1,5 @@
 //
-// UnitTestExtendedUniversalCppSupport.hpp : shareed header for a utf8 everywhere component unit test project
+// UnitTestExtendedUniversalCppSupport.hpp : shared header for a utf8 everywhere component unit test project
 //
 // Copyright (c) 2019-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
@@ -36,3 +36,37 @@ namespace UnitTestExtendedUniversalCppSupport
 #define TO_STRING_LITERAL(x) STRINGIZE(x)
 #endif
 
+
+
+/// <summary>
+/// RAII impersonation helper available for use in various tests.
+/// </summary>
+class RAII_impersonate
+{
+
+public:
+   RAII_impersonate() noexcept
+   {
+      if (!ImpersonateSelf(SecurityAnonymous))
+      {
+         LOG_ERROR("RAII_impersonate ImpersonateSelf failed");
+      }
+   }
+
+   ///<summary> deleted copy constructor.</summary>
+   RAII_impersonate(RAII_impersonate& other) = delete;
+
+   ///<summary> deleted move constructor.</summary>
+   RAII_impersonate(RAII_impersonate&& other) = delete;
+
+   ///<summary> deleted copy assignment.</summary>
+   RAII_impersonate& operator=(RAII_impersonate& other) = delete;
+
+   ///<summary> deleted move assignment.</summary>
+   RAII_impersonate& operator=(RAII_impersonate&& other) = delete;
+
+   ~RAII_impersonate()
+   {
+      RevertToSelf();
+   }
+};

@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
    }
 
    // In addition to (obvious) main thread exceptions, exceptions thrown from the tracker task also propagate and are caught below.
-   // This is (usually) exactly what we've always wanted for SEH, but was hithertofore difficult to arrange. With std::async it's built in.
+   // With std::async this behaviour is built-in, because future.get() catches thread exceptions, and then rethrows them in the current thread context.
    catch (const error::context& f) 
    {
       std::string error_text = "Unhandled Error/Exception: "; error_text.append(f.full_what()); // fancy what (root cause and locus of error)

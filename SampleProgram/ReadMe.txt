@@ -232,4 +232,5 @@ DONE:
     being read by another program. Unit tests on lock feature were passing. Issue in cdRomDevice fixed. Also needed to claim exclusive access
     when tray door is locked. Unit tests have been extended. 
 93. Added RAII_exclusive_access_lock.hpp and reworked / simplified exclusive access and tray door locking to remove redundant responsibilities.
+94. Cleaned up RAII_cd... modularity inaccuracies (removing duplicate declarations in unit tests etc.)
     

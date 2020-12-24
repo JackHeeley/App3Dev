@@ -33,8 +33,8 @@
 #include <cd_rom_device.hpp>
 #include <device_discoverer.hpp>
 #include <memory_mapped_file.hpp>
+#include <RAII_cd_exclusive_access_lock.hpp>
+#include <RAII_cd_physical_lock.hpp>
 
 #include "progress_tracker.hpp"
-#include "RAII_exclusive_access_lock.hpp"
-#include "RAII_physical_lock.hpp"
 #include "ripper.hpp"

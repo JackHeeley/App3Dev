@@ -1,5 +1,5 @@
 //
-// RAII_physical_lock.hpp : implements an optical drive physical lock helper class.
+// RAII_cd_physical_lock.hpp : implements an optical drive physical lock helper class.
 //
 // Note: Many (but not all) optical media devices support physical locking and unlocking
 // to prevent media removal at critical times.
@@ -25,8 +25,8 @@
 #include <logger.hpp>
 
 ///<summary> RAII object used to lock the physical media tray door on CDROM.</summary>
-///<remarks> Be aware that signalled process termination (Eg CRTL+C or CTRL+BREAK) will bypass these destructors!</remarks>
-class RAII_physical_lock
+///<remarks> Be aware that signalled process termination (Eg CRTL+C or CTRL+BREAK) can bypass RAII destructors!</remarks>
+class RAII_cd_physical_lock
 {
 private:
    ///<summary> the referenced cdrom.</summary>
@@ -35,32 +35,27 @@ private:
 public:
    ///<summary> lock tray door at construction time.</summary>
    ///<param name='cdr'> a reference to the cdrom to lock.</param>
-   RAII_physical_lock::RAII_physical_lock(CdromDevice& cdr) noexcept
+   RAII_cd_physical_lock::RAII_cd_physical_lock(CdromDevice& cdr) noexcept
       : m_cdr(cdr)
    {
       m_cdr.lock();
    }
 
-   ///<summary> deleted copy constructor.</summary>
-   ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   RAII_physical_lock(RAII_physical_lock& other) = delete;
-
-   ///<summary> deleted move constructor.</summary>
-   ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   RAII_physical_lock(RAII_physical_lock&& other) = delete;
-
-   ///<summary> deleted copy assignment.</summary>
-   ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   RAII_physical_lock& operator=(RAII_physical_lock& other) = delete;
-
-   ///<summary> deleted move assignment.</summary>
-   ///<remarks> avoids premature unlocks via inactive object.</remarks>
-   RAII_physical_lock& operator=(RAII_physical_lock&& other) = delete;
+   RAII_cd_physical_lock(RAII_cd_physical_lock& other) = delete;
+   RAII_cd_physical_lock(RAII_cd_physical_lock&& other) = delete;
+   RAII_cd_physical_lock& operator=(RAII_cd_physical_lock& other) = delete;
+   RAII_cd_physical_lock& operator=(RAII_cd_physical_lock&& other) = delete;
 
    ///<summary>unlock tray door in all return paths</summary>
-   ~RAII_physical_lock() noexcept
+   /// <remarks> 
+   ///   Be aware that signalled process termination (Eg CRTL+C or CTRL+BREAK) can bypass RAII destructors!
+   ///   In this case a signal handler is ALSO required (to perform a speculative unlock).
+   ///   The signal handler ensures that the program can never leave a (permanently) locked cdrom drive door behind.
+   ///   (see SampleProgram for an example of such a signal handler).
+   /// </remarks>
+   ~RAII_cd_physical_lock() noexcept
    {
-      LOG_INFO("~RAII_physical_lock invoked");
-      m_cdr.unlock();
+      LOG_INFO("~RAII_cd_physical_lock invoked");
+      m_cdr.unlock();                                    // unlock immediately after use
    }
 };

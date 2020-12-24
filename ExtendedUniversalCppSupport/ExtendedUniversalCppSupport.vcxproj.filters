@@ -42,6 +42,12 @@
     <ClInclude Include="toolsver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RAII_cd_physical_lock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RAII_cd_exclusive_access_lock.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -67,34 +67,6 @@ namespace UnitTestExtendedUniversalCppSupport
 
       TEST_METHOD(TestCdromTrayLocking)
       {
-         // RAII door lock helper. We could pull in header from SampleProgram (but thats a bit unstructured)
-         class RAII_physical_lock
-         {
-            CdromDevice& m_cdr;
-
-         public:
-            RAII_physical_lock(CdromDevice& cdrom) noexcept : m_cdr(cdrom)
-            {
-               m_cdr.lock();
-            }
-            ///<summary> deleted copy constructor.</summary>
-            RAII_physical_lock(RAII_physical_lock& other) = delete;
-
-            ///<summary> deleted move constructor.</summary>
-            RAII_physical_lock(RAII_physical_lock&& other) = delete;
-
-            ///<summary> deleted copy assignment.</summary>
-            RAII_physical_lock& operator=(RAII_physical_lock& other) = delete;
-
-            ///<summary> deleted move assignment.</summary>
-            RAII_physical_lock& operator=(RAII_physical_lock&& other) = delete;
-
-            ~RAII_physical_lock()
-            {
-               m_cdr.unlock();
-            }
-         };
-
          // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
          try
          {
@@ -108,7 +80,7 @@ namespace UnitTestExtendedUniversalCppSupport
                try
                {
                   // perpare for test (lock the tray door)...
-                  RAII_physical_lock scoped_lock(cdrom0);
+                  RAII_cd_physical_lock scoped_lock(cdrom0);
 
                   // perform the operation under test...
                   cdrom0.eject();
@@ -164,34 +136,6 @@ namespace UnitTestExtendedUniversalCppSupport
       //TODO: TIDY UP THESE CUT AND PASTE VARIANTS ON TestCdromTrayLocking
       TEST_METHOD(TestCdromTrayLockingAdvanced)
       {
-         // RAII door lock helper. We could pull in header from SampleProgram (but thats a bit unstructured)
-         class RAII_physical_lock
-         {
-            CdromDevice& m_cdr;
-
-         public:
-            RAII_physical_lock(CdromDevice& cdrom) noexcept : m_cdr(cdrom)
-            {
-               m_cdr.lock();
-            }
-            ///<summary> deleted copy constructor.</summary>
-            RAII_physical_lock(RAII_physical_lock& other) = delete;
-
-            ///<summary> deleted move constructor.</summary>
-            RAII_physical_lock(RAII_physical_lock&& other) = delete;
-
-            ///<summary> deleted copy assignment.</summary>
-            RAII_physical_lock& operator=(RAII_physical_lock& other) = delete;
-
-            ///<summary> deleted move assignment.</summary>
-            RAII_physical_lock& operator=(RAII_physical_lock&& other) = delete;
-
-            ~RAII_physical_lock()
-            {
-               m_cdr.unlock();
-            }
-         };
-
          // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
          try
          {
@@ -206,7 +150,7 @@ namespace UnitTestExtendedUniversalCppSupport
                try
                {
                   // perpare for test (lock the tray door)...
-                  RAII_physical_lock scoped_lock(cdrom0);
+                  RAII_cd_physical_lock scoped_lock(cdrom0);
 
                   // perform the operation under test USING A DIFERENT OBJECT INSTANCE THIS TIME...
                   cdrom1.eject();
@@ -261,34 +205,6 @@ namespace UnitTestExtendedUniversalCppSupport
 
       TEST_METHOD(TestCdromTrayLockingMultiThreaded)
       {
-         // RAII door lock helper. We could pull in header from SampleProgram (but thats a bit unstructured)
-         class RAII_physical_lock
-         {
-            CdromDevice& m_cdr;
-
-         public:
-            RAII_physical_lock(CdromDevice& cdrom) noexcept : m_cdr(cdrom)
-            {
-               m_cdr.lock();
-            }
-            ///<summary> deleted copy constructor.</summary>
-            RAII_physical_lock(RAII_physical_lock& other) = delete;
-
-            ///<summary> deleted move constructor.</summary>
-            RAII_physical_lock(RAII_physical_lock&& other) = delete;
-
-            ///<summary> deleted copy assignment.</summary>
-            RAII_physical_lock& operator=(RAII_physical_lock& other) = delete;
-
-            ///<summary> deleted move assignment.</summary>
-            RAII_physical_lock& operator=(RAII_physical_lock&& other) = delete;
-
-            ~RAII_physical_lock()
-            {
-               m_cdr.unlock();
-            }
-         };
-
          // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
          try
          {
@@ -303,7 +219,7 @@ namespace UnitTestExtendedUniversalCppSupport
                try
                {
                   // perpare for test (lock the tray door)...
-                  RAII_physical_lock scoped_lock(cdrom0);
+                  RAII_cd_physical_lock scoped_lock(cdrom0);
 
                   // perform the operation under test USING A DIFERENT THREAD THIS TIME...
                   auto future = std::async(std::launch::async, [&cdrom1] { cdrom1.eject(); return true; });
@@ -366,64 +282,6 @@ namespace UnitTestExtendedUniversalCppSupport
 
       TEST_METHOD(TestCdromTrayLockingMultiUser)
       {
-         // RAII door lock helper. We could pull in header from SampleProgram (but thats a bit unstructured)
-         class RAII_physical_lock
-         {
-            CdromDevice& m_cdr;
-
-         public:
-            RAII_physical_lock(CdromDevice& cdrom) noexcept : m_cdr(cdrom)
-            {
-               m_cdr.lock();
-            }
-            ///<summary> deleted copy constructor.</summary>
-            RAII_physical_lock(RAII_physical_lock& other) = delete;
-
-            ///<summary> deleted move constructor.</summary>
-            RAII_physical_lock(RAII_physical_lock&& other) = delete;
-
-            ///<summary> deleted copy assignment.</summary>
-            RAII_physical_lock& operator=(RAII_physical_lock& other) = delete;
-
-            ///<summary> deleted move assignment.</summary>
-            RAII_physical_lock& operator=(RAII_physical_lock&& other) = delete;
-
-            ~RAII_physical_lock()
-            {
-               m_cdr.unlock();
-            }
-         };
-
-         class RAII_impersonate
-         {
-
-         public:
-            RAII_impersonate() noexcept
-            {
-               if (!ImpersonateSelf(SecurityAnonymous))
-               {
-                  LOG_ERROR("RAII_impersonate ImpersonateSelf failed");
-               }
-            }
-
-            ///<summary> deleted copy constructor.</summary>
-            RAII_impersonate(RAII_impersonate& other) = delete;
-
-            ///<summary> deleted move constructor.</summary>
-            RAII_impersonate(RAII_impersonate&& other) = delete;
-
-            ///<summary> deleted copy assignment.</summary>
-            RAII_impersonate& operator=(RAII_impersonate& other) = delete;
-
-            ///<summary> deleted move assignment.</summary>
-            RAII_impersonate& operator=(RAII_impersonate&& other) = delete;
-
-            ~RAII_impersonate()
-            {
-               RevertToSelf();
-            }
-         };
-
          // issue IOCTL_STORAGE_EJECT_MEDIA while PREVENT_MEDIA_REMOVAL is/is not enacted...
          try
          {
@@ -438,7 +296,7 @@ namespace UnitTestExtendedUniversalCppSupport
                try
                {
                   // perpare for test (lock the tray door)...
-                  RAII_physical_lock scoped_lock(cdrom0);
+                  RAII_cd_physical_lock scoped_lock(cdrom0);
 
                   // TODO: perform the operation under test impersonating another user...
                   auto future = std::async(std::launch::async, [&cdrom1]
@@ -551,41 +409,6 @@ namespace UnitTestExtendedUniversalCppSupport
 #pragma warning(default: 26485)
       TEST_METHOD(TestCdromDeviceReadImage)
       {
-         // RAII door lock helper
-         class TrayDoorLock
-         {
-            CdromDevice& m_cdr;
-
-         public:
-            TrayDoorLock(CdromDevice& cdrom) noexcept : m_cdr(cdrom)
-            {
-               m_cdr.lock();
-            }
-            ///<summary> deleted copy constructor.</summary>
-            TrayDoorLock(TrayDoorLock& other) = delete;
-
-            ///<summary> deleted move constructor.</summary>
-            TrayDoorLock(TrayDoorLock&& other) = delete;
-
-            ///<summary> deleted copy assignment.</summary>
-            TrayDoorLock& operator=(TrayDoorLock& other) = delete;
-
-            ///<summary> deleted move assignment.</summary>
-            TrayDoorLock& operator=(TrayDoorLock&& other) = delete;
-
-            ~TrayDoorLock()
-            {
-               try
-               {
-                  m_cdr.unlock();
-               }
-               catch (const std::exception& e)
-               {
-                  LOG_WARNING(e.what());
-               }
-            }
-         };
-
          try
          {
             // prepare for test (construct a device for the system's first enumerated cdrom)...
@@ -596,7 +419,7 @@ namespace UnitTestExtendedUniversalCppSupport
             buffer.resize(gsl::narrow<std::vector<unsigned char>::size_type>(cdrom.get_image_size()));    
 
             // disable media eject (also operator initiated) during test
-            TrayDoorLock scoped_lock(cdrom);
+            RAII_cd_physical_lock scoped_lock(cdrom);
 
             bool test_done = false;    // cdrom drive may not be in ready state
             while (!test_done)

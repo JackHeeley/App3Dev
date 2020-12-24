@@ -41,5 +41,7 @@
 #include <device_discoverer.hpp>
 #include <device_type_directory.hpp>
 #include <memory_mapped_file.hpp>
+#include <RAII_cd_exclusive_access_lock.hpp>
+#include <RAII_cd_physical_lock.hpp>
 
 #include "UnitTestExtendedUniversalCppSupport.hpp"

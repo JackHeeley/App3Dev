@@ -41,7 +41,8 @@
 #include <memory_mapped_file.hpp>
 #include <cd_rom_device.hpp>
 
-#include <RAII_physical_lock.hpp>
+#include <RAII_cd_physical_lock.hpp>
+#include <RAII_cd_exclusive_access_lock.hpp>
 #include <ripper.hpp>
 
 #include <utf8_assert.hpp>

@@ -1,5 +1,5 @@
 //
-// UnitTestRAII_physical_lock.cpp : a utf8 everywhere component unit test 
+// UnitTestRAII_cd_physical_lock.cpp : a utf8 everywhere component unit test 
 //
 // Copyright (c) 2019-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
 //
@@ -24,12 +24,12 @@ using namespace utf8;
 
 namespace UnitTestSampleProgram
 {
-   TEST_CLASS(UnitTestRAII_physical_lock)
+   TEST_CLASS(UnitTestRAII_cd_physical_lock)
    {
    public:
 
 #pragma warning(disable: 26440 26497)
-      TEST_CLASS_INITIALIZE(InitializeUnitTestRAII_physical_lock) noexcept // NOLINT(clang-diagnostic-missing-braces)
+      TEST_CLASS_INITIALIZE(InitializeUnitTestRAII_cd_physical_lock) noexcept // NOLINT(clang-diagnostic-missing-braces)
 #pragma warning(default: 26440 26497)
       {
          try
@@ -42,7 +42,7 @@ namespace UnitTestSampleProgram
          }
       }
 
-      TEST_METHOD(TestRAII_physical_lock)
+      TEST_METHOD(TestRAII_cd_physical_lock)
       {
          // check test preconditions (at least one physical cdrom needed)
          DeviceDiscoverer cdrom_interface(DeviceTypeDirectory::DeviceType::CDROM_DEVICES);
@@ -54,7 +54,7 @@ namespace UnitTestSampleProgram
          try
          {
             //perform operation under test
-            RAII_physical_lock lock(m_cdr);
+            RAII_cd_physical_lock lock(m_cdr);
             
             try
             {

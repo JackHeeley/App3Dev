@@ -21,8 +21,8 @@
 #include <atomic>
 
 #include "logger.hpp"
-#include "RAII_physical_lock.hpp"
-#include "RAII_exclusive_access_lock.hpp"
+#include "RAII_cd_physical_lock.hpp"
+#include "RAII_cd_exclusive_access_lock.hpp"
 
 ///<summary> functor class to rip image.</summary>
 class Ripper
@@ -40,13 +40,20 @@ public:
       LOG_INFO(std::string("Ripper Device ").append(devicePath));
    }
 
-   ///<summary> functor to perform the rip operation.</summary>
+   ///<summary> functor to perform the rip operation. This copies the cdrom image to a disk file.</summary>
+   ///<remarks> 
+   /// During the rip operation we take steps to avoid mission failure happening as a side-effect of some other (ill advised) user action.
+   ///   1) we make sure (assuming hardware supports tray door locking) that the media can't be prematurely removed (during copy).
+   ///   2) we make sure that another program instance or another program can't simultaneously access the device (being used for copy). 
+   /// Externally callers can permit the user to choose to abort the mission (via CTRL+C, CTRL+BREAK and close console window). 
+   /// In that case the caller process should issue a pre-emptive tray door unlock during abort signal handling.
+   /// </remarks>
    ///<param name='filePath'> the utf8 name of a file to receive the (iso 9660) image.</param>
    ///<param name='a_progress'> reference to where percentage read progress will be maintained (during the rip operation).</param>
    void operator()(const std::string& filePath, std::atomic<int>& a_progress)
    {
-      RAII_physical_lock lock(m_cdr);
-      RAII_exclusive_access_lock ea_lock(m_cdr, "Rip_" + utc_timestamp());
+      RAII_cd_physical_lock lock(m_cdr);                                      // disables the cd eject button
+      RAII_cd_exclusive_access_lock ea_lock(m_cdr, "Rip_" + utc_timestamp()); // disallow other instances/programs (potential simultaneous writes)
 
       LOG_INFO(std::string("Ripping to ").append(filePath));
 
