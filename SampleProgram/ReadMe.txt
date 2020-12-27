@@ -234,4 +234,6 @@ DONE:
 93. Added RAII_exclusive_access_lock.hpp and reworked / simplified exclusive access and tray door locking to remove redundant responsibilities.
 94. Cleaned up RAII_cd... modularity inaccuracies (removing duplicate declarations in unit tests etc.)
 95. Removed redundant class name qualifiers (used in some method declarations). These become illegal at /std:c++20 but were missed by the static analysers.
+96. Added U8("") workround to utf8_convert.hpp. This addresses char8_t backward incompatibilities affecting utf8 string literals. 
+    Code base is now ready for /std:C++20.
     

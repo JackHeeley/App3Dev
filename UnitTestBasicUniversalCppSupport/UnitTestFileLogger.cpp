@@ -107,7 +107,7 @@ namespace UnitTestBasicUniversalCppSupport
          utf8::Assert::AreEqual("file_i.ext", get_short_file("c:\\dir\\subdir////////////file_i.ext"));
          utf8::Assert::AreEqual("file_j.ext", get_short_file("////////////////file_j.ext"));
          utf8::Assert::AreEqual("file_k.ext", get_short_file("\\\\\\\\\\\\\\\\file_k.ext"));
-         utf8::Assert::AreEqual(u8"φιλε_λ.εχτ", get_short_file(u8"\\\\\\\\\\\\\\\\φιλε_λ.εχτ"));
+         utf8::Assert::AreEqual(U8("φιλε_λ.εχτ"), get_short_file(U8("\\\\\\\\\\\\\\\\φιλε_λ.εχτ")));
       }
 
       TEST_METHOD(TestErrorContext)
@@ -474,7 +474,7 @@ namespace UnitTestBasicUniversalCppSupport
                   bar << /*"\r" << */ "[";
                   for (int i = 0; i < 20; i++)
                   {
-                     bar << ((i < percent / 5) ? u8"█" : " ");
+                     bar << ((i < percent / 5) ? U8("█") : " ");
                   }
                   bar << "]" << std::setw(3) << percent << "%";
                   return bar.str();

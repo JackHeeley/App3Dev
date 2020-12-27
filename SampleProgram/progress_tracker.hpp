@@ -72,7 +72,7 @@ private:
       bar << "\r" << "[";
       for (int i = 0; i < 20; i++)
       {
-         bar << ((i < percent / 5) ? u8"█" : " ");
+         bar << ((i < percent / 5) ? U8("█") : " ");
       }
       bar << "]" << std::setw(3) << percent << "%";
       return bar.str();

@@ -55,9 +55,9 @@ int main(int argc, char* argv[])
 
    try
    {
-      LOG_INFO(u8"Γειά σας Κόσμε! On Windows, switch platform console support to use the utf8 codepage");
+      LOG_INFO(U8("Γειά σας Κόσμε! On Windows, switch platform console support to use the utf8 codepage"));
       utf8::console::configure_codepage();
-      std::cout << u8"Γειά σας Κόσμε!\n" << std::endl; // try it.
+      std::cout << U8("Γειά σας Κόσμε!\n") << std::endl; // try it.
 
       std::cout << "SampleProgram.exe Copyright(c) 2019-2020 Jack Heeley.\n";
       std::cout << "This program comes with ABSOLUTELY NO WARRANTY; for details refer to GPL 3.0.\n";
