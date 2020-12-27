@@ -44,7 +44,7 @@ public:
    ///<summary> constructs a user mode Device that can be used to access a particular system cdrom instance.</summary>
    ///<param name='device_path'> the system name of the cdrom device to use.</param>
    ///<exception cref='std::exception'>if construction fails.</exception>
-   EXTENDEDUNIVERSALCPPSUPPORT_API CdromDevice::CdromDevice(const std::string& device_path);
+   EXTENDEDUNIVERSALCPPSUPPORT_API CdromDevice(const std::string& device_path);
 
    ///<summary> get size of media image.</summary>
    ///<returns> size in bytes of image data.</returns>
@@ -57,7 +57,7 @@ public:
    ///<param name ='span'> a gsl::span representing a memory location to receive the image.</param>
    ///<param name='a_progress'> reference to percentage progress used in get_image.</param>
    ///<exception cref='std::exception'>if the operation could not be completed.</exception>
-   EXTENDEDUNIVERSALCPPSUPPORT_API void CdromDevice::get_image(gsl::span<unsigned char> span, std::atomic<int>& a_progress) const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API void get_image(gsl::span<unsigned char> span, std::atomic<int>& a_progress) const;
 
    ///<summary> claims exclusive access to device.</summary>
    ///<remarks> by sending IOCTL. If successful, the filesystem that overlays the physical device will be inaccessible 

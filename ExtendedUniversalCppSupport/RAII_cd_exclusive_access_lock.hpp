@@ -33,7 +33,7 @@ private:
 public:
    ///<summary> claim exclusive access at construction time.</summary>
    ///<param name='cdr'> a reference to the cdrom to claim.</param>
-   RAII_cd_exclusive_access_lock::RAII_cd_exclusive_access_lock(CdromDevice& cdr, const std::string& callerName) noexcept
+   RAII_cd_exclusive_access_lock(CdromDevice& cdr, const std::string& callerName) noexcept
       : m_cdr(cdr)
    {
       try

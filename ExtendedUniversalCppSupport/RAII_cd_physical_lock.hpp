@@ -35,7 +35,7 @@ private:
 public:
    ///<summary> lock tray door at construction time.</summary>
    ///<param name='cdr'> a reference to the cdrom to lock.</param>
-   RAII_cd_physical_lock::RAII_cd_physical_lock(CdromDevice& cdr) noexcept
+   RAII_cd_physical_lock(CdromDevice& cdr) noexcept
       : m_cdr(cdr)
    {
       m_cdr.lock();

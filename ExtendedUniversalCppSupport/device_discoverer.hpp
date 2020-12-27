@@ -46,11 +46,11 @@ public:
 
    ///<summary> equals comparison operator.</summary>
    ///<remarks> defines equals to mean identical device path content.</remarks>
-   EXTENDEDUNIVERSALCPPSUPPORT_API const bool DeviceDiscoverer::operator==(const DeviceDiscoverer& other) const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API const bool operator==(const DeviceDiscoverer& other) const;
 
    ///<summary> not equals comparison operator.</summary>
    ///<remarks> defines not equals to mean differing device path content.</remarks>
-   EXTENDEDUNIVERSALCPPSUPPORT_API const bool DeviceDiscoverer::operator!=(const DeviceDiscoverer& other) const;
+   EXTENDEDUNIVERSALCPPSUPPORT_API const bool operator!=(const DeviceDiscoverer& other) const;
 
 private:
    ///<summary> forward reference to private implementation.</summary>
