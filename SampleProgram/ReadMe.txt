@@ -236,4 +236,6 @@ DONE:
 95. Removed redundant class name qualifiers (used in some method declarations). These become illegal at /std:c++20 but were missed by the static analysers.
 96. Added U8("") workround to utf8_convert.hpp. This addresses char8_t backward incompatibilities affecting utf8 string literals. 
     Code base is now ready for /std:C++20.
+97. Reconsidered, and disabled clang-tidy in project settings for best out-of-box experience with the current 16.8.x compiler.
+    Code base is now ready for clang-tidy.
     
