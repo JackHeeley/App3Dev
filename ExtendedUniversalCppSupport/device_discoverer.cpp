@@ -66,7 +66,7 @@ public:
    {
       m_hDevInfo = getDevInfoHandle(INTERFACE_CLASS_GUID);
 
-      SP_DEVICE_INTERFACE_DATA deviceInterfaceData;
+      SP_DEVICE_INTERFACE_DATA deviceInterfaceData{};
       deviceInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 
       int device_number = -1;

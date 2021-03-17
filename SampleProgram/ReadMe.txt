@@ -238,4 +238,7 @@ DONE:
     Code base is now ready for /std:C++20.
 97. Reconsidered, and disabled clang-tidy in project settings for best out-of-box experience with the current 16.8.x compiler.
     Code base is now ready for clang-tidy.
+98. Updated to 16.9.2 (now available) and restored clang enabled settings for x64 release builds. Builds clean with /std:c++latest.
+
+TODO: Check set of NOLINT's and disabled warnings. against latest compiler behaviour. Enable anything that no longer raises a warning.
     
