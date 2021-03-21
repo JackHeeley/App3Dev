@@ -45,7 +45,7 @@ namespace UnitTestSampleProgram
 
 #pragma warning(disable: 26485)
       BEGIN_TEST_METHOD_ATTRIBUTE(TestRipperMove)
-         TEST_IGNORE()        // TestFunctor takes too long to run every time...
+         TEST_IGNORE()        // TestRipperMove takes too long to run every time...
       END_TEST_METHOD_ATTRIBUTE()
 #pragma warning(default: 26485)
       TEST_METHOD(TestRipperMove)
@@ -57,7 +57,7 @@ namespace UnitTestSampleProgram
             utf8::Assert::IsFalse(cdromDevices.device_path_map.get().empty(), "no system cdrom devices were discovered");
             
             //prepare test 
-            auto deviceName = cdromDevices.device_path_map.get()[0];
+            const std::string& deviceName = cdromDevices.device_path_map.get()[0];
 
             //perform operation under test
             Ripper rip = std::move(Ripper(deviceName));     // NOLINT(clang-diagnostic-pessimizing-move)
@@ -90,7 +90,7 @@ namespace UnitTestSampleProgram
             utf8::Assert::IsFalse(cdromDevices.device_path_map.get().empty(), "no system cdrom devices were discovered");
 
             //prepare test 
-            auto deviceName = cdromDevices.device_path_map.get()[0];
+            const std::string& deviceName = cdromDevices.device_path_map.get()[0];
             Ripper rip(deviceName);
             std::atomic<int> progress;
             const static std::string fileName("cdrom_image.iso");

@@ -95,7 +95,29 @@ public:
 
       return bufferSize;
    }
- 
+
+   ///<summary> check for presence or absence of media in drive.</summary>
+   ///<returns>true if a compatible compact disk is recognized as being present in the drive, otherwise false.</returns> 
+   ///<exception cref='std::exception'>if the operation could not be completed.</exception>
+   const bool check_for_media_present(void) const
+   {
+      try
+      {
+         return get_image_size(); // true when non-zero size
+      }
+      catch (...)
+      {
+         // there is no function to ask nicely up front...
+         if (GetLastError() == ERROR_NOT_READY) 
+            return false;
+
+         throw;   // rethrow any weird stuff 
+      }
+   }
+
+
+
+
    ///<summary>get image of media into span, while maintaining a progress indication as we go.</summary>
    ///<remarks> This is a synchronous operation that can be very time consuming with some media (eg DVD).</remarks>
    ///<param name ='span'> a gsl::span repesenting a memory location to receive the image.</param>
@@ -375,6 +397,14 @@ private:
 CdromDevice::CdromDevice(const std::string& device_path) :
    pimpl(spimpl::make_unique_impl<impl>(device_path))
 {
+}
+
+///<summary> check for presence or absence of media in drive.</summary>
+///<returns>true if a compatible compact disk is recognized as being present in the drive, otherwise false.</returns> 
+///<exception cref='std::exception'>if the operation could not be completed.</exception>
+const bool CdromDevice::check_for_media_present(void) const
+{
+   return pimpl->check_for_media_present();
 }
 
 ///<summary> get size of media image.</summary>
