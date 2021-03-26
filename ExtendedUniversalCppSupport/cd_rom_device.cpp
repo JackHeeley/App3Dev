@@ -287,7 +287,7 @@ private:
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
    void lock_control(bool aLockedValue) const
    {
-      PREVENT_MEDIA_REMOVAL lpInBuffer;
+      PREVENT_MEDIA_REMOVAL lpInBuffer {};
 
       lpInBuffer.PreventMediaRemoval = aLockedValue;
 
@@ -310,10 +310,7 @@ private:
    ///<exception cref='std::exception'>if the operation could not be completed</exception>
    void claim_control(bool anExclusiveAccessValue, const std::string& aCallerName) const
    {
-
-#pragma warning(disable:26494)
-      CDROM_EXCLUSIVE_LOCK lpInBuffer;
-#pragma warning(default:26494)
+      CDROM_EXCLUSIVE_LOCK lpInBuffer {};
 
       if (anExclusiveAccessValue)
       {

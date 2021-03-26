@@ -242,6 +242,7 @@ DONE:
 99. Reworked exception handling for media present checks. When probing, it no longer consumes throws of 'unexpected' errors. 
     For example a CD inserted upside down will now trigger a report of an I/O error (instead of just asking to insert a disk).
 100.Fixed possible unintended copy in two (disabled) unit tests - warning that auto can't deduce references.
+101.Fixed two initialize variable warnings and removed unnecessary disable warning pragma.
 
 TODO: Check set of NOLINT's and disabled warnings. against latest compiler behaviour. Enable anything that no longer raises a warning.
     
