@@ -54,7 +54,7 @@
     <ClInclude Include="logger_factory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bogger.hpp">
+    <ClInclude Include="logger.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utf8_guid.hpp">
