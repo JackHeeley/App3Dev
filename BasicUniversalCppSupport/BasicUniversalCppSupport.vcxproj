@@ -198,7 +198,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system_error.hpp" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="logger.hpp" />
+    <ClInclude Include="bogger.hpp" />
     <ClInclude Include="toolsver.h" />
     <ClInclude Include="utc_timestamp.hpp" />
     <ClInclude Include="utf8_assert.hpp" />
