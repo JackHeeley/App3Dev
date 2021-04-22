@@ -29,9 +29,9 @@ namespace UnitTestSampleProgram
    {
    public:
 
-#pragma warning(disable: 26440 26497)
+#pragma warning(disable: 26440)
       TEST_CLASS_INITIALIZE(InitializeUnitTestRipper) noexcept // NOLINT(clang-diagnostic-missing-braces)
-#pragma warning(default: 26440 26497)
+#pragma warning(default: 26440)
       {
          try
          {

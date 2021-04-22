@@ -80,7 +80,7 @@ public:
    ///<remarks> defines equals to mean accessible data is identical.</remarks>
    const bool operator==(const impl& other) const
    {
-      if ((this == nullptr) || (&other == nullptr)) return false;       // moved object NOLINT (false positive)
+      if ((this == nullptr) || (&other == nullptr)) return false;       // NOLINT (safety) msvc std::move leaves a null reference to the stale source object, whereas C++ standard requires a valid object (with undefined behaviour) to remain.
       if (this == &other) return true; // same object
       return (
          (INTERFACE_CLASS_GUID == other.INTERFACE_CLASS_GUID) &&
