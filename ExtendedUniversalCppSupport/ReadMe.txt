@@ -88,3 +88,26 @@ memory_mapped_file.hpp, memory_mapped_file.cpp
     These files wrap the windows memory mapping functions with enough 
     functionality to supply a shared memory buffer backed by a file system
     (eg disk) file.
+
+RAII_exclusive_access_lock.hpp
+    Provides an RAII object that prevents other software from interrupting the rip 
+    by using the optical drive when busy. The design releases exclusive access lock 
+    on all return paths. In the event of a signalled stop the system  (Windows) will 
+    take care of the unlocking by releasing the lock when the process terminates.
+
+RAII_physical_lock.hpp
+    Provides an RAII object that prevents the user from interrupting the rip 
+    by opening the optical drive when busy. The design attempts to unlock the 
+    door on all return paths, BUT IS DOOMED TO FAILURE in this attempt. This
+    is because there are ways to stop a program abruptly without unrolling the
+    stack (i.e. signals).
+    
+    The code demonstrates a limitation of the RAII approach (it will reliably restore
+    internal program state on all program paths, but not external system state if
+    the program is interrupted). main.cpp demonstrates a work around by providing a 
+    signal handler. 
+
+toolsver.h
+    Provides an upgrade warning to users of earlier visual studio versions.
+
+NOTE: A HISTORY OF CHANGES MATCHING CHECK-IN NUMBERS HAS BEEN MAINTAINED (in the SampleProgram project Readme.txt

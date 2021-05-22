@@ -105,6 +105,9 @@ spimpl.hpp
 system_error.hpp, system_error.cpp
     These files provide a service to fetch the system error text in the default locale.
 
+toolsver.h
+    Provides an upgrade warning to users of earlier visual studio versions.
+
 utc_timestamp.hpp
     Timestamp support (provided for logging purposes, and available to client code).
 
@@ -122,3 +125,5 @@ utf8_guid.hpp
     This header supplies utf8 string conversions to and from windows GUID type.
     It is not platform independent, and client code should be careful (localize) where 
     this header is included (e.g. in .cpp files where an encapsulated windows impl inner class needs it).
+
+NOTE: A HISTORY OF CHANGES MATCHING CHECK-IN NUMBERS HAS BEEN MAINTAINED (in the SampleProgram project Readme.txt)
