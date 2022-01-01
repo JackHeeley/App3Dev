@@ -231,3 +231,4 @@ DONE:
 102.Reviewed and trimmed disabled warnings and NOLINT comments for compiler version 16.9.4   
 103.Comment correcting.
 104.Updated forgotten entry in change history. 
+105.Removed linker warning caused by /LTCG:incremental (release builds)
