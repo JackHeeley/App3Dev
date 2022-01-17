@@ -232,3 +232,4 @@ DONE:
 103.Comment correcting.
 104.Updated forgotten entry in change history. 
 105.Removed linker warning caused by /LTCG:incremental (release builds)
+106.Updates to projects for VS2022 (4 bit) 17.0.5 including platform toolset 142->143 supression of unit test warnings and fix to unit test TestDeviceIoCtl

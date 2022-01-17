@@ -105,8 +105,9 @@ namespace UnitTestExtendedUniversalCppSupport
             utf8::Assert::IsTrue((cdrom1.device_path_map.get()[0] == cdrom_device0_path), "device path was not transferred by move");
 
             // after moves source must be left in a valid (but unspecified) state. In this case we find source addressable (as required), and empty (not required).
+#pragma warning(disable: 26800)
             utf8::Assert::IsTrue((cdrom1 != cdrom), "moved from object (unexpectedly) preserved during move");
-
+#pragma warning(default: 26800)
          }
          catch (std::exception e)
          {
@@ -168,7 +169,9 @@ namespace UnitTestExtendedUniversalCppSupport
             utf8::Assert::IsTrue((disk == cdrom_copy), "move failed to create an identical object");
 
             // after moves source must be left in a valid (but unspecified) state. In this case we find source addressable (as required), and different (not required).
+#pragma warning(disable: 26800)
             utf8::Assert::IsFalse((cdrom == cdrom_copy), "moved from object is equal after move"); // NOLINT(clang-analyzer-cplusplus.Move)
+#pragma warning(default: 26800)
          }
          catch (std::exception e)
          {

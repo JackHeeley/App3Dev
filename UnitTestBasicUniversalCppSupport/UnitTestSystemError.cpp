@@ -148,7 +148,9 @@ namespace UnitTestBasicUniversalCppSupport
             utf8::Assert::IsTrue((error_a == error_b_copy), "move failed to create an identical object");
 
             // after moves source must be left in a valid (but unspecified) state. In this case we find source addressable (as required), and not equal (acceptable).
+#pragma warning(disable: 26800)
             utf8::Assert::IsTrue((error_b != error_b_copy), "moved from object is still equal after move (suspicious)");   // NOLINT(clang-analyzer-cplusplus.Move)
+#pragma warning(default: 26800)            
          }
          catch (const std::exception& e)
          {

@@ -93,6 +93,7 @@ namespace UnitTestExtendedUniversalCppSupport
                      std::this_thread::sleep_for(1s);
                      continue;
                   default:
+                     //utf8::Assert::IsTrue(i+1<MAX_RETRIES, "ioctl retry limit reached");
                      break;
                   }
                }
