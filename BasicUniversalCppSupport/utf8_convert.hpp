@@ -62,7 +62,7 @@ namespace utf8
    ///<returns>a count of the number of code points found in str.</returns>
    ///<remarks> convenient because individual character representations in utf8 vary in length.
    ///codepoint_count is always less than or equal to the raw data storage length.</remarks>
-   inline size_t count_codepoints(const std::string& str)
+   static size_t count_codepoints(const std::string& str)
    {
       return std::count_if(str.begin(), str.end(), [](auto ch) { return ((ch & 0xc0) != 0x80); });
    };
