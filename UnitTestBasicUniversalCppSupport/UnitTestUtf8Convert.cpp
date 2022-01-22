@@ -1,4 +1,4 @@
-//
+﻿//
 // UnitTestUtf8Convert.cpp : a utf8 everywhere component unit test 
 //
 // Copyright (c) 2019-2020 Jack Heeley, all rights reserved. https://github.com/JackHeeley/App3Dev
@@ -43,7 +43,62 @@ namespace UnitTestBasicUniversalCppSupport
          }
       }
 
-       TEST_METHOD(TestUtf8ConvertFromGuid)
+      TEST_METHOD(TestUtf8CountCodepoints)
+      {
+         try
+         {
+            // This test provides a demonstration of what a code point is. 
+            // It shows how string length can differ from the number of separately readable characters 
+            // and shows that it DOES in fact differ when you need to use an extended character set.
+            // 
+            // UTF8 represents a code point (e.g. a printing character or white space etc.) using anything between 1 and 4 bytes of storage
+            // The convention we adopt here is to store all strings in utf8 encoded format as classical zero terminated char strings, and
+            // to manipulate these in code using modern std::string objects. Where this convention is expensive or inconvenient to apply
+            // (such as with the device access API's in the extended library) we encapsulate and isolate the unconventional elements using
+            // pointer to implementation (PIMPL) constructs. This generally means string conversion is a one time (construction) overhead
+            // and limits the runtime impact fairly effectively in most practical situations. In some cases (such as with Microsoft CPP unit
+            // test framework Assert) it is more convenient to apply a just in time intercept and convert strategy, and although this is 
+            // theoretically expensive, in the context of unit testing it has negligible performance imact.
+            //
+            // The benefit of utf8 everywhere is evident looking at this unit test. It shows that "naive" assignment of string literals can 
+            // be applied completely naturally in the bulk of the code, without complexities arising from wrong encoding assumptions.
+            //
+            // As this unit test demonstrates, when programmers are actually working with an extended character set, they need to appreciate 
+            // the variable length character encoding aspect of UTF8. We provide a codepoint_count function for convenience in this respect.
+         
+            std::string s(U8("Γειά σας Κόσμε!\n"));
+            utf8::Assert::IsTrue(s.length() == 28, "UTF8 unexpected data length");
+            utf8::Assert::IsTrue(utf8::count_codepoints(s) == 16, "UTF8 unexpected codepoint count");
+
+            s = (U8("Γειά σας Κόσμε!\n"));
+            utf8::Assert::IsTrue(s.length() == 28, "Test 2 UTF8 unexpected data length");
+            utf8::Assert::IsTrue(utf8::count_codepoints(s) == 16, "Test 2 UTF8 unexpected codepoint count");
+
+#pragma warning(disable: 4566)                   // we override the compiler warning to demonstrate that an
+            s = "Γειά σας Κόσμε!\n";             // ill formed utf8 string literal causes a character encoding error
+#pragma warning(default: 4566)
+            utf8::Assert::IsFalse(s.length() == 28, "programmer's anticipated value (28), is unexpected in this bug scenario");
+            utf8::Assert::IsTrue(s.length() == 16, "test designer's expected value (16), was not found");
+            utf8::Assert::IsTrue(utf8::count_codepoints(s) == 16, "Test 3 UTF8 unexpected codepoint count");
+
+            s = U8("Hello World!\n");
+            utf8::Assert::IsTrue(s.length() == 13, "UTF8 ansi compatibility unexpected data length");
+            utf8::Assert::IsTrue(utf8::count_codepoints(s) == 13, "UTF8 ansi compatibility unexpected codepoint count");
+
+            s = "Hello World!\n";
+            utf8::Assert::IsTrue(s.length() == 13, "ANSI Unexpected data length");
+            utf8::Assert::IsTrue(utf8::count_codepoints(s) == 13, "ANSI Unexpected codepoint count");
+
+            s.clear();
+            utf8::Assert::IsTrue(utf8::count_codepoints(s) == 0, "codepoint count failed with empty string");
+         }
+         catch (const std::exception& e)
+         {
+            utf8::Assert::Fail(e.what()); // something went wrong
+         }
+      }
+
+      TEST_METHOD(TestUtf8ConvertFromGuid)
       {
          try
          {

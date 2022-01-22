@@ -55,5 +55,16 @@ namespace utf8
       ///<param name='str'>utf8 encoded string</param>
       ///<returns>utf16 encoded string representation of str</returns>
       BASICUNIVERSALCPPSUPPORT_API static std::wstring to_utf16(const std::string& str);
-  };
+   };
+
+   ///<summary>counts the number of code points in a utf8 encoded string</summary>
+   ///<param name='str'>a utf8 encoded string</param>
+   ///<returns>a count of the number of code points found in str.</returns>
+   ///<remarks> convenient because individual character representations in utf8 vary in length.
+   ///codepoint_count is always less than or equal to the raw data storage length.</remarks>
+   inline size_t count_codepoints(const std::string& str)
+   {
+      return std::count_if(str.begin(), str.end(), [](auto ch) { return ((ch & 0xc0) != 0x80); });
+   };
+
 }
