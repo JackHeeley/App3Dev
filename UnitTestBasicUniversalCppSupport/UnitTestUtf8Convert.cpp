@@ -58,7 +58,7 @@ namespace UnitTestBasicUniversalCppSupport
             // pointer to implementation (PIMPL) constructs. This generally means string conversion is a one time (construction) overhead
             // and limits the runtime impact fairly effectively in most practical situations. In some cases (such as with Microsoft CPP unit
             // test framework Assert) it is more convenient to apply a just in time intercept and convert strategy, and although this is 
-            // theoretically expensive, in the context of unit testing it has negligible performance imact.
+            // theoretically expensive, in the context of unit testing it has negligible performance impact.
             //
             // The benefit of utf8 everywhere is evident looking at this unit test. It shows that "naive" assignment of string literals can 
             // be applied completely naturally in the bulk of the code, without complexities arising from wrong encoding assumptions.

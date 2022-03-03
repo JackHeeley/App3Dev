@@ -235,5 +235,7 @@ DONE:
 106.Updates to projects for VS2022 (4 bit) 17.0.5 including platform toolset 142->143 supression of unit test warnings and fix to unit test TestDeviceIoCtl
 107.Added utf8::count_codepoints and unit test.
 108.Made utf8::count_codepoints static.
+109.Upgraded from ms-gsl3.1.0 to ms_gsl 4.0.0 (again just by importing headers into the solution's include path)
 
 TODO: @106 (vs22) Began to notice new issues with incremental builds (now need to rebuild all to clear some link errors)
+    - Workround : right click on solution and do build (active solution is built) Repeat this for each of the 4 solution builds.
