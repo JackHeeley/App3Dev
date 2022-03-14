@@ -238,4 +238,7 @@ DONE:
 109.Upgraded from ms-gsl3.1.0 to ms_gsl 4.0.0 (again just by importing headers into the solution's include path)
 
 TODO: @106 (vs22) Began to notice new issues with incremental builds (now need to rebuild all to clear some link errors)
-    - Workround : right click on solution and do build (active solution is built) Repeat this for each of the 4 solution builds.
+    - Workround : 
+        1. Right click on Solution in the Solution Explorer window. Choose Build Solution. (the *active* solution is incrementally built without any problems) 
+        2. Change the active solution (using Solution Configurations and Solution Platforms pick-lists on the Toolbar) 
+        3. Repeat steps 1 & 2 for each of the 4 solution options.
