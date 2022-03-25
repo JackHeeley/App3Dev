@@ -236,6 +236,7 @@ DONE:
 107.Added utf8::count_codepoints and unit test.
 108.Made utf8::count_codepoints static.
 109.Upgraded from ms-gsl3.1.0 to ms_gsl 4.0.0 (again just by importing headers into the solution's include path)
+110.Removed references to nuget version of GSL (redundant since build 78) & changed ExtendedUniversalCppSupport stdafx.h to use #include "" instead of <> (consistency)
 
 TODO: @106 (vs22) Began to notice new issues with incremental builds (now need to rebuild all to clear some link errors)
     - Workround : 
