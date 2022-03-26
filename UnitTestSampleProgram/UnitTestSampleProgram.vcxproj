@@ -133,7 +133,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;$(Outdir)BasicUniversalCppSupport.lib;$(Outdir)ExtendedUniversalCppSupport.lib;setupapi.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -154,7 +154,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;$(Outdir)BasicUniversalCppSupport.lib;$(Outdir)ExtendedUniversalCppSupport.lib;setupapi.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -179,7 +179,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;$(Outdir)BasicUniversalCppSupport.lib;$(Outdir)ExtendedUniversalCppSupport.lib;setupapi.lib</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
@@ -205,7 +205,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;setupapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)SampleProgram\$(IntDir)main.obj;$(SolutionDir)SampleProgram\$(IntDir)StdAfx.obj;$(Outdir)BasicUniversalCppSupport.lib;$(Outdir)ExtendedUniversalCppSupport.lib;setupapi.lib</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <Bscmake>
