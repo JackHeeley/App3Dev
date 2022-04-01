@@ -238,4 +238,9 @@ DONE:
 109.Upgraded from ms-gsl3.1.0 to ms_gsl 4.0.0 (again just by importing headers into the solution's include path)
 110.Removed references to nuget version of GSL (redundant since build 78) & changed ExtendedUniversalCppSupport stdafx.h to use #include "" instead of <> (consistency)
 111.Fixed issue detected at 106 with incremental batch builds: We have to explicitly link dependency libraries - the msbuild inference picks libraries from the active configuration (which isnt switched during batch processing)
+112.Fixed issue introduced at 111 (the explicit imports to the linker) For UnitTestBasicUniversalCppSupport these should NOT include the extended library. It isnt used here and may not be available at time of build)
 
+TODO:
+
+Beginning experiment with modules to improve compiletime experience.
+    - basline batch build all (after clean) = 15 min 5 sec.
