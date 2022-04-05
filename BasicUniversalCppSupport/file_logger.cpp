@@ -178,7 +178,7 @@ public:
 
 /*
 * ***************************************************************************
-* PIMPL idiom - public interface for SystemError implementation (Rule of 0)
+* PIMPL idiom - public interface for file_logger implementation (Rule of 0)
 * ***************************************************************************
 */
 
