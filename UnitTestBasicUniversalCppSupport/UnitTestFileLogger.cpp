@@ -89,6 +89,33 @@ namespace UnitTestBasicUniversalCppSupport
          }
       }
 
+      TEST_METHOD(TestLoggerSharedPointer)
+      {
+         long use_count = logger_factory::getInstance().use_count();
+         utf8::Assert::AreEqual(2L, use_count, "unexpected logger reference count increment (expected 2)");
+         {
+            std::shared_ptr<logger_interface>logger2 = logger_factory::getInstance();
+            use_count = logger_factory::getInstance().use_count();
+            utf8::Assert::AreEqual(3L, use_count, "unexpected logger reference count increment (expected 3)");
+            {
+               std::shared_ptr<logger_interface>logger3 = logger_factory::getInstance();
+               use_count = logger_factory::getInstance().use_count();
+               utf8::Assert::AreEqual(4L, use_count, "unexpected logger reference count increment (expected 4)");
+               {
+                  std::shared_ptr<logger_interface>logger4 = logger_factory::getInstance();
+                  use_count = logger_factory::getInstance().use_count();
+                  utf8::Assert::AreEqual(5L, use_count, "unexpected logger reference count increment (expected 5)");
+               }
+               use_count = logger_factory::getInstance().use_count();
+               utf8::Assert::AreEqual(4L, use_count, "unexpected logger reference count decrement (expected 4)");
+            }
+            use_count = logger_factory::getInstance().use_count();
+            utf8::Assert::AreEqual(3L, use_count, "unexpected logger reference count decrement (expected 3)");
+         }
+         use_count = logger_factory::getInstance().use_count();
+         utf8::Assert::AreEqual(2L, use_count, "unexpected logger reference count decrement (expected 2)");
+      }
+      
       TEST_METHOD(TestGetShortFile)
       {
          // we expect consistent seperator characters (e.g. as __FILE__ macro will present to loggers) ...
@@ -96,7 +123,7 @@ namespace UnitTestBasicUniversalCppSupport
          utf8::Assert::AreEqual("file_b.ext", get_short_file("c:/dir/subdir/file_b.ext"));
          utf8::Assert::AreEqual("file_c.ext", get_short_file("file_c.ext"));
          utf8::Assert::AreEqual("file_d.ext", get_short_file("c:\\dir\\subdir\\subsubdir\\subsubsubdir\\file_d.ext"));
-       
+
          // and we support mixed separators for completeness (there is no real trade-off with constexpr)...
          utf8::Assert::AreEqual("file_e.ext", get_short_file("c:\\dir/subdir\\file_e.ext"));
          utf8::Assert::AreEqual("file_f.ext", get_short_file("c:/dir/subdir\\file_f.ext"));
