@@ -129,13 +129,17 @@ int main(int argc, char* argv[])
       exit(EXIT_FAILURE);
    }
 
-   // Our design intent is to always use error::context. External libraries can't comply with all of our design requirements though, but will often 
-   // follow best practice and raise std::exceptions. We therefore try to catch and handle these, and other error indications, at point of failure 
-   // when calling platform library functions. If recovery isn't practical, we construct an error::context from the std::exception and throw it.
-   // Here we we provide a last-ditch defence, to handle the possibility that this approach is not perfectly applied everywhere in the code...
+   // Our design intent is to always use error::context as the thrown object type during structured exception handling (SEH). But we can't impose that
+   // requirement on the external libraries we choose to use. These libraries could do anything when stressed, including but not limited to best practice 
+   // (i.e. raising std::exceptions). Our code aspires to manage all recoverable reported errors at the locus of the call/return, but will typically not 
+   // anticipate or handle exceptions or other objects thrown from such libraries (noting particularly that aberrant behaviour might be undocumented). 
+   // We make good effort to catch and handle these and other error indications, according to library documentation, at points of failure wherever we call
+   // platform library functions. If recovery isn't practical, we aim to construct an error::context from any std::exception and rethrow it (with context). 
+   // That would be caught above at the preceding catch statement. Here however, we provide a further defence, to handle the possibility that somewhere in
+   // some untested path (now or in future) we fail to perfectly apply this treatment, and a std::exception slips through...
    catch (const std::exception& e)
    {
-      LOG_WARNING("A std::exception was thrown.");
+      LOG_WARNING("A std::exception was thrown. Our design intent (to use error::context) was compromised.");
       std::string error_text = "Unhandled Std Exception: "; error_text.append(e.what());   // simple what (a comment)
       std::cout << std::endl << error_text << std::endl;
       std::system("pause");
@@ -143,10 +147,11 @@ int main(int argc, char* argv[])
       exit(EXIT_FAILURE);
    }
 
-   // ...and this is the foxhole, behind the last-ditch, ensuring some kind of controlled program exit (if possible) no matter what was thrown.
+   // ...and extending this argument, this final catch ensures that, wherever possible, some kind of controlled program exit is made no matter object might
+   // have been thrown. Note that we have no insight or control over what external libraries do, and they might not honour their contract.
    catch (...)
    {
-      LOG_WARNING("Something odd was thrown. (design intent is to always use error::context).");
+      LOG_WARNING("Some unanticipated object was thrown. Our design intent (to use error::context) was compromised.");
       std::string error_text = "Unhandled exception, "; error_text.append(SystemError().get_error_text()); // best effort
       std::cout << std::endl << error_text << std::endl;
       std::system("pause");
