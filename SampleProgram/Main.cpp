@@ -57,15 +57,16 @@ int main(int argc, char* argv[])
    {
       LOG_INFO(U8("Γειά σας Κόσμε! On Windows, switch platform console support to use the utf8 codepage"));
       utf8::console::configure_codepage();
-      std::cout << U8("Γειά σας Κόσμε!\n") << std::endl; // try it.
-
-      std::cout << "SampleProgram.exe Copyright(c) 2019-2020 Jack Heeley.\n";
-      std::cout << "This program comes with ABSOLUTELY NO WARRANTY; for details refer to GPL 3.0.\n";
-      std::cout << "This is free software, and you are welcome to redistribute it\n";
-      std::cout << "under certain conditions; refer to GPL 3.0 for details.\n\n";
-
-      std::cout << "You should have received a copy of the GNU General Public License (GPL 3.0)\n";
-      std::cout << "along with this program. If not, see < http://www.gnu.org/licenses/" << " >.\n" << std::endl;
+      std::cout << U8("Γειά σας Κόσμε!") << std::endl; // try it.
+      std::cout << std::endl;
+      std::cout << "SampleProgram.exe Copyright(c) 2019-2020 Jack Heeley." << std::endl;
+      std::cout << "This program comes with ABSOLUTELY NO WARRANTY; for details refer to GPL 3.0." << std::endl;
+      std::cout << "This is free software, and you are welcome to redistribute it" << std::endl;
+      std::cout << "under certain conditions; refer to GPL 3.0 for details." << std::endl;
+      std::cout << std::endl;
+      std::cout << "You should have received a copy of the GNU General Public License (GPL 3.0)" << std::endl;
+      std::cout << "along with this program. If not, see < http://www.gnu.org/licenses/" << " >." << std::endl;
+      std::cout << std::endl;
 
       LOG_INFO("Sample test program starting.");
       
@@ -175,7 +176,7 @@ void signal_handler(int signum)
    catch (...)
    {
       std::string error_text = "Couldn't unlock the optical drive.";
-      std::cout << std::endl << error_text << "\nIf your drive supports locking you may need to reboot to retrieve the disk." << std::endl;
+      std::cout << std::endl << error_text << std::endl << "If your drive supports locking you may need to reboot to retrieve the disk." << std::endl;
       LOG_ERROR(error_text);
    }
    exit(signum);
