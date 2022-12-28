@@ -241,3 +241,4 @@ DONE:
 112.Fixed issue introduced at 111 (the explicit imports to the linker) For UnitTestBasicUniversalCppSupport these should NOT include the extended library. It isnt used here and may not be available at time of build)
 113.Added unit test to assess logger shared pointer reference counts.
 114.Sorted some longstanding \r\n, \n & std::endl issues.
+115.Applied a speculative workround to a unit-test sequencing limitation.

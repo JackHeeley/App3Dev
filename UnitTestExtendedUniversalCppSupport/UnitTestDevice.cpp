@@ -163,7 +163,7 @@ namespace UnitTestExtendedUniversalCppSupport
 
             uint32_t nBytesReturned = 0;
 
-            int retries = 60;
+            int retries = 10;
             while (--retries >= 0 && nBytesReturned != BLOCK_SIZE)
             {
                try
@@ -179,11 +179,18 @@ namespace UnitTestExtendedUniversalCppSupport
                {
                   switch (SystemError().get_error_code())
                   {
-                  // some cases are worth retrying
+                  // some cases are worth retrying. 
                   case ERROR_NOT_READY:
-                  case ERROR_MEDIA_CHANGED:
                   case ERROR_IO_DEVICE:
                      std::this_thread::sleep_for(1s);
+                     break;
+
+                  case ERROR_MEDIA_CHANGED:
+                     // Early version of windows the cdrom driver reset the changed media state quite quickly.
+                     // Since windows 11 it seems to respond better if stimulated with a load media ioctl. 
+                     // This is experimentation and guesswork :-( I have failed to find any specific guidance in documentation or literature.
+                     std::this_thread::sleep_for(1s);
+                     try { cdrom.ioctl(IOCTL_DISK_LOAD_MEDIA, nullptr, 0, nullptr, 0); } catch (...) {};
                      break; 
 
                   default: throw e;
