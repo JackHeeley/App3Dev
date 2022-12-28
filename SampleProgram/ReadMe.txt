@@ -242,3 +242,4 @@ DONE:
 113.Added unit test to assess logger shared pointer reference counts.
 114.Sorted some longstanding \r\n, \n & std::endl issues.
 115.Applied a speculative workround to a unit-test sequencing limitation.
+116.Updated gsl headers ms-gsl4.0.0 from github (latest main branch as of 28-12-2022).
