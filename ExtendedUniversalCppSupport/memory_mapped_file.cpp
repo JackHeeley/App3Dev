@@ -80,7 +80,7 @@ public:
       hFile(INVALID_HANDLE_VALUE),
       hFileMap(nullptr)
    {
-      bufferSize.QuadPart = other.bufferSize.QuadPart;
+      bufferSize = other.bufferSize;
       openFile();
       createFileMapping();
       mapViewOfFile();
@@ -88,16 +88,14 @@ public:
 
    ///<summary> move constructor.</summary>
    impl(impl&& other) noexcept :
-#pragma warning(disable:26447)
-      filePathW(other.filePathW),
-      bufferNameW(other.bufferNameW),
-#pragma warning(default:26447)
+      filePathW(std::move(other.filePathW)),
+      bufferNameW(std::move(other.bufferNameW)),
 
-      buffer_ptr(other.buffer_ptr),
-      hFile(other.hFile),
-      hFileMap(other.hFileMap)
+      buffer_ptr(std::move(other.buffer_ptr)),
+      hFile(std::exchange(other.hFile,INVALID_HANDLE_VALUE)),
+      hFileMap(std::exchange(other.hFileMap,nullptr))
    {
-      bufferSize.QuadPart = other.bufferSize.QuadPart;
+      bufferSize = std::move(other.bufferSize);
       other.hFile = INVALID_HANDLE_VALUE;
       other.hFileMap = nullptr;
    }
@@ -114,7 +112,7 @@ public:
          hFile = INVALID_HANDLE_VALUE;
          hFileMap = nullptr;
          
-         bufferSize.QuadPart = other.bufferSize.QuadPart;
+         bufferSize = other.bufferSize;
          openFile();
          createFileMapping();
          mapViewOfFile();
@@ -129,21 +127,18 @@ public:
       {
          try
          {
-            filePathW = other.filePathW;
-            bufferNameW = other.bufferNameW;
+            filePathW = std::move(other.filePathW);
+            bufferNameW = std::move(other.bufferNameW);
          }
          catch (const std::exception& e)
          {
             LOG_WARNING(e.what());
          }
 
-         buffer_ptr = other.buffer_ptr;
-         hFile = other.hFile;
-         hFileMap = other.hFileMap;
-         bufferSize.QuadPart = other.bufferSize.QuadPart;
-      
-         ((impl&)other).hFile = INVALID_HANDLE_VALUE;
-         ((impl&)other).hFileMap = nullptr;
+         buffer_ptr = std::move(other.buffer_ptr);
+         hFile = std::exchange(other.hFile, nullptr);
+         hFileMap = std::exchange(other.hFileMap, INVALID_HANDLE_VALUE);
+         bufferSize = std::move(other.bufferSize);
       }
       return (*this);
    }

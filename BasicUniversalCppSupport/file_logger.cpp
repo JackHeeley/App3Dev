@@ -72,9 +72,10 @@ public:
    impl(impl&& other) noexcept :
       filter(other.filter),
       fileName(other.fileName),
-      stream(std::ofstream(fileName, std::ofstream::out | std::ofstream::app)),
+      stream(),
       the_mutex()
    {
+      stream.swap(other.stream);
    }
    
    ///<summary> destructor.</summary>
@@ -107,9 +108,9 @@ public:
    {
       if (this != &other)
       {
-         fileName = other.fileName;
-         filter = other.filter;
-         stream = std::ofstream(fileName, std::ofstream::out | std::ofstream::app);
+         fileName = std::move(other.fileName);
+         filter = std::move(other.filter);
+         stream.swap(other.stream); 
       }
       return (*this);
    }

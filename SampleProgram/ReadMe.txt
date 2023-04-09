@@ -243,3 +243,4 @@ DONE:
 114.Sorted some longstanding \r\n, \n & std::endl issues.
 115.Applied a speculative workround to a unit-test sequencing limitation.
 116.Updated gsl headers ms-gsl4.0.0 from github (latest main branch as of 28-12-2022).
+117.Revisited/rechecked move semantics. Found issues with file_logger, system_error, and memory_mapped_file. These are now better optimized.

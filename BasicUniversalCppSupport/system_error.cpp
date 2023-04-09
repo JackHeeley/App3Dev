@@ -81,9 +81,8 @@ public:
    ///<summary> move constructor.</summary>
    impl(impl&& other) noexcept :
       error_code(other.error_code),
-      lpBuffer(other.lpBuffer)
+      lpBuffer(std::exchange(other.lpBuffer, nullptr))
    {
-      other.lpBuffer = nullptr;
    }
 
    ///<summary> copy assignment operator.</summary>
@@ -102,9 +101,9 @@ public:
    {
       if (this != &other)
       {
-         error_code = other.error_code;
-         lpBuffer = other.lpBuffer;
-         other.lpBuffer = nullptr;
+         LocalFree(lpBuffer);
+         error_code = std::move(other.error_code);
+         lpBuffer = std::exchange(other.lpBuffer, nullptr);
       }
       return (*this);
    }

@@ -22,7 +22,7 @@
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
 #pragma once
-#define GSL_WARNINGS_SUPPRESSED 26481
+#define GSL_WARNINGS_SUPPRESSED // hooray! all fixed now
 #pragma warning(disable: GSL_WARNINGS_SUPPRESSED)
 #include <gsl/gsl>
 #pragma warning(default: GSL_WARNINGS_SUPPRESSED)
