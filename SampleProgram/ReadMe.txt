@@ -244,3 +244,4 @@ DONE:
 115.Applied a speculative workround to a unit-test sequencing limitation.
 116.Updated gsl headers ms-gsl4.0.0 from github (latest main branch as of 28-12-2022).
 117.Revisited/rechecked move semantics. Found issues with file_logger, system_error, and memory_mapped_file. These are now better optimized.
+118.Revisited/rechecked pragmas warnings in BasicUniversalCppSupport and ExtendedUniversalCppSupport. Improved casting and readability in CdromDevice::impl.get_image().

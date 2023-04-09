@@ -123,7 +123,6 @@ public:
    ///<param name ='span'> a gsl::span repesenting a memory location to receive the image.</param>
    ///<param name ='a_progress'> reference to the external location where get_image() %progress is maintained</param>
    ///<exception cref='std::exception'>if the operation could not be completed with m_progress==100.</exception>
-#pragma warning(disable : 26493)
    void get_image(gsl::span<unsigned char> span, std::atomic<int>& a_progress) const
    {
       // initialize the low and high water marks (used in read, and resource limited exception handling)
@@ -148,30 +147,32 @@ public:
             // query current media for details used in exception handling strategy (physical block alignment constraint)
             const DISK_GEOMETRY diskGeometry = get_disk_geometry();
 
+            const uint64_t cTracksPerCylinder = gsl::narrow<uint64_t>(diskGeometry.TracksPerCylinder);
+            const uint64_t cSectorsPerTrack = gsl::narrow<uint64_t>(diskGeometry.SectorsPerTrack);
+            const uint64_t cBytesPerSector = gsl::narrow<uint64_t>(diskGeometry.BytesPerSector);
+            const uint64_t cCylinders = gsl::narrow<uint64_t>(diskGeometry.Cylinders.LowPart);
+
             if (diskGeometry.Cylinders.HighPart != 0)
             {
                SetLastError(ERROR_NOT_SUPPORTED);
                throw error_context("Unsupported media size"); // future proofing
             }
 
-            const uint64_t cbyCylinderSize =
-               uint64_t{ diskGeometry.TracksPerCylinder } *
-               uint64_t{ diskGeometry.SectorsPerTrack } *
-               uint64_t{ diskGeometry.BytesPerSector };
+            const uint64_t cbyCylinderSize = cTracksPerCylinder * cSectorsPerTrack * cBytesPerSector;
 
             try
             {
                // read remainder of the image in cylinder sized chunks 
                // (not necessarily physical cylinders but guaranteed to be an exact multiple of physical block size)
-               read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, diskGeometry.Cylinders.LowPart, cbyCylinderSize, a_progress);
+               read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, cCylinders, cbyCylinderSize, a_progress);
             }
             catch (std::exception&)
             {
                if (GetLastError() == ERROR_NO_SYSTEM_RESOURCES)
                {
-                  const uint64_t cTracksReadAsCylinders = (((uint64_t)lpabyBufferMemoryAddress - (uint64_t)lpabyBufferMemoryBase) / cbyCylinderSize)* diskGeometry.TracksPerCylinder;
-                  const uint64_t cbyTrackSize = (uint64_t)(diskGeometry.SectorsPerTrack) * (uint64_t)(diskGeometry.BytesPerSector);
-                  const uint64_t cTracksStillToRead = ((uint64_t)(diskGeometry.Cylinders.LowPart) * (uint64_t)(diskGeometry.TracksPerCylinder)) - cTracksReadAsCylinders;
+                  const uint64_t cTracksReadAsCylinders = (gsl::narrow<uint64_t>(lpabyBufferMemoryAddress - lpabyBufferMemoryBase) / cbyCylinderSize) * cTracksPerCylinder;
+                  const uint64_t cbyTrackSize = cSectorsPerTrack * cBytesPerSector;
+                  const uint64_t cTracksStillToRead = (cCylinders * cTracksPerCylinder) - cTracksReadAsCylinders;
                   try
                   {
                      // read remainder of the image in track sized sized chunks 
@@ -180,13 +181,13 @@ public:
                   }
                   catch (std::exception&)
                   {
-                     const uint64_t cSectorsReadAsTracks = (((uint64_t)lpabyBufferMemoryAddress - (uint64_t)lpabyBufferMemoryBase) / cbyTrackSize)* diskGeometry.SectorsPerTrack;
-                     const uint64_t cSectorsStillToRead = ((uint64_t)(diskGeometry.Cylinders.LowPart) * (uint64_t)(diskGeometry.TracksPerCylinder) * (uint64_t)(diskGeometry.SectorsPerTrack)) - cSectorsReadAsTracks;
+                     const uint64_t cSectorsReadAsTracks = (gsl::narrow<uint64_t>(lpabyBufferMemoryAddress - lpabyBufferMemoryBase) / cbyTrackSize) * cSectorsPerTrack;
+                     const uint64_t cSectorsStillToRead = (cCylinders * cTracksPerCylinder * cSectorsPerTrack) - cSectorsReadAsTracks;
                      if (GetLastError() == ERROR_NO_SYSTEM_RESOURCES)
                      {
                         // read remainder of the image in sector sized sized chunks 
                         // (not necessarily physical sectors but guaranteed to be an exact multiple of physical block size)
-                        read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, cSectorsStillToRead, diskGeometry.BytesPerSector, a_progress);
+                        read_blocks(lpabyBufferMemoryBase, lpabyBufferMemoryAddress, cSectorsStillToRead, cBytesPerSector, a_progress);
                      }
                      else throw;
                   }
@@ -199,8 +200,6 @@ public:
 
       Ensures(a_progress == 100);   // if not, program will deadlock
    }
-#pragma warning(default : 26493)
-
 
    ///<summary> prevents media removal (if the hardware has a lockable drive).</summary>
    void lock(void) noexcept
