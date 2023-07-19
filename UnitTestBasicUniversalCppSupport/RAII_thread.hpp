@@ -1,5 +1,5 @@
 //
-// RAII_thread.hpp : implements helper class
+// RAII_thread.hpp : implements helper class *** DEPRECATED (use std::async) *** 
 //
 //    Allows a RAII thread to abnormally end, without a program abort arising from the ensuing improper thread state.
 //

@@ -529,6 +529,7 @@ namespace UnitTestBasicUniversalCppSupport
 #endif // !STATIC_LOG_FILTERING
 
             LOG_TRACE("Launch the progress bar in a separate thread.");
+            // test continues to use deprecated approach to avoid unnecessary test code rework. A comparison (see main.cpp) showcases why std::async is better.
             RAII_thread separate_thread(std::thread(log_progress), RAII_thread::DtorAction::detach);
 
             LOG_TRACE("Do some simultaneous logging from the main thread.");
