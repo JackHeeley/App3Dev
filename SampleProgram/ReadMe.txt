@@ -248,3 +248,4 @@ DONE:
 119.Reverted to C++20. A recent check-in enabled experimental features (and that broke the project as of VS 17.6.4).
 120.Comment only change (verifies VS 17.6.5 build).
 121.Updated gsl includes to latest repo (contemporary with VS17.6.5 release)
+122.Added gsl #include <algorithm> to utf8_convert.hpp (to mitigate intellisense syntax error)

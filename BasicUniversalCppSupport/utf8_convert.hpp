@@ -24,6 +24,7 @@
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllimport)
 #endif
 
+#include <algorithm>
 #include <string>
 
 #if defined(__cpp_char8_t)
