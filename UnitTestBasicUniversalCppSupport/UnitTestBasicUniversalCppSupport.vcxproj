@@ -123,7 +123,7 @@
       <UseFullPaths>true</UseFullPaths>
       <EnablePREfast>true</EnablePREfast>
       <BrowseInformation>true</BrowseInformation>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,7 +141,7 @@
       <UseFullPaths>true</UseFullPaths>
       <EnablePREfast>true</EnablePREfast>
       <BrowseInformation>true</BrowseInformation>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -161,7 +161,7 @@
       <UseFullPaths>true</UseFullPaths>
       <EnablePREfast>true</EnablePREfast>
       <BrowseInformation>true</BrowseInformation>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -184,7 +184,7 @@
       <UseFullPaths>true</UseFullPaths>
       <EnablePREfast>true</EnablePREfast>
       <BrowseInformation>true</BrowseInformation>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
