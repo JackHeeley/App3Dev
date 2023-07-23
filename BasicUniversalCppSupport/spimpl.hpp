@@ -21,8 +21,12 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __SPIMPLE_HPP__
+#define __SPIMPLE_HPP__
+
 #define SPIMPLE_WARNINGS_SUPPRESSED 26402 26409 26432 26434 26440 26456
 #pragma warning(disable: SPIMPLE_WARNINGS_SUPPRESSED)
 #include "spimpl.h"
 #pragma warning(default: SPIMPLE_WARNINGS_SUPPRESSED)
+
+#endif // __SPIMPLE_HPP__

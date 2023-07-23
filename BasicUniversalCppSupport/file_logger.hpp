@@ -18,7 +18,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __FILE_LOGGER_HPP__
+#define __FILE_LOGGER_HPP__
 
 #ifdef BASICUNIVERSALCPPSUPPORT_EXPORTS
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllexport)
@@ -91,3 +92,6 @@ private:
    ///<remarks> with default copy, move and compare support.</remarks>
    spimpl::impl_ptr<impl> pimpl;
 };
+
+#endif // __FILE_LOGGER_HPP__
+

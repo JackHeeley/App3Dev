@@ -21,8 +21,12 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __CPPUNITTEST_HPP__
+#define __CPPUNITTEST_HPP__
+
 #define CPPUNITTEST_WARNINGS_SUPRESSED 26429 26432 26433 26440 26455 26461 26466 26485 26490 26496 
 #pragma warning(disable: CPPUNITTEST_WARNINGS_SUPRESSED)
 #include <CppUnitTest.h>
 #pragma warning(default: CPPUNITTEST_WARNINGS_SUPRESSED)
+
+#endif // __CPPUNITTEST_HPP__

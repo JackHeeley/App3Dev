@@ -16,7 +16,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __LOGGER_FACTORY_HPP__
+#define __LOGGER_FACTORY_HPP__
 
 #ifdef BASICUNIVERSALCPPSUPPORT_EXPORTS
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllexport)
@@ -74,3 +75,5 @@ private:
      }
    }
 };
+
+#endif // __LOGGER_FACTORY_HPP__

@@ -16,7 +16,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __RIPPER_HPP__
+#define __RIPPER_HPP__
 
 #include <atomic>
 
@@ -61,3 +62,5 @@ public:
       m_cdr.get_image(MemoryMappedFile(filePath, "", m_cdr.get_image_size()).get_span(), a_progress);
    }
 };
+
+#endif // __RIPPER_HPP__

@@ -18,7 +18,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __UTF8_ASSERT_HPP__
+#define __UTF8_ASSERT_HPP__
 
 #include <Windows.h>
 #include <winnt.h>
@@ -153,3 +154,5 @@ namespace utf8
       }
    };
 }
+
+#endif // __UTF8_ASSERT_HPP__

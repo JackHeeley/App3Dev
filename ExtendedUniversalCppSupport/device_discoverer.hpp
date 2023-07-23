@@ -22,7 +22,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __DEVICE_DISCOVERER_HPP__
+#define __DEVICE_DISCOVERER_HPP__
 
 #ifdef EXTENDEDUNIVERSALCPPSUPPORT_EXPORTS
 #define EXTENDEDUNIVERSALCPPSUPPORT_API __declspec(dllexport)
@@ -68,3 +69,6 @@ public:
    /// move operations with the current implementation choices). </remarks>
    std::reference_wrapper<std::map<int, std::string>> device_path_map;
 };
+
+#endif // __DEVICE_DISCOVERER_HPP__
+

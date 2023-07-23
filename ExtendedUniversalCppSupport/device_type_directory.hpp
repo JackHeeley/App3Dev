@@ -19,7 +19,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __DEVICE_TYPE_DIRECTORY_HPP__
+#define __DEVICE_TYPE_DIRECTORY_HPP__
 
 #ifdef EXTENDEDUNIVERSALCPPSUPPORT_EXPORTS
 #define EXTENDEDUNIVERSALCPPSUPPORT_API __declspec(dllexport)
@@ -67,3 +68,5 @@ private:
    class impl;
 
 };
+
+#endif // __DEVICE_TYPE_DIRECTORY_HPP__

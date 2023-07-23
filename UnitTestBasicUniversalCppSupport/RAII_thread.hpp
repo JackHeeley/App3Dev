@@ -18,7 +18,9 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __RAII_THREAD_HPP__
+#define __RAII_THREAD_HPP__
+
 #include <thread>
 #include "logger.hpp"
 
@@ -87,3 +89,5 @@ public:
       return t;
    }
 };
+
+#endif // __RAII_THREAD_HPP__

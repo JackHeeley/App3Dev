@@ -2,8 +2,8 @@
 // or project specific include files that are used frequently, but
 // are changed infrequently
 //
-
-#pragma once
+#ifndef __STDAFX_H__
+#define __STDAFX_H__
 
 // add check for tools limitations (clang support) with impact on build preferences
 #include "toolsver.h"
@@ -48,4 +48,6 @@
 #include <utf8_assert.hpp>
 
 #include "UnitTestSampleProgram.hpp"
+
+#endif // __STDAFX_H__
 

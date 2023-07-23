@@ -22,7 +22,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __MEMORY_MAPPED_FILE_HPP__
+#define __MEMORY_MAPPED_FILE_HPP__
 
 #ifdef EXTENDEDUNIVERSALCPPSUPPORT_EXPORTS
 #define EXTENDEDUNIVERSALCPPSUPPORT_API __declspec(dllexport)
@@ -81,3 +82,5 @@ private:
    ///<remarks> with default copy, move and compare support.</remarks>
    spimpl::impl_ptr<impl> pimpl;
 };
+
+#endif // __MEMORY_MAPPED_FILE_HPP_

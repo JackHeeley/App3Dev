@@ -19,7 +19,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __LOGGER_INTERFACE_HPP__
+#define __LOGGER_INTERFACE_HPP__
 
 #include <stdexcept>
 #include <string>
@@ -170,3 +171,5 @@ public:
    /// <summary> Clear log file.</summary>
    BASICUNIVERSALCPPSUPPORT_API virtual void clear() = 0;
 };
+
+#endif // __LOGGER_INTERFACE_HPP__

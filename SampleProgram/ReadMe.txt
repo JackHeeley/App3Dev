@@ -249,3 +249,4 @@ DONE:
 120.Comment only change (verifies VS 17.6.5 build).
 121.Updated gsl includes to latest repo (contemporary with VS17.6.5 release)
 122.Added gsl #include <algorithm> to utf8_convert.hpp (to mitigate intellisense syntax error)
+123.Reverted non-standard #pragma once to guard #defines. (Mitigates cascading intellisense warnings with VS17.6.5 release)

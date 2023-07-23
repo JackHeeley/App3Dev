@@ -20,8 +20,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
-
+#ifndef __LOGGER_HPP__
+#define __LOGGER_HPP__
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // LOGGING CONFIGURATION CONSISTS OF THE FOLLOWING FIVE OPTIONS 
@@ -162,3 +162,5 @@ __pragma(warning(pop))
 #define LOG_WARNING(text) UNREFERENCED_PARAMETER(text)
 #define LOG_ERROR(text) UNREFERENCED_PARAMETER(text)
 #endif
+
+#endif // __LOGGER_HPP__

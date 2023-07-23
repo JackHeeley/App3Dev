@@ -16,7 +16,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __RAII_CD_EXCLUSIVE_ACCESS_LOCK_HPP__
+#define __RAII_CD_EXCLUSIVE_ACCESS_LOCK_HPP__
 
 #include <cd_rom_device.hpp>
 #include <logger.hpp>
@@ -65,4 +66,4 @@ public:
    }
 };
 
-#pragma once
+#endif // __RAII_CD_EXCLUSIVE_ACCESS_LOCK_HPP__

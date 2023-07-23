@@ -16,7 +16,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __UTC_TIMESTAMP_HPP__
+#define __UTC_TIMESTAMP_HPP__
 
 #include <algorithm>
 #include <locale>
@@ -77,3 +78,5 @@ const auto utc_timestamp = []()
      
    return trim_copy({ timebuf });
 };
+
+#endif // __UTC_TIMESTAMP_HPP__

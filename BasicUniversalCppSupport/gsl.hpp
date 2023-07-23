@@ -21,8 +21,13 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __GSL_HPP__
+#define __GSL_HPP__
+
 #define GSL_WARNINGS_SUPPRESSED // hooray! all fixed now
 #pragma warning(disable: GSL_WARNINGS_SUPPRESSED)
 #include <gsl/gsl>
 #pragma warning(default: GSL_WARNINGS_SUPPRESSED)
+
+#endif // __GSL_HPP__
+

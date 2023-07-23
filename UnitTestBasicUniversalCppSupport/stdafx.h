@@ -3,7 +3,8 @@
 // are changed infrequently
 //
 
-#pragma once
+#ifndef __STDAFX_H__
+#define __STDAFX_H__
 
 // add check for tools limitations (clang support) with impact on build preferences
 #include "toolsver.h"
@@ -40,3 +41,4 @@
 
 #include "UnitTestBasicUniversalCppSupport.hpp"
 
+#endif // __STDAFX_H__

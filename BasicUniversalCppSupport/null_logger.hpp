@@ -16,7 +16,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __NULL_LOGGER_HPP__
+#define __NULL_LOGGER_HPP__
 
 #ifdef BASICUNIVERSALCPPSUPPORT_EXPORTS
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllexport)
@@ -84,4 +85,5 @@ public:
    ///<summary>Clear log file.</summary>
    BASICUNIVERSALCPPSUPPORT_API void clear() noexcept override {}
 };
-#pragma once
+
+#endif //__NULL_LOGGER_HPP__

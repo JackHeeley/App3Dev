@@ -16,7 +16,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __PROGRESS_TRACKER_HPP__
+#define __PROGRESS_TRACKER_HPP__
 
 #include <atomic>
 #include <chrono>
@@ -105,3 +106,5 @@ public:
       return is_finished();
    }
 };
+
+#endif __PROGRESS_TRACKER_HPP__

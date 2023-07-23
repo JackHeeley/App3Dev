@@ -16,7 +16,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __UTF8_CONVERT_HPP__
+#define __UTF8_CONVERT_HPP__
 
 #ifdef BASICUNIVERSALCPPSUPPORT_EXPORTS
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllexport)
@@ -70,3 +71,5 @@ namespace utf8
    };
 
 }
+
+#endif // __UTF8_CONVERT_HPP__

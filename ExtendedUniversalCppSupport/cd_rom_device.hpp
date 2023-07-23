@@ -18,7 +18,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __CD_ROM_DEVICE_HPP__
+#define __CD_ROM_DEVICE_HPP__
 
 #ifdef EXTENDEDUNIVERSALCPPSUPPORT_EXPORTS
 #define EXTENDEDUNIVERSALCPPSUPPORT_API __declspec(dllexport)
@@ -114,3 +115,5 @@ private:
    ///<remarks> Non copyable, with move limitations.</remarks>
    spimpl::unique_impl_ptr<impl> pimpl;
 };
+
+#endif // __CD_ROM_DEVICE_HPP__

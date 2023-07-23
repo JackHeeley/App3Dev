@@ -18,7 +18,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.If not, see < http://www.gnu.org/licenses/ >.
 //
-#pragma once
+#ifndef __ERROR_CONTEXT_HPP__
+#define __ERROR_CONTEXT_HPP__
 
 #ifdef BASICUNIVERSALCPPSUPPORT_EXPORTS
 #define BASICUNIVERSALCPPSUPPORT_API __declspec(dllexport)
@@ -83,3 +84,5 @@ namespace error
       std::string m_full_what;
    };
 }
+#endif // __ERROR_CONTEXT_HPP__
+

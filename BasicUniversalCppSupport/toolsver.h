@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __TOOLSVER_H__
+#define __TOOLSVER_H__
 
 // Check for known limitation with visual studio clang support. Fixed at VS 2019 16.9.0 preview 2 (compiler version 19.282.9617)
 #if defined _MSC_VER
@@ -13,3 +14,4 @@
 #endif // _MSC_FULL_VER < 192829617
 #endif // _MSC_VER
 
+#endif __TOOLSVER_H__
