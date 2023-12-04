@@ -250,3 +250,4 @@ DONE:
 121.Updated gsl includes to latest repo (contemporary with VS17.6.5 release)
 122.Added gsl #include <algorithm> to utf8_convert.hpp (to mitigate intellisense syntax error)
 123.Reverted non-standard #pragma once to guard #defines. (Mitigates cascading intellisense warnings with VS17.6.5 release)
+124.Assessed/addressed new warning raised with VS 17.8.2 build. Updated to use Microsoft GSL latest as of 4 Dec 2023

@@ -45,7 +45,9 @@ private:
          nullptr,
          error_code,
          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-         (LPTSTR)& lpBuffer,
+#pragma warning(disable:26490)
+         reinterpret_cast<LPTSTR>(&lpBuffer),
+#pragma warning(default:26490)
          0,
          nullptr
       );
